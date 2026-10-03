@@ -1,0 +1,886 @@
+{
+  "neighborhoods": [
+    {
+      "name": "Mission",
+      "lat": 37.7599,
+      "lng": -122.4148
+    },
+    {
+      "name": "Tenderloin",
+      "lat": 37.7847,
+      "lng": -122.4141
+    },
+    {
+      "name": "SoMa",
+      "lat": 37.7785,
+      "lng": -122.4056
+    },
+    {
+      "name": "Bayview",
+      "lat": 37.7296,
+      "lng": -122.3925
+    },
+    {
+      "name": "Excelsior",
+      "lat": 37.7244,
+      "lng": -122.4272
+    },
+    {
+      "name": "Outer Sunset",
+      "lat": 37.755,
+      "lng": -122.494
+    },
+    {
+      "name": "Inner Richmond",
+      "lat": 37.78,
+      "lng": -122.464
+    },
+    {
+      "name": "Haight-Ashbury",
+      "lat": 37.7692,
+      "lng": -122.4481
+    },
+    {
+      "name": "Chinatown",
+      "lat": 37.7941,
+      "lng": -122.4078
+    },
+    {
+      "name": "Western Addition",
+      "lat": 37.781,
+      "lng": -122.433
+    },
+    {
+      "name": "Visitacion Valley",
+      "lat": 37.716,
+      "lng": -122.404
+    },
+    {
+      "name": "Bernal Heights",
+      "lat": 37.7389,
+      "lng": -122.4152
+    },
+    {
+      "name": "Civic Center",
+      "lat": 37.7793,
+      "lng": -122.418
+    },
+    {
+      "name": "Potrero Hill",
+      "lat": 37.7605,
+      "lng": -122.4009
+    },
+    {
+      "name": "North Beach",
+      "lat": 37.8061,
+      "lng": -122.4103
+    },
+    {
+      "name": "Noe Valley",
+      "lat": 37.7502,
+      "lng": -122.4337
+    },
+    {
+      "name": "Parkside",
+      "lat": 37.741,
+      "lng": -122.488
+    },
+    {
+      "name": "Oceanview / Ingleside",
+      "lat": 37.723,
+      "lng": -122.456
+    }
+  ],
+  "foodBanks": [
+    {
+      "id": "b01",
+      "name": "24th Street Share Shelf",
+      "hood": "Mission",
+      "address": "24th St & Folsom St",
+      "lat": 37.7525,
+      "lng": -122.414,
+      "open": "07:00",
+      "close": "21:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Shelf plus fridge inside the laundromat entrance."
+    },
+    {
+      "id": "b02",
+      "name": "Larkin Street Pantry Point",
+      "hood": "Tenderloin",
+      "address": "Larkin St & Eddy St",
+      "lat": 37.7835,
+      "lng": -122.4175,
+      "open": "08:00",
+      "close": "22:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Volunteers on site 5\u20138 PM."
+    },
+    {
+      "id": "b03",
+      "name": "Howard Street Community Fridge",
+      "hood": "SoMa",
+      "address": "Howard St & 7th St",
+      "lat": 37.7775,
+      "lng": -122.4075,
+      "open": "00:00",
+      "close": "24:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Open all day and night."
+    },
+    {
+      "id": "b04",
+      "name": "Third Street Neighbor Box",
+      "hood": "Bayview",
+      "address": "3rd St & Palou Ave",
+      "lat": 37.733,
+      "lng": -122.3905,
+      "open": "09:00",
+      "close": "20:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Next to the bus shelter. Fridge restocked daily."
+    },
+    {
+      "id": "b05",
+      "name": "Mission & Geneva Food Shelf",
+      "hood": "Excelsior",
+      "address": "Mission St & Geneva Ave",
+      "lat": 37.717,
+      "lng": -122.44,
+      "open": "08:00",
+      "close": "20:00",
+      "fridge": true,
+      "access": "One small step",
+      "note": "Spanish and Tagalog spoken by volunteers."
+    },
+    {
+      "id": "b06",
+      "name": "Judah Street Kindbox",
+      "hood": "Outer Sunset",
+      "address": "Judah St & 42nd Ave",
+      "lat": 37.7605,
+      "lng": -122.5005,
+      "open": "07:00",
+      "close": "19:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Near the N Judah stop."
+    },
+    {
+      "id": "b07",
+      "name": "Clement Street Shared Pantry",
+      "hood": "Inner Richmond",
+      "address": "Clement St & 6th Ave",
+      "lat": 37.7828,
+      "lng": -122.4645,
+      "open": "09:00",
+      "close": "21:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Cantonese spoken by volunteers."
+    },
+    {
+      "id": "b08",
+      "name": "Haight Street Fridge",
+      "hood": "Haight-Ashbury",
+      "address": "Haight St & Cole St",
+      "lat": 37.7695,
+      "lng": -122.4505,
+      "open": "00:00",
+      "close": "24:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Open all day and night."
+    },
+    {
+      "id": "b09",
+      "name": "Stockton Street Share Shelf",
+      "hood": "Chinatown",
+      "address": "Stockton St & Jackson St",
+      "lat": 37.7955,
+      "lng": -122.4075,
+      "open": "07:00",
+      "close": "19:00",
+      "fridge": false,
+      "access": "Two steps",
+      "note": "Shelf only. Packaged food and produce."
+    },
+    {
+      "id": "b10",
+      "name": "Fillmore Fridge",
+      "hood": "Western Addition",
+      "address": "Fillmore St & Eddy St",
+      "lat": 37.781,
+      "lng": -122.433,
+      "open": "08:00",
+      "close": "22:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Inside the community center lobby."
+    },
+    {
+      "id": "b11",
+      "name": "Leland Avenue Food Box",
+      "hood": "Visitacion Valley",
+      "address": "Leland Ave & Bayshore Blvd",
+      "lat": 37.712,
+      "lng": -122.403,
+      "open": "09:00",
+      "close": "18:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Fridge inside the corner market."
+    },
+    {
+      "id": "b12",
+      "name": "Cortland Avenue Pantry",
+      "hood": "Bernal Heights",
+      "address": "Cortland Ave & Moultrie St",
+      "lat": 37.739,
+      "lng": -122.4165,
+      "open": "08:00",
+      "close": "20:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Outside the library side door."
+    },
+    {
+      "id": "b13",
+      "name": "Civic Center Share Point",
+      "hood": "Civic Center",
+      "address": "Hyde St & Grove St",
+      "lat": 37.7785,
+      "lng": -122.4155,
+      "open": "06:00",
+      "close": "23:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Busy at lunch. Restocked often."
+    },
+    {
+      "id": "b14",
+      "name": "Ocean Avenue Food Shelf",
+      "hood": "Oceanview / Ingleside",
+      "address": "Ocean Ave & Granada Ave",
+      "lat": 37.7235,
+      "lng": -122.456,
+      "open": "09:00",
+      "close": "19:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Near the K Ingleside stop."
+    },
+    {
+      "id": "b15",
+      "name": "18th Street Kindbox",
+      "hood": "Potrero Hill",
+      "address": "18th St & Connecticut St",
+      "lat": 37.762,
+      "lng": -122.3975,
+      "open": "08:00",
+      "close": "21:00",
+      "fridge": true,
+      "access": "Steep hill approach",
+      "note": "Fridge on the cafe patio."
+    },
+    {
+      "id": "b16",
+      "name": "Columbus Avenue Fridge",
+      "hood": "North Beach",
+      "address": "Columbus Ave & Green St",
+      "lat": 37.7995,
+      "lng": -122.4085,
+      "open": "10:00",
+      "close": "20:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Italian and Cantonese spoken nearby."
+    },
+    {
+      "id": "b17",
+      "name": "Noe Valley Neighbor Shelf",
+      "hood": "Noe Valley",
+      "address": "24th St & Castro St",
+      "lat": 37.751,
+      "lng": -122.434,
+      "open": "08:00",
+      "close": "20:00",
+      "fridge": false,
+      "access": "Step-free",
+      "note": "Shelf only."
+    },
+    {
+      "id": "b18",
+      "name": "Taraval Street Pantry",
+      "hood": "Parkside",
+      "address": "Taraval St & 26th Ave",
+      "lat": 37.743,
+      "lng": -122.4835,
+      "open": "09:00",
+      "close": "19:00",
+      "fridge": true,
+      "access": "Step-free",
+      "note": "Near the L Taraval stop."
+    }
+  ],
+  "packets": [
+    {
+      "id": "p01",
+      "bankId": "b01",
+      "title": "Rajma chawal, 2 boxes",
+      "contents": "Kidney bean curry with basmati rice. Mild spice.",
+      "kind": "Cooked meal",
+      "servings": 2,
+      "tags": [
+        "Vegetarian",
+        "Vegan",
+        "Gluten-free"
+      ],
+      "packedMinutesAgo": 55,
+      "eatWithinHours": 24,
+      "donor": "Priya"
+    },
+    {
+      "id": "p02",
+      "bankId": "b01",
+      "title": "Chicken tinga tacos",
+      "contents": "Corn tortillas, shredded chicken, salsa on the side.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Gluten-free",
+        "Dairy-free"
+      ],
+      "packedMinutesAgo": 120,
+      "eatWithinHours": 24,
+      "donor": "Lupe"
+    },
+    {
+      "id": "p03",
+      "bankId": "b01",
+      "title": "Bag of oranges and bananas",
+      "contents": "About 10 pieces of fruit.",
+      "kind": "Produce",
+      "servings": 5,
+      "tags": [
+        "Vegan",
+        "Kid-friendly",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 300,
+      "eatWithinHours": 168,
+      "donor": "Marco"
+    },
+    {
+      "id": "p04",
+      "bankId": "b02",
+      "title": "Chicken noodle soup",
+      "contents": "Homemade, in two 1-quart jars. Contains celery.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Dairy-free",
+        "Nut-free",
+        "Soft food"
+      ],
+      "packedMinutesAgo": 40,
+      "eatWithinHours": 24,
+      "donor": "Dana"
+    },
+    {
+      "id": "p05",
+      "bankId": "b02",
+      "title": "Halal lamb and rice plates",
+      "contents": "Lamb, yellow rice, salad. Yogurt sauce in a separate cup.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Halal",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 80,
+      "eatWithinHours": 12,
+      "donor": "Yusuf"
+    },
+    {
+      "id": "p06",
+      "bankId": "b02",
+      "title": "Peanut butter sandwiches",
+      "contents": "Wheat bread, PB and jelly. Contains peanuts.",
+      "kind": "Snacks",
+      "servings": 6,
+      "tags": [
+        "Vegetarian",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 30,
+      "eatWithinHours": 12,
+      "donor": "Sam"
+    },
+    {
+      "id": "p07",
+      "bankId": "b03",
+      "title": "Pasta primavera",
+      "contents": "Penne with vegetables and parmesan.",
+      "kind": "Cooked meal",
+      "servings": 2,
+      "tags": [
+        "Vegetarian",
+        "Nut-free",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 95,
+      "eatWithinHours": 24,
+      "donor": "Elena"
+    },
+    {
+      "id": "p08",
+      "bankId": "b03",
+      "title": "Sourdough loaves",
+      "contents": "Two loaves baked this morning.",
+      "kind": "Bakery",
+      "servings": 8,
+      "tags": [
+        "Vegan",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 240,
+      "eatWithinHours": 72,
+      "donor": "Theo"
+    },
+    {
+      "id": "p09",
+      "bankId": "b03",
+      "title": "Canned beans and tuna",
+      "contents": "4 cans black beans, 3 cans tuna, pull-tab lids.",
+      "kind": "Pantry",
+      "servings": 7,
+      "tags": [
+        "Gluten-free",
+        "Dairy-free"
+      ],
+      "packedMinutesAgo": 600,
+      "eatWithinHours": 2000,
+      "donor": "Kim"
+    },
+    {
+      "id": "p10",
+      "bankId": "b04",
+      "title": "Red beans, rice and cornbread",
+      "contents": "Cornbread contains egg and milk.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Vegetarian",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 70,
+      "eatWithinHours": 12,
+      "donor": "Denise"
+    },
+    {
+      "id": "p11",
+      "bankId": "b04",
+      "title": "Apples and carrots",
+      "contents": "From a backyard tree and a CSA box.",
+      "kind": "Produce",
+      "servings": 6,
+      "tags": [
+        "Vegan",
+        "Kid-friendly",
+        "Gluten-free"
+      ],
+      "packedMinutesAgo": 420,
+      "eatWithinHours": 168,
+      "donor": "Andre"
+    },
+    {
+      "id": "p12",
+      "bankId": "b05",
+      "title": "Pancit and lumpia",
+      "contents": "Rice noodles with vegetables and pork; pork spring rolls.",
+      "kind": "Cooked meal",
+      "servings": 5,
+      "tags": [
+        "Dairy-free",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 60,
+      "eatWithinHours": 24,
+      "donor": "Maricel"
+    },
+    {
+      "id": "p13",
+      "bankId": "b05",
+      "title": "Pupusas with curtido",
+      "contents": "Bean and cheese pupusas, cabbage slaw.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Vegetarian",
+        "Gluten-free"
+      ],
+      "packedMinutesAgo": 150,
+      "eatWithinHours": 24,
+      "donor": "Rosa"
+    },
+    {
+      "id": "p14",
+      "bankId": "b05",
+      "title": "Baby food pouches",
+      "contents": "8 sealed pouches, apple and pear. Age 6 months+.",
+      "kind": "Baby & kids",
+      "servings": 8,
+      "tags": [
+        "Vegan",
+        "Kid-friendly",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 900,
+      "eatWithinHours": 2000,
+      "donor": "Jess"
+    },
+    {
+      "id": "p15",
+      "bankId": "b06",
+      "title": "Vegetable curry and roti",
+      "contents": "Potato, cauliflower, peas. Roti wrapped separately.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Vegetarian",
+        "Vegan",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 45,
+      "eatWithinHours": 24,
+      "donor": "Anita"
+    },
+    {
+      "id": "p16",
+      "bankId": "b06",
+      "title": "Granola bars and juice boxes",
+      "contents": "12 bars (contain almonds), 6 juice boxes.",
+      "kind": "Snacks",
+      "servings": 12,
+      "tags": [
+        "Vegetarian",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 200,
+      "eatWithinHours": 2000,
+      "donor": "Liam"
+    },
+    {
+      "id": "p17",
+      "bankId": "b07",
+      "title": "Congee with ginger",
+      "contents": "Plain rice porridge, scallions on the side.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Vegan",
+        "Gluten-free",
+        "Soft food",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 35,
+      "eatWithinHours": 12,
+      "donor": "Mei"
+    },
+    {
+      "id": "p18",
+      "bankId": "b07",
+      "title": "Steamed pork buns",
+      "contents": "8 char siu bao.",
+      "kind": "Bakery",
+      "servings": 4,
+      "tags": [
+        "Dairy-free",
+        "Nut-free",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 110,
+      "eatWithinHours": 24,
+      "donor": "Kenny"
+    },
+    {
+      "id": "p19",
+      "bankId": "b08",
+      "title": "Lentil soup",
+      "contents": "Red lentils, carrots, cumin. Lemon on the side.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Vegan",
+        "Gluten-free",
+        "Halal",
+        "Soft food"
+      ],
+      "packedMinutesAgo": 85,
+      "eatWithinHours": 24,
+      "donor": "Noor"
+    },
+    {
+      "id": "p20",
+      "bankId": "b08",
+      "title": "Bagels and cream cheese",
+      "contents": "6 bagels, sealed tub of cream cheese.",
+      "kind": "Bakery",
+      "servings": 6,
+      "tags": [
+        "Vegetarian",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 180,
+      "eatWithinHours": 48,
+      "donor": "Ari"
+    },
+    {
+      "id": "p21",
+      "bankId": "b09",
+      "title": "Bok choy and tofu",
+      "contents": "Fresh bok choy bunches, 2 sealed tofu packs.",
+      "kind": "Produce",
+      "servings": 4,
+      "tags": [
+        "Vegan",
+        "Gluten-free"
+      ],
+      "packedMinutesAgo": 260,
+      "eatWithinHours": 72,
+      "donor": "Grace"
+    },
+    {
+      "id": "p22",
+      "bankId": "b09",
+      "title": "Rice and noodles",
+      "contents": "5 lb bag of jasmine rice, 4 packs dry noodles.",
+      "kind": "Pantry",
+      "servings": 10,
+      "tags": [
+        "Vegan",
+        "Dairy-free"
+      ],
+      "packedMinutesAgo": 700,
+      "eatWithinHours": 2000,
+      "donor": "Wen"
+    },
+    {
+      "id": "p23",
+      "bankId": "b10",
+      "title": "Baked chicken, greens, mac and cheese",
+      "contents": "Collard greens cooked with smoked turkey.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 65,
+      "eatWithinHours": 24,
+      "donor": "Tasha"
+    },
+    {
+      "id": "p24",
+      "bankId": "b10",
+      "title": "Diapers, size 3",
+      "contents": "Unopened pack of 28, plus wipes.",
+      "kind": "Baby & kids",
+      "servings": 1,
+      "tags": [
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 1000,
+      "eatWithinHours": 5000,
+      "donor": "Chris"
+    },
+    {
+      "id": "p25",
+      "bankId": "b11",
+      "title": "Spaghetti with meat sauce",
+      "contents": "Beef sauce, garlic bread wrapped separately.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Nut-free",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 100,
+      "eatWithinHours": 24,
+      "donor": "Tony"
+    },
+    {
+      "id": "p26",
+      "bankId": "b12",
+      "title": "Quinoa salad bowls",
+      "contents": "Quinoa, chickpeas, cucumber, lemon dressing.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Vegan",
+        "Gluten-free",
+        "Halal"
+      ],
+      "packedMinutesAgo": 50,
+      "eatWithinHours": 24,
+      "donor": "Hannah"
+    },
+    {
+      "id": "p27",
+      "bankId": "b12",
+      "title": "Muffins",
+      "contents": "Blueberry, a dozen. Contain egg and milk.",
+      "kind": "Bakery",
+      "servings": 12,
+      "tags": [
+        "Vegetarian",
+        "Nut-free",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 220,
+      "eatWithinHours": 48,
+      "donor": "Olivia"
+    },
+    {
+      "id": "p28",
+      "bankId": "b13",
+      "title": "Turkey and cheese sandwiches",
+      "contents": "Whole wheat, individually wrapped.",
+      "kind": "Snacks",
+      "servings": 8,
+      "tags": [
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 25,
+      "eatWithinHours": 12,
+      "donor": "Ben"
+    },
+    {
+      "id": "p29",
+      "bankId": "b13",
+      "title": "Biryani with raita",
+      "contents": "Chicken biryani. Raita in a separate cup.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Halal",
+        "Gluten-free",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 75,
+      "eatWithinHours": 12,
+      "donor": "Farah"
+    },
+    {
+      "id": "p30",
+      "bankId": "b13",
+      "title": "Oatmeal cups and milk",
+      "contents": "6 instant oatmeal cups, 6 shelf-stable milk boxes.",
+      "kind": "Pantry",
+      "servings": 6,
+      "tags": [
+        "Vegetarian",
+        "Soft food",
+        "Kid-friendly"
+      ],
+      "packedMinutesAgo": 500,
+      "eatWithinHours": 2000,
+      "donor": "Rachel"
+    },
+    {
+      "id": "p31",
+      "bankId": "b14",
+      "title": "Adobo chicken and rice",
+      "contents": "Soy and vinegar braised chicken.",
+      "kind": "Cooked meal",
+      "servings": 3,
+      "tags": [
+        "Dairy-free",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 130,
+      "eatWithinHours": 24,
+      "donor": "Joel"
+    },
+    {
+      "id": "p32",
+      "bankId": "b15",
+      "title": "Minestrone",
+      "contents": "Beans, pasta, vegetables. Parmesan on the side.",
+      "kind": "Cooked meal",
+      "servings": 4,
+      "tags": [
+        "Vegetarian",
+        "Nut-free",
+        "Soft food"
+      ],
+      "packedMinutesAgo": 90,
+      "eatWithinHours": 24,
+      "donor": "Giulia"
+    },
+    {
+      "id": "p33",
+      "bankId": "b15",
+      "title": "Tomatoes and zucchini",
+      "contents": "Garden surplus, about 3 lb.",
+      "kind": "Produce",
+      "servings": 5,
+      "tags": [
+        "Vegan",
+        "Gluten-free"
+      ],
+      "packedMinutesAgo": 360,
+      "eatWithinHours": 120,
+      "donor": "Pete"
+    },
+    {
+      "id": "p34",
+      "bankId": "b16",
+      "title": "Focaccia",
+      "contents": "Rosemary and olive oil, a full tray cut in squares.",
+      "kind": "Bakery",
+      "servings": 10,
+      "tags": [
+        "Vegan",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 160,
+      "eatWithinHours": 48,
+      "donor": "Luca"
+    },
+    {
+      "id": "p35",
+      "bankId": "b18",
+      "title": "Kimchi fried rice",
+      "contents": "With egg on top. Kimchi contains fish sauce.",
+      "kind": "Cooked meal",
+      "servings": 2,
+      "tags": [
+        "Dairy-free",
+        "Nut-free"
+      ],
+      "packedMinutesAgo": 40,
+      "eatWithinHours": 12,
+      "donor": "Jun"
+    },
+    {
+      "id": "p36",
+      "bankId": "b18",
+      "title": "Hummus and pita packs",
+      "contents": "4 sealed hummus tubs, 2 bags pita.",
+      "kind": "Snacks",
+      "servings": 8,
+      "tags": [
+        "Vegan",
+        "Halal"
+      ],
+      "packedMinutesAgo": 140,
+      "eatWithinHours": 72,
+      "donor": "Leila"
+    }
+  ]
+}

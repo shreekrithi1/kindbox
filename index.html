@@ -1,0 +1,1311 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>[hidden]{display:none!important}</style></head><body style="margin:0">
+<title>Kindbox SF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: app shell — header with Find/Give switch; Find = list panel + SF map side by side (stacked on phones, map first); Give = form beside a live box-label preview. */
+:root{
+  --bg:#F1F5EF; --surface:#FFFFFF; --ink:#17251E; --muted:#56675D; --line:#D6DFD6;
+  --leaf:#2B7349; --leaf-ink:#FFFFFF; --leaf-soft:#E0EEE4;
+  --squash:#C95F17; --squash-soft:#FBE9DA;
+  --water:#D5E4EA; --land:#FAFCF8; --park:#CFE3CA; --street:#C9D2C9;
+  --warn:#A8400B; --taken:#8B958F;
+  --shadow:0 1px 2px rgb(23 37 30/.06),0 6px 20px rgb(23 37 30/.06);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --f-serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --k-meal:#D0661E; --k-produce:#3E8A4F; --k-bakery:#C2902F; --k-pantry:#93694B; --k-snacks:#B44C6C; --k-baby:#3D7CAF;
+  --glass:rgb(255 255 255/.86); --landdot:rgb(43 115 73/.16); --glow1:rgb(43 115 73/.10); --glow2:rgb(201 95 23/.10);
+  --r:12px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1611; --surface:#16211A; --ink:#E4EDE6; --muted:#9AAB9F; --line:#28372E;
+  --leaf:#6BC28D; --leaf-ink:#0E1611; --leaf-soft:#1C3326;
+  --squash:#F0944E; --squash-soft:#3A2616;
+  --water:#112129; --land:#19251D; --park:#1E3825; --street:#2E3E34;
+  --warn:#F49A62; --taken:#6E7A73;
+  --shadow:0 1px 2px rgb(0 0 0/.3),0 6px 20px rgb(0 0 0/.25);
+  --glass:rgb(22 33 26/.86); --landdot:rgb(107 194 141/.13); --glow1:rgb(107 194 141/.08); --glow2:rgb(240 148 78/.08);
+  --k-meal:#E0803A; --k-produce:#5DAA6E; --k-bakery:#D3A548; --k-pantry:#B08566; --k-snacks:#CF6B8A; --k-baby:#5B9BCF;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1611; --surface:#16211A; --ink:#E4EDE6; --muted:#9AAB9F; --line:#28372E;
+  --leaf:#6BC28D; --leaf-ink:#0E1611; --leaf-soft:#1C3326;
+  --squash:#F0944E; --squash-soft:#3A2616;
+  --water:#112129; --land:#19251D; --park:#1E3825; --street:#2E3E34;
+  --warn:#F49A62; --taken:#6E7A73;
+  --shadow:0 1px 2px rgb(0 0 0/.3),0 6px 20px rgb(0 0 0/.25);
+  --glass:rgb(22 33 26/.86); --landdot:rgb(107 194 141/.13); --glow1:rgb(107 194 141/.08); --glow2:rgb(240 148 78/.08);
+  --k-meal:#E0803A; --k-produce:#5DAA6E; --k-bakery:#D3A548; --k-pantry:#B08566; --k-snacks:#CF6B8A; --k-baby:#5B9BCF;
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--squash);outline-offset:2px;border-radius:6px}
+h1,h2,h3{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.wrap{max-width:1280px;margin:0 auto;padding-inline:16px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto}
+.brand svg{flex:none}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:22px;letter-spacing:-.01em}
+.brand small{display:block;font-size:12.5px;color:var(--muted);line-height:1.2}
+.switch{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+.switch button{border:0;background:none;padding:8px 18px;border-radius:999px;font-weight:700;cursor:pointer;color:var(--muted);min-height:40px}
+.switch button[aria-pressed="true"]{background:var(--leaf);color:var(--leaf-ink)}
+.switch button[data-mode="give"][aria-pressed="true"]{background:var(--squash);color:#fff}
+
+/* FIND layout */
+.find{display:grid;grid-template-columns:minmax(340px,420px) 1fr;gap:16px;padding-block:16px;height:calc(100vh - 70px);min-height:560px}
+.panel{display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.mapbox{position:relative;min-width:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--water);box-shadow:var(--shadow)}
+.controls{padding:14px 14px 10px;display:grid;gap:10px;border-bottom:1px solid var(--line)}
+.search{position:relative}
+.search input{width:100%;padding:12px 14px 12px 40px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:16px}
+.search input:focus{border-color:var(--leaf);outline:none}
+.search svg{position:absolute;left:12px;top:50%;translate:0 -50%;color:var(--muted)}
+.near{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.near select{padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-weight:700;max-width:100%}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:5px 11px;font-size:13.5px;cursor:pointer;min-height:32px;display:inline-flex;align-items:center;gap:5px}
+.chip[aria-pressed="true"]{background:var(--leaf-soft);border-color:var(--leaf);color:var(--ink);font-weight:700}
+.chip.toggle[aria-pressed="true"]{background:var(--leaf);color:var(--leaf-ink);border-color:var(--leaf)}
+.summary{padding:10px 14px;font-size:14px;color:var(--muted);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.summary strong{color:var(--ink)}
+.list{overflow:auto;flex:1;min-height:0}
+.bank{display:grid;grid-template-columns:1fr auto;gap:4px 12px;padding:14px;border-bottom:1px solid var(--line);cursor:pointer;background:none;border-inline:0;border-top:0;width:100%;text-align:left}
+.bank:hover,.bank.hl{background:var(--leaf-soft)}
+.bank h3{font-size:17px;font-weight:600}
+.bank .meta{font-size:13.5px;color:var(--muted);grid-column:1}
+.bank .items{grid-column:1/-1;font-size:13.5px;color:var(--ink);opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.count{grid-row:1/3;grid-column:2;align-self:center;text-align:center;min-width:56px;padding:6px 8px;border-radius:10px;background:var(--leaf-soft)}
+.count b{display:block;font-family:var(--f-display);font-size:22px;line-height:1;color:var(--leaf)}
+.count span{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.count.zero{background:var(--bg)}
+.count.zero b{color:var(--taken)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;letter-spacing:.02em}
+.pill.open{background:var(--leaf-soft);color:var(--leaf)}
+.pill.closed{background:var(--squash-soft);color:var(--warn)}
+.empty{padding:28px 18px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+
+/* detail */
+.detail{padding:14px;display:grid;gap:14px}
+.back{justify-self:start;border:0;background:none;color:var(--leaf);font-weight:700;cursor:pointer;padding:4px 0;display:flex;align-items:center;gap:4px}
+.detail h2{font-size:24px}
+.facts{display:grid;gap:6px;font-size:14.5px}
+.facts div{display:flex;gap:8px}
+.facts dt{min-width:72px;color:var(--muted)}
+.facts dd{margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 16px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);font-weight:700;cursor:pointer;text-decoration:none;color:var(--ink)}
+.btn.primary{background:var(--leaf);border-color:var(--leaf);color:var(--leaf-ink)}
+.btn.give{background:var(--squash);border-color:var(--squash);color:#fff}
+.btn.small{min-height:36px;padding:6px 12px;font-size:14px}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.sect{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* packet label card */
+.tag{position:relative;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px 12px 18px;background:var(--bg);display:grid;gap:6px}
+.tag::before{content:"";position:absolute;left:-1px;top:14px;width:8px;height:8px;border-radius:50%;background:var(--surface);border:1.5px solid var(--line);translate:-50% 0}
+.tag.taken{opacity:.6}
+.tag .row1{display:flex;justify-content:space-between;align-items:start;gap:10px}
+.tag h4{margin:0;font-size:16px;font-weight:700}
+.kind{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--squash);white-space:nowrap}
+.tag p{margin:0;font-size:14px;color:var(--muted)}
+.diet{display:flex;gap:4px;flex-wrap:wrap}
+.diet span{font-size:12px;padding:1px 7px;border-radius:6px;background:var(--leaf-soft);color:var(--leaf);font-weight:700}
+.fresh{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:center;font-size:12.5px}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--leaf)}
+.bar i.late{background:var(--squash)}
+.tag .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.new{font-size:11px;font-weight:700;color:var(--squash);letter-spacing:.06em;text-transform:uppercase}
+
+/* map */
+#map{display:block;width:100%;height:100%;cursor:crosshair;user-select:none}
+#map .land{fill:var(--land);stroke:var(--street);stroke-width:1.2}
+#map .landtex{display:none;fill:url(#dotpat);pointer-events:none}
+#map #dotpat circle{fill:var(--landdot)}
+#map .park{fill:var(--park)}
+#map .street{stroke:var(--street);fill:none;stroke-linecap:round}
+#map .hood{fill:var(--muted);font-family:var(--f-body);font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.55;pointer-events:none}
+#map .pin{cursor:pointer}
+#map .pin circle.dot{fill:var(--leaf);stroke:var(--surface)}
+#map .pin.zero circle.dot{fill:var(--taken)}
+#map .pin.closed circle.dot{fill:var(--surface);stroke:var(--leaf)}
+#map .pin.closed text{fill:var(--leaf)}
+#map .pin.sel circle.dot{fill:var(--squash);stroke:var(--surface)}
+#map .pin.sel text{fill:#fff}
+#map .pin.dim{opacity:.28}
+#map .pin text{fill:var(--leaf-ink);font-family:var(--f-display);font-weight:800;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+#map .pin:focus{outline:none}
+#map .pin:focus-visible circle.dot{stroke:var(--squash)}
+#map .me circle.halo{fill:var(--squash);opacity:.2}
+#map .me circle.core{fill:var(--squash);stroke:var(--surface)}
+.mapui{position:absolute;right:10px;top:10px;display:grid;gap:6px}
+.mapui button{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:20px;font-weight:700;cursor:pointer;box-shadow:var(--shadow)}
+.maphint{position:absolute;left:10px;bottom:10px;right:60px;font-size:12.5px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.maphint span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px 10px;display:inline-flex;align-items:center;gap:6px}
+.lg{width:10px;height:10px;border-radius:50%;display:inline-block}
+.compass{position:absolute;left:12px;top:10px;font-family:var(--f-mono);font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:3px 8px}
+
+/* GIVE layout */
+.give{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;padding-block:20px 40px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:22px;min-width:0}
+.give h2{font-size:28px;margin-bottom:4px}
+.lede{color:var(--muted);margin:0 0 18px;max-width:60ch}
+form{display:grid;gap:16px}
+.field{display:grid;gap:6px;min-width:0}
+.field label,.field legend{font-weight:700;font-size:14.5px;padding:0}
+.field .hint{font-size:13px;color:var(--muted)}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.field input,.field select,.field textarea{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);font-size:16px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--squash);outline:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.stepper{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);width:max-content}
+.stepper button{width:44px;height:44px;border:0;background:none;font-size:20px;font-weight:700;cursor:pointer;color:var(--squash)}
+.stepper output{min-width:36px;text-align:center;font-family:var(--f-mono);font-size:18px}
+.chips.pick .chip[aria-pressed="true"]{background:var(--squash-soft);border-color:var(--squash)}
+.pledge{display:flex;gap:10px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px;font-size:14px}
+.pledge input{width:20px;height:20px;margin-top:2px;accent-color:var(--squash);flex:none}
+.err{color:var(--warn);font-size:14px;font-weight:700;min-height:1.2em}
+aside.side{display:grid;gap:16px;position:sticky;top:84px}
+.boxlabel{border:2px solid var(--ink);border-radius:6px;background:var(--surface);padding:14px 16px;font-family:var(--f-mono);font-size:13px;display:grid;gap:8px;position:relative}
+.boxlabel .hd{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:8px;font-weight:500}
+.boxlabel .hd b{font-family:var(--f-display);font-size:20px;letter-spacing:.02em}
+.boxlabel .ttl{font-family:var(--f-body);font-weight:700;font-size:18px;line-height:1.25}
+.boxlabel dl{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:0}
+.boxlabel dt{color:var(--muted);text-transform:uppercase;font-size:11px;letter-spacing:.08em;align-self:center}
+.boxlabel dd{margin:0}
+.tips ul{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px}
+.tips h3{font-size:18px}
+.done{display:grid;gap:14px;justify-items:start}
+.done .code{font-family:var(--f-mono);font-size:34px;letter-spacing:.06em;color:var(--squash);border:2px dashed var(--squash);border-radius:10px;padding:6px 16px}
+.mydrops{display:grid;gap:8px;margin-top:6px}
+.mydrops div{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-top:1px solid var(--line);padding-top:8px;flex-wrap:wrap}
+.status{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--taken);display:inline-block}
+.status.live i{background:var(--leaf)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));translate:-50% 0;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;z-index:50;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+
+/* ---------- shared bits for the web (desktop) experience ---------- */
+@media (max-width:1023px){.desk-only{display:none!important}}
+.serif{font-family:var(--f-serif);font-weight:400;letter-spacing:-.01em}
+.serif em{font-style:italic;color:var(--squash)}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--squash)}
+.glass{background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.kdot{width:8px;height:8px;border-radius:50%;display:inline-block;flex:none}
+
+/* ---------- LANDING (web only) ---------- */
+.landing{position:fixed;inset:0;z-index:60;overflow:auto;background:
+  radial-gradient(60% 55% at 50% 38%,var(--glow1),transparent 70%),
+  radial-gradient(40% 40% at 80% 80%,var(--glow2),transparent 70%),var(--bg);display:flex;flex-direction:column;padding-inline:32px}
+.l-top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px 0;max-width:1240px;width:100%;margin:0 auto}
+.l-brand{display:flex;align-items:center;gap:12px;font-family:var(--f-display);font-weight:800;font-size:22px}
+.l-brand .tile{width:44px;height:44px;border-radius:12px;background:var(--leaf);display:grid;place-items:center;box-shadow:0 6px 16px rgb(43 115 73/.25)}
+.l-pill{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted)}
+.l-pill i{width:8px;height:8px;border-radius:50%;background:var(--squash);box-shadow:0 0 0 4px var(--squash-soft)}
+.l-link{color:var(--ink);font-weight:700;text-decoration:none;display:flex;gap:8px;align-items:center;background:none;border:0;cursor:pointer;font-size:15px}
+.l-link:hover{color:var(--leaf)}
+.l-stage{position:relative;width:min(1100px,100%);margin:0 auto;height:min(52vh,470px);min-height:360px}
+.l-stage #lMap{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.l-stage .ldot{fill:var(--leaf);opacity:.42}
+.l-stage .lpark{fill:var(--leaf);opacity:.8}
+.l-stage .lpin{fill:var(--squash)}
+.l-stage .lring{fill:none;stroke:var(--squash);opacity:.5}
+.l-stage .orbit{fill:none;stroke:var(--squash);stroke-opacity:.28;stroke-width:1;stroke-dasharray:2 5}
+.stat{position:absolute;padding:18px 22px;min-width:200px;display:grid;gap:2px}
+.stat b{font-family:var(--f-display);font-size:34px;line-height:1.05;color:var(--squash);font-variant-numeric:tabular-nums}
+.stat span{font-size:14px;font-weight:700}
+.stat small{font-size:12.5px;color:var(--muted);margin-top:8px}
+.stat svg.ic{position:absolute;right:16px;top:16px;color:var(--muted)}
+.l-copy{text-align:center;display:grid;justify-items:center;gap:14px;padding-block:6px 40px}
+.l-copy h1{font-family:var(--f-serif);font-weight:400;font-size:clamp(40px,4.6vw,64px);letter-spacing:-.02em;line-height:1.05}
+.l-copy h1 em{color:var(--squash);font-style:italic}
+.l-copy p{margin:0;color:var(--muted);font-size:17px;max-width:56ch}
+.l-ctas{display:flex;gap:12px;margin-top:10px;flex-wrap:wrap;justify-content:center}
+.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:28px;min-width:280px;padding:16px 22px;border-radius:14px;border:0;font-weight:700;font-size:16.5px;cursor:pointer;background:linear-gradient(135deg,var(--leaf),color-mix(in srgb,var(--leaf) 70%,var(--ink)));color:var(--leaf-ink);box-shadow:0 12px 28px rgb(43 115 73/.28)}
+.cta.alt{background:var(--surface);color:var(--ink);border:1.5px solid var(--line);box-shadow:var(--shadow);min-width:220px}
+.cta:hover{filter:brightness(1.05)}
+.l-note{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){
+  .orbit-g{animation:spin 90s linear infinite;transform-origin:center;transform-box:fill-box}
+  .lring{animation:ping 2.6s ease-out infinite;transform-origin:center;transform-box:fill-box}
+  .stat{animation:float 7s ease-in-out infinite}
+  .stat:nth-of-type(2){animation-delay:-2s}.stat:nth-of-type(3){animation-delay:-4s}.stat:nth-of-type(4){animation-delay:-5.5s}
+  @keyframes spin{to{rotate:360deg}}
+  @keyframes ping{0%{scale:.4;opacity:.7}100%{scale:2.2;opacity:0}}
+  @keyframes float{50%{translate:0 -6px}}
+}
+
+/* ---------- ATLAS layout (web ≥1024px) ---------- */
+@media (min-width:1024px){
+  .desk-only{display:revert}
+  body.on-find header.top{display:none}
+  body.on-find{overflow:hidden}
+  .find{display:block;position:relative;max-width:none;padding:0;height:100vh;height:100dvh;min-height:640px}
+  .find .mapbox{position:absolute;inset:0;border:0;border-radius:0;box-shadow:none}
+  .find .mapbox .compass,.find .mapbox .maphint{display:none}
+  .find .mapui{right:356px;top:16px}
+  .atlas-top.compact .eyebrow,.atlas-top.compact h2,.atlas-top.compact p{display:none}
+  #map .landtex{display:inline}
+  /* left panel */
+  .find .panel{position:absolute;left:16px;top:16px;bottom:16px;width:340px;z-index:5;overflow:auto;border-radius:20px;background:var(--glass);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2)}
+  .find .panel .list{overflow:visible;flex:none}
+  .side-brand{display:grid;gap:12px;padding:18px 18px 4px}
+  .side-brand .row{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+  .side-brand .tile{width:40px;height:40px;border-radius:11px;background:var(--leaf);display:grid;place-items:center;flex:none}
+  .side-brand b{font-family:var(--f-display);font-weight:800;font-size:20px;display:block;line-height:1.1}
+  .side-brand small{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .side-brand h1{font-family:var(--f-serif);font-weight:400;font-size:30px;line-height:1.08;letter-spacing:-.015em;margin-top:8px}
+  .side-brand h1 em{font-style:italic;color:var(--squash)}
+  .side-brand p{margin:0;color:var(--muted);font-size:14px}
+  .find .controls{border-bottom:0;padding:12px 18px}
+  .refine{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:12px}
+  .refine button{border:0;background:none;color:var(--squash);font-weight:700;cursor:pointer;font-size:13px}
+  .facet-h{font-weight:700;font-size:14px;margin-top:6px}
+  #dietChips,#kindChips{display:flex;flex-direction:column;gap:2px}
+  .chip .kdot{display:inline-block}
+  #toggleChips .mob-kind{display:none}
+  #dietChips .chip,#kindChips .chip{border:0;background:none;border-radius:8px;justify-content:flex-start;width:100%;padding:6px 10px;font-size:14px}
+  #dietChips .chip .n,#kindChips .chip .n{margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px}
+  #dietChips .chip:hover,#kindChips .chip:hover{background:var(--leaf-soft)}
+  #dietChips .chip[aria-pressed="true"],#kindChips .chip[aria-pressed="true"]{background:var(--squash-soft);color:var(--squash);font-weight:700}
+  .find .summary{border-top:1px solid var(--line);padding:12px 18px}
+  .find .bank{padding:12px 18px}
+  /* overlay headline */
+  .atlas-top{position:absolute;left:372px;right:356px;top:16px;z-index:4;display:grid;justify-items:center;gap:10px;pointer-events:none;text-align:center}
+  .atlas-top .switch{pointer-events:auto;box-shadow:var(--shadow)}
+  .atlas-top h2{font-family:var(--f-serif);font-weight:400;font-size:clamp(26px,2.4vw,36px);letter-spacing:-.015em}
+  .atlas-top h2 em{font-style:italic;color:var(--squash)}
+  .atlas-top p{margin:0;color:var(--muted);font-size:14px}
+  /* right rail */
+  .rail{position:absolute;right:16px;top:16px;bottom:16px;width:324px;z-index:5;display:flex;flex-direction:column;gap:12px;overflow:auto;scrollbar-width:none}
+  .rail>.glass{padding:16px 18px}
+  .bign{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+  .bign b{display:block;font-family:var(--f-display);font-size:32px;line-height:1;font-variant-numeric:tabular-nums}
+  .bign span{font-size:12.5px;color:var(--muted)}
+  .meter{height:6px;border-radius:3px;background:var(--line);margin-top:12px;overflow:hidden}
+  .meter i{display:block;height:100%;background:var(--leaf)}
+  .rail .fine{font-size:12px;color:var(--muted);margin-top:6px}
+  .rank{display:grid;gap:2px;margin-top:8px}
+  .rank button{display:grid;grid-template-columns:22px 1fr auto;gap:2px 8px;align-items:center;border:0;background:none;padding:7px 6px;border-radius:8px;cursor:pointer;text-align:left}
+  .rank button:hover{background:var(--leaf-soft)}
+  .rank .i{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+  .rank .bar2{grid-column:2/4;height:3px;border-radius:2px;background:var(--line);overflow:hidden}
+  .rank .bar2 i{display:block;height:100%;background:var(--squash)}
+  .promo{position:relative;overflow:hidden;background:linear-gradient(160deg,var(--squash-soft),var(--glass)) !important}
+  .promo h3{font-family:var(--f-serif);font-weight:400;font-size:28px;line-height:1.08;margin-top:8px;max-width:11ch}
+  .promo p{font-size:13.5px;color:var(--muted);margin:8px 0 12px;max-width:26ch}
+  .promo .art{position:absolute;right:-18px;bottom:-14px;opacity:.9;pointer-events:none}
+  .promo button{border:0;background:none;padding:0;font-weight:700;color:var(--ink);cursor:pointer;display:flex;gap:6px;align-items:center}
+  .tipcard{display:flex;gap:12px;align-items:center;border:0;cursor:pointer;text-align:left;width:100%;padding:14px 16px !important}
+  .tipcard .ti{width:36px;height:36px;border-radius:10px;background:var(--leaf-soft);display:grid;place-items:center;color:var(--leaf);flex:none}
+  .tipcard b{display:block;font-size:14px}
+  .tipcard span{font-size:12.5px;color:var(--muted)}
+  /* bottom dock */
+  .dock{position:absolute;left:372px;right:356px;bottom:16px;z-index:4;padding:14px 16px 16px}
+  .dock-h{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .dock-h .tile{width:30px;height:30px;border-radius:8px;background:var(--squash);display:grid;place-items:center}
+  .dock-h b{font-size:15px}
+  .dock-h .cnt{font-size:11px;font-family:var(--f-mono);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--muted)}
+  .dock-h .nav{margin-left:auto;display:flex;gap:6px}
+  .dock-h .nav button{width:32px;height:32px;border-radius:8px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700}
+  .strip{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:2px}
+  .strip::-webkit-scrollbar{display:none}
+  .bcard{flex:0 0 176px;scroll-snap-align:start;border:0;background:none;padding:0;text-align:left;cursor:pointer;display:grid;gap:6px}
+  .bcard .art{position:relative;height:100px;border-radius:12px;overflow:hidden;display:grid;place-items:center}
+  .bcard .art .k{position:absolute;left:8px;bottom:8px;font-size:10.5px;font-weight:700;letter-spacing:.04em;background:rgb(255 255 255/.92);color:#17251E;border-radius:6px;padding:2px 7px}
+  .bcard .art .t{position:absolute;right:8px;top:8px;font-size:10.5px;font-weight:700;background:rgb(23 37 30/.72);color:#fff;border-radius:6px;padding:2px 7px;font-family:var(--f-mono)}
+  .bcard:hover .art{outline:2px solid var(--squash);outline-offset:2px}
+  .bcard b{font-size:14px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .bcard span{font-size:12px;color:var(--muted);display:flex;gap:4px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* detail drawer */
+  .drawer{position:absolute;right:16px;top:16px;bottom:16px;width:400px;z-index:7;overflow:auto;padding:4px 4px 8px}
+  .drawer .detail{padding:16px 18px}
+  .drawer .x{position:sticky;top:0;float:right;margin:12px 12px 0 0;width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:18px;z-index:2}
+  .drawer .detail h2{font-family:var(--f-serif);font-weight:400;font-size:30px;letter-spacing:-.015em}
+  .drawer .hero-art{height:120px;border-radius:14px;display:grid;place-items:center;overflow:hidden;margin:0 18px}
+  /* give mode on web keeps header */
+  .give{padding-block:32px 56px}
+}
+@media (min-width:1024px) and (max-width:1240px){
+  .find .panel{width:300px}
+  .atlas-top,.dock{left:332px;right:316px}
+  .rail{width:288px}
+  .find .mapui{right:316px}
+  .atlas-top{top:12px}
+  .bign b{font-size:26px}
+}
+@media (max-width:1023px){ .landing{display:none !important} }
+
+@media (max-width:860px){
+  .find{grid-template-columns:1fr;height:auto;min-height:0;padding-block:12px}
+  .mapbox{order:-1;height:min(46vh,380px);min-height:260px}
+  .panel{overflow:visible}
+  .list{overflow:visible}
+  .give{grid-template-columns:1fr}
+  aside.side{position:static}
+}
+@media (max-width:480px){
+  .brand small{display:none}
+  .switch{width:100%}
+  .switch button{flex:1;padding:8px 10px}
+  .two{grid-template-columns:1fr}
+  .card{padding:16px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .bank,.chip,.btn{transition:background-color .15s,border-color .15s}
+}
+</style>
+
+<section class="landing" id="landing" hidden aria-label="Welcome to Kindbox SF">
+  <div class="l-top">
+    <div class="l-brand"><span class="tile"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--leaf)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="#FBD9B8"/></svg></span>Kindbox SF</div>
+    <div class="l-pill"><i></i>A live map of shared meals</div>
+    <button class="l-link" data-go="find">Open the map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+  </div>
+  <div class="l-stage" id="lStage">
+    <svg id="lMap" aria-hidden="true"></svg>
+    <div class="stat glass" style="left:2%;top:10%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 10l9 5 9-5"/></svg><b id="lsBoxes">0</b><span>boxes ready right now</span><small>Sealed, labeled, free.</small></div>
+    <div class="stat glass" style="right:2%;top:30%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b id="lsPoints">0</b><span>drop points in the city</span><small id="lsOpen">Fridges and shelves.</small></div>
+    <div class="stat glass" style="left:7%;bottom:4%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11h16a8 6 0 0 1-16 0zM9 7c0-1.5 1-1.5 1-3M14 7c0-1.5 1-1.5 1-3"/></svg><b id="lsServ">0</b><span>servings shared</span><small>Cooked at home, by neighbors.</small></div>
+  </div>
+  <div class="l-copy">
+    <div class="eyebrow">Your next meal is closer than you think</div>
+    <h1>A city that <em>shares its table.</em></h1>
+    <p>Neighbors drop sealed, labeled meals at community fridges and shelves. Anyone who needs food can find one nearby, free, with no questions asked.</p>
+    <div class="l-ctas">
+      <button class="cta" data-go="find">Find food near me <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+      <button class="cta alt" data-go="give">I have food to give</button>
+    </div>
+    <div class="l-note">No account needed. Free for everyone.</div>
+  </div>
+</section>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="var(--squash)"/><path d="M3 14 17 20 31 14" stroke="var(--surface)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="var(--leaf)"/></svg>
+      <div><b>Kindbox SF</b><small>Shared food, sealed with care</small></div>
+    </div>
+    <nav class="switch" aria-label="Mode">
+      <button data-mode="find" aria-pressed="true">Find food</button>
+      <button data-mode="give" aria-pressed="false">Give food</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- FIND -->
+  <section id="findView" class="wrap find" aria-label="Find food near you">
+    <div class="panel">
+      <div class="side-brand desk-only">
+        <button class="row" data-go="home" aria-label="Kindbox SF home">
+          <span class="tile"><svg width="24" height="24" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--leaf)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="#FBD9B8"/></svg></span>
+          <span><b>Kindbox SF</b><small>Shared meals · San Francisco</small></span>
+        </button>
+        <h1>Find a warm meal, <em>close by.</em></h1>
+        <p>Home-cooked boxes and groceries left by neighbors at fridges and shelves across the city.</p>
+      </div>
+      <div class="controls">
+        <div class="search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+          <input id="q" type="search" placeholder="Search rice, soup, Mission, Tenderloin…" aria-label="Search food or neighborhood" autocomplete="off">
+        </div>
+        <div class="near">
+          <span class="muted">I'm near</span>
+          <select id="nearSel" aria-label="Your location"></select>
+          <span class="muted">or tap the map</span>
+        </div>
+        <div class="refine desk-only"><span class="eyebrow" style="color:var(--muted);letter-spacing:.14em">Refine your search</span><button id="resetF">Reset</button></div>
+        <div class="facet-h desk-only">Diet</div>
+        <div class="chips" id="dietChips" aria-label="Dietary needs"></div>
+        <div class="facet-h desk-only">Type of food</div>
+        <div class="chips desk-only" id="kindChips" aria-label="Type of food"></div>
+        <div class="chips" id="toggleChips"></div>
+      </div>
+      <div class="summary" id="summary"></div>
+      <div class="list" id="list" aria-live="polite"></div>
+    </div>
+    <div class="mapbox">
+      <svg id="map" role="img" aria-label="Map of San Francisco with food drop points"></svg>
+      <div class="compass">N ↑ · San Francisco</div>
+      <div class="mapui">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+        <button id="zreset" aria-label="Show all of San Francisco" style="font-size:13px">SF</button>
+      </div>
+      <div class="maphint">
+        <span><i class="lg" style="background:var(--leaf)"></i>Has food</span>
+        <span><i class="lg" style="background:var(--surface);border:2px solid var(--leaf)"></i>Closed now</span>
+        <span><i class="lg" style="background:var(--squash)"></i>You</span>
+      </div>
+    </div>
+    <div class="atlas-top desk-only">
+      <nav class="switch" aria-label="Mode">
+        <button data-mode="find" aria-pressed="true">Find food</button>
+        <button data-mode="give" aria-pressed="false">Give food</button>
+      </nav>
+      <div class="eyebrow">Rooted in neighbors. Connected by food.</div>
+      <h2>One city. <em>Many shared tables.</em></h2>
+      <p>Tap a drop point to see what's inside, or tap anywhere to set where you are.</p>
+    </div>
+    <aside class="rail desk-only" aria-label="City overview">
+      <div class="glass">
+        <div class="eyebrow" style="color:var(--muted);letter-spacing:.14em">Right now in San Francisco</div>
+        <div class="bign"><div><b id="rBoxes">0</b><span>boxes ready</span></div><div><b id="rServ">0</b><span>servings</span></div></div>
+        <div class="meter"><i id="rMeter" style="width:0"></i></div>
+        <div class="fine" id="rOpen"></div>
+      </div>
+      <div class="glass">
+        <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:15px">Across the city</b><span class="muted" style="font-size:12px">boxes</span></div>
+        <div class="fine" style="margin:2px 0 0">Pick a neighborhood to fly there.</div>
+        <div class="rank" id="rRank"></div>
+      </div>
+      <div class="glass promo">
+        <div class="eyebrow">Cooked too much?</div>
+        <h3>Pack it. Drop it. <em style="color:var(--squash)">Share it.</em></h3>
+        <p>Seal a box, leave it at a fridge, and list it here in under a minute.</p>
+        <button data-mode="give">Give a meal <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+        <svg class="art" width="130" height="110" viewBox="0 0 120 100" aria-hidden="true"><path d="M14 52h92a46 34 0 0 1-92 0z" fill="var(--squash)" opacity=".22"/><path d="M45 40c0-6 5-6 5-13M60 40c0-6 5-6 5-13M75 40c0-6 5-6 5-13" stroke="var(--squash)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".35"/></svg>
+      </div>
+      <button class="glass tipcard" id="nearestOpen">
+        <span class="ti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
+        <span><b>Hungry right now?</b><span>Show the nearest open point with food</span></span>
+      </button>
+    </aside>
+    <div class="dock glass desk-only" aria-label="Nearest boxes">
+      <div class="dock-h">
+        <span class="tile"><svg width="16" height="16" viewBox="0 0 34 34"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--squash)" stroke-width="2.5" fill="none"/></svg></span>
+        <b>Nearest boxes to you</b><span class="cnt" id="dockCnt">0</span>
+        <div class="nav"><button id="dPrev" aria-label="Scroll left">‹</button><button id="dNext" aria-label="Scroll right">›</button></div>
+      </div>
+      <div class="strip" id="strip"></div>
+    </div>
+    <aside class="drawer glass" id="drawer" hidden aria-label="Drop point details"></aside>
+  </section>
+
+  <!-- GIVE -->
+  <section id="giveView" class="wrap give" hidden aria-label="Drop off food">
+    <div class="card" id="giveCard">
+      <div id="doneBox" hidden></div>
+      <div id="giveFormWrap">
+      <h2>Drop off a meal box</h2>
+      <p class="lede">Cooked too much, or have groceries you won't use? Pack it in a clean, sealed box, drop it at a Kindbox point, and list it here so someone nearby can find it while it's fresh.</p>
+      <form id="giveForm" novalidate>
+        <div class="field">
+          <label for="gBank">Where are you dropping it?</label>
+          <select id="gBank" required></select>
+          <span class="hint" id="gBankHint"></span>
+        </div>
+        <div class="field">
+          <label for="gTitle">What's in the box?</label>
+          <input id="gTitle" maxlength="60" placeholder="e.g. Vegetable biryani, 3 boxes" required>
+        </div>
+        <div class="field">
+          <label for="gContents">Ingredients and notes</label>
+          <textarea id="gContents" rows="2" maxlength="200" placeholder="List main ingredients and anything someone with allergies should know."></textarea>
+        </div>
+        <div class="two">
+          <div class="field">
+            <label for="gKind">Type</label>
+            <select id="gKind"></select>
+          </div>
+          <div class="field">
+            <span style="font-weight:700;font-size:14.5px" id="servLbl">Servings</span>
+            <div class="stepper" role="group" aria-labelledby="servLbl">
+              <button type="button" id="sMinus" aria-label="Fewer servings">−</button>
+              <output id="gServ">2</output>
+              <button type="button" id="sPlus" aria-label="More servings">+</button>
+            </div>
+          </div>
+        </div>
+        <fieldset class="field">
+          <legend>Suitable for</legend>
+          <div class="chips pick" id="gTags"></div>
+        </fieldset>
+        <div class="two">
+          <div class="field">
+            <label for="gPacked">Packed</label>
+            <select id="gPacked">
+              <option value="0">Just now</option>
+              <option value="30">30 minutes ago</option>
+              <option value="60">1 hour ago</option>
+              <option value="120">2 hours ago</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="gEat">Good to eat for</label>
+            <select id="gEat">
+              <option value="4">4 hours (cooked, unrefrigerated)</option>
+              <option value="12">12 hours</option>
+              <option value="24" selected>1 day (refrigerated)</option>
+              <option value="72">3 days</option>
+              <option value="168">1 week (packaged / produce)</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="gName">Your first name (optional)</label>
+          <input id="gName" maxlength="24" placeholder="Shown as “From Priya”" autocomplete="given-name">
+        </div>
+        <label class="pledge"><input type="checkbox" id="gPledge"> <span>The food is in a clean, sealed container, labeled with what's inside, and was cooked or stored safely. No alcohol, no opened or half-eaten food.</span></label>
+        <div class="err" id="gErr" role="alert"></div>
+        <div class="actions">
+          <button class="btn give" type="submit">List my box</button>
+          <span class="status" id="storeStatus"><i></i>Connecting…</span>
+        </div>
+      </form>
+      </div>
+    </div>
+    <aside class="side">
+      <div>
+        <div class="sect" style="margin-bottom:8px">Write this on your box</div>
+        <div class="boxlabel" id="labelPreview"></div>
+      </div>
+      <div class="card tips">
+        <h3>Packing guide</h3>
+        <ul>
+          <li>Let cooked food cool, then seal it within 2 hours of cooking.</li>
+          <li>One meal per container. Wrap the box so it stays closed.</li>
+          <li>Mark nuts, dairy, eggs, shellfish, and pork clearly.</li>
+          <li>Put cooked food in a fridge point if the box says “Refrigerated”.</li>
+          <li>Drop it off during open hours and list it right away.</li>
+        </ul>
+      </div>
+      <div class="card" id="myDropsCard" hidden>
+        <h3 style="font-size:18px">Your recent boxes</h3>
+        <div class="mydrops" id="myDrops"></div>
+      </div>
+    </aside>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<!-- Mock data (temporary). Swap for an API later: same shape. Packet times are relative to page load. -->
+<script type="application/json" id="seed">
+{
+  "neighborhoods": [
+    {"name":"Mission","lat":37.7599,"lng":-122.4148},
+    {"name":"Tenderloin","lat":37.7847,"lng":-122.4141},
+    {"name":"SoMa","lat":37.7785,"lng":-122.4056},
+    {"name":"Bayview","lat":37.7296,"lng":-122.3925},
+    {"name":"Excelsior","lat":37.7244,"lng":-122.4272},
+    {"name":"Outer Sunset","lat":37.7550,"lng":-122.4940},
+    {"name":"Inner Richmond","lat":37.7800,"lng":-122.4640},
+    {"name":"Haight-Ashbury","lat":37.7692,"lng":-122.4481},
+    {"name":"Chinatown","lat":37.7941,"lng":-122.4078},
+    {"name":"Western Addition","lat":37.7810,"lng":-122.4330},
+    {"name":"Visitacion Valley","lat":37.7160,"lng":-122.4040},
+    {"name":"Bernal Heights","lat":37.7389,"lng":-122.4152},
+    {"name":"Civic Center","lat":37.7793,"lng":-122.4180},
+    {"name":"Potrero Hill","lat":37.7605,"lng":-122.4009},
+    {"name":"North Beach","lat":37.8061,"lng":-122.4103},
+    {"name":"Noe Valley","lat":37.7502,"lng":-122.4337},
+    {"name":"Parkside","lat":37.7410,"lng":-122.4880},
+    {"name":"Oceanview / Ingleside","lat":37.7230,"lng":-122.4560}
+  ],
+  "foodBanks": [
+    {"id":"b01","name":"24th Street Share Shelf","hood":"Mission","address":"24th St & Folsom St","lat":37.7525,"lng":-122.4140,"open":"07:00","close":"21:00","fridge":true,"access":"Step-free","note":"Shelf plus fridge inside the laundromat entrance."},
+    {"id":"b02","name":"Larkin Street Pantry Point","hood":"Tenderloin","address":"Larkin St & Eddy St","lat":37.7835,"lng":-122.4175,"open":"08:00","close":"22:00","fridge":true,"access":"Step-free","note":"Volunteers on site 5–8 PM."},
+    {"id":"b03","name":"Howard Street Community Fridge","hood":"SoMa","address":"Howard St & 7th St","lat":37.7775,"lng":-122.4075,"open":"00:00","close":"24:00","fridge":true,"access":"Step-free","note":"Open all day and night."},
+    {"id":"b04","name":"Third Street Neighbor Box","hood":"Bayview","address":"3rd St & Palou Ave","lat":37.7330,"lng":-122.3905,"open":"09:00","close":"20:00","fridge":true,"access":"Step-free","note":"Next to the bus shelter. Fridge restocked daily."},
+    {"id":"b05","name":"Mission & Geneva Food Shelf","hood":"Excelsior","address":"Mission St & Geneva Ave","lat":37.7170,"lng":-122.4400,"open":"08:00","close":"20:00","fridge":true,"access":"One small step","note":"Spanish and Tagalog spoken by volunteers."},
+    {"id":"b06","name":"Judah Street Kindbox","hood":"Outer Sunset","address":"Judah St & 42nd Ave","lat":37.7605,"lng":-122.5005,"open":"07:00","close":"19:00","fridge":true,"access":"Step-free","note":"Near the N Judah stop."},
+    {"id":"b07","name":"Clement Street Shared Pantry","hood":"Inner Richmond","address":"Clement St & 6th Ave","lat":37.7828,"lng":-122.4645,"open":"09:00","close":"21:00","fridge":true,"access":"Step-free","note":"Cantonese spoken by volunteers."},
+    {"id":"b08","name":"Haight Street Fridge","hood":"Haight-Ashbury","address":"Haight St & Cole St","lat":37.7695,"lng":-122.4505,"open":"00:00","close":"24:00","fridge":true,"access":"Step-free","note":"Open all day and night."},
+    {"id":"b09","name":"Stockton Street Share Shelf","hood":"Chinatown","address":"Stockton St & Jackson St","lat":37.7955,"lng":-122.4075,"open":"07:00","close":"19:00","fridge":false,"access":"Two steps","note":"Shelf only. Packaged food and produce."},
+    {"id":"b10","name":"Fillmore Fridge","hood":"Western Addition","address":"Fillmore St & Eddy St","lat":37.7810,"lng":-122.4330,"open":"08:00","close":"22:00","fridge":true,"access":"Step-free","note":"Inside the community center lobby."},
+    {"id":"b11","name":"Leland Avenue Food Box","hood":"Visitacion Valley","address":"Leland Ave & Bayshore Blvd","lat":37.7120,"lng":-122.4030,"open":"09:00","close":"18:00","fridge":true,"access":"Step-free","note":"Fridge inside the corner market."},
+    {"id":"b12","name":"Cortland Avenue Pantry","hood":"Bernal Heights","address":"Cortland Ave & Moultrie St","lat":37.7390,"lng":-122.4165,"open":"08:00","close":"20:00","fridge":true,"access":"Step-free","note":"Outside the library side door."},
+    {"id":"b13","name":"Civic Center Share Point","hood":"Civic Center","address":"Hyde St & Grove St","lat":37.7785,"lng":-122.4155,"open":"06:00","close":"23:00","fridge":true,"access":"Step-free","note":"Busy at lunch. Restocked often."},
+    {"id":"b14","name":"Ocean Avenue Food Shelf","hood":"Oceanview / Ingleside","address":"Ocean Ave & Granada Ave","lat":37.7235,"lng":-122.4560,"open":"09:00","close":"19:00","fridge":true,"access":"Step-free","note":"Near the K Ingleside stop."},
+    {"id":"b15","name":"18th Street Kindbox","hood":"Potrero Hill","address":"18th St & Connecticut St","lat":37.7620,"lng":-122.3975,"open":"08:00","close":"21:00","fridge":true,"access":"Steep hill approach","note":"Fridge on the cafe patio."},
+    {"id":"b16","name":"Columbus Avenue Fridge","hood":"North Beach","address":"Columbus Ave & Green St","lat":37.7995,"lng":-122.4085,"open":"10:00","close":"20:00","fridge":true,"access":"Step-free","note":"Italian and Cantonese spoken nearby."},
+    {"id":"b17","name":"Noe Valley Neighbor Shelf","hood":"Noe Valley","address":"24th St & Castro St","lat":37.7510,"lng":-122.4340,"open":"08:00","close":"20:00","fridge":false,"access":"Step-free","note":"Shelf only."},
+    {"id":"b18","name":"Taraval Street Pantry","hood":"Parkside","address":"Taraval St & 26th Ave","lat":37.7430,"lng":-122.4835,"open":"09:00","close":"19:00","fridge":true,"access":"Step-free","note":"Near the L Taraval stop."}
+  ],
+  "packets": [
+    {"id":"p01","bankId":"b01","title":"Rajma chawal, 2 boxes","contents":"Kidney bean curry with basmati rice. Mild spice.","kind":"Cooked meal","servings":2,"tags":["Vegetarian","Vegan","Gluten-free"],"packedMinutesAgo":55,"eatWithinHours":24,"donor":"Priya"},
+    {"id":"p02","bankId":"b01","title":"Chicken tinga tacos","contents":"Corn tortillas, shredded chicken, salsa on the side.","kind":"Cooked meal","servings":3,"tags":["Gluten-free","Dairy-free"],"packedMinutesAgo":120,"eatWithinHours":24,"donor":"Lupe"},
+    {"id":"p03","bankId":"b01","title":"Bag of oranges and bananas","contents":"About 10 pieces of fruit.","kind":"Produce","servings":5,"tags":["Vegan","Kid-friendly","Nut-free"],"packedMinutesAgo":300,"eatWithinHours":168,"donor":"Marco"},
+    {"id":"p04","bankId":"b02","title":"Chicken noodle soup","contents":"Homemade, in two 1-quart jars. Contains celery.","kind":"Cooked meal","servings":4,"tags":["Dairy-free","Nut-free","Soft food"],"packedMinutesAgo":40,"eatWithinHours":24,"donor":"Dana"},
+    {"id":"p05","bankId":"b02","title":"Halal lamb and rice plates","contents":"Lamb, yellow rice, salad. Yogurt sauce in a separate cup.","kind":"Cooked meal","servings":3,"tags":["Halal","Nut-free"],"packedMinutesAgo":80,"eatWithinHours":12,"donor":"Yusuf"},
+    {"id":"p06","bankId":"b02","title":"Peanut butter sandwiches","contents":"Wheat bread, PB and jelly. Contains peanuts.","kind":"Snacks","servings":6,"tags":["Vegetarian","Kid-friendly"],"packedMinutesAgo":30,"eatWithinHours":12,"donor":"Sam"},
+    {"id":"p07","bankId":"b03","title":"Pasta primavera","contents":"Penne with vegetables and parmesan.","kind":"Cooked meal","servings":2,"tags":["Vegetarian","Nut-free","Kid-friendly"],"packedMinutesAgo":95,"eatWithinHours":24,"donor":"Elena"},
+    {"id":"p08","bankId":"b03","title":"Sourdough loaves","contents":"Two loaves baked this morning.","kind":"Bakery","servings":8,"tags":["Vegan","Nut-free"],"packedMinutesAgo":240,"eatWithinHours":72,"donor":"Theo"},
+    {"id":"p09","bankId":"b03","title":"Canned beans and tuna","contents":"4 cans black beans, 3 cans tuna, pull-tab lids.","kind":"Pantry","servings":7,"tags":["Gluten-free","Dairy-free"],"packedMinutesAgo":600,"eatWithinHours":2000,"donor":"Kim"},
+    {"id":"p10","bankId":"b04","title":"Red beans, rice and cornbread","contents":"Cornbread contains egg and milk.","kind":"Cooked meal","servings":4,"tags":["Vegetarian","Nut-free"],"packedMinutesAgo":70,"eatWithinHours":12,"donor":"Denise"},
+    {"id":"p11","bankId":"b04","title":"Apples and carrots","contents":"From a backyard tree and a CSA box.","kind":"Produce","servings":6,"tags":["Vegan","Kid-friendly","Gluten-free"],"packedMinutesAgo":420,"eatWithinHours":168,"donor":"Andre"},
+    {"id":"p12","bankId":"b05","title":"Pancit and lumpia","contents":"Rice noodles with vegetables and pork; pork spring rolls.","kind":"Cooked meal","servings":5,"tags":["Dairy-free","Nut-free"],"packedMinutesAgo":60,"eatWithinHours":24,"donor":"Maricel"},
+    {"id":"p13","bankId":"b05","title":"Pupusas with curtido","contents":"Bean and cheese pupusas, cabbage slaw.","kind":"Cooked meal","servings":4,"tags":["Vegetarian","Gluten-free"],"packedMinutesAgo":150,"eatWithinHours":24,"donor":"Rosa"},
+    {"id":"p14","bankId":"b05","title":"Baby food pouches","contents":"8 sealed pouches, apple and pear. Age 6 months+.","kind":"Baby & kids","servings":8,"tags":["Vegan","Kid-friendly","Nut-free"],"packedMinutesAgo":900,"eatWithinHours":2000,"donor":"Jess"},
+    {"id":"p15","bankId":"b06","title":"Vegetable curry and roti","contents":"Potato, cauliflower, peas. Roti wrapped separately.","kind":"Cooked meal","servings":3,"tags":["Vegetarian","Vegan","Nut-free"],"packedMinutesAgo":45,"eatWithinHours":24,"donor":"Anita"},
+    {"id":"p16","bankId":"b06","title":"Granola bars and juice boxes","contents":"12 bars (contain almonds), 6 juice boxes.","kind":"Snacks","servings":12,"tags":["Vegetarian","Kid-friendly"],"packedMinutesAgo":200,"eatWithinHours":2000,"donor":"Liam"},
+    {"id":"p17","bankId":"b07","title":"Congee with ginger","contents":"Plain rice porridge, scallions on the side.","kind":"Cooked meal","servings":3,"tags":["Vegan","Gluten-free","Soft food","Nut-free"],"packedMinutesAgo":35,"eatWithinHours":12,"donor":"Mei"},
+    {"id":"p18","bankId":"b07","title":"Steamed pork buns","contents":"8 char siu bao.","kind":"Bakery","servings":4,"tags":["Dairy-free","Nut-free","Kid-friendly"],"packedMinutesAgo":110,"eatWithinHours":24,"donor":"Kenny"},
+    {"id":"p19","bankId":"b08","title":"Lentil soup","contents":"Red lentils, carrots, cumin. Lemon on the side.","kind":"Cooked meal","servings":4,"tags":["Vegan","Gluten-free","Halal","Soft food"],"packedMinutesAgo":85,"eatWithinHours":24,"donor":"Noor"},
+    {"id":"p20","bankId":"b08","title":"Bagels and cream cheese","contents":"6 bagels, sealed tub of cream cheese.","kind":"Bakery","servings":6,"tags":["Vegetarian","Nut-free"],"packedMinutesAgo":180,"eatWithinHours":48,"donor":"Ari"},
+    {"id":"p21","bankId":"b09","title":"Bok choy and tofu","contents":"Fresh bok choy bunches, 2 sealed tofu packs.","kind":"Produce","servings":4,"tags":["Vegan","Gluten-free"],"packedMinutesAgo":260,"eatWithinHours":72,"donor":"Grace"},
+    {"id":"p22","bankId":"b09","title":"Rice and noodles","contents":"5 lb bag of jasmine rice, 4 packs dry noodles.","kind":"Pantry","servings":10,"tags":["Vegan","Dairy-free"],"packedMinutesAgo":700,"eatWithinHours":2000,"donor":"Wen"},
+    {"id":"p23","bankId":"b10","title":"Baked chicken, greens, mac and cheese","contents":"Collard greens cooked with smoked turkey.","kind":"Cooked meal","servings":3,"tags":["Nut-free"],"packedMinutesAgo":65,"eatWithinHours":24,"donor":"Tasha"},
+    {"id":"p24","bankId":"b10","title":"Diapers, size 3","contents":"Unopened pack of 28, plus wipes.","kind":"Baby & kids","servings":1,"tags":["Kid-friendly"],"packedMinutesAgo":1000,"eatWithinHours":5000,"donor":"Chris"},
+    {"id":"p25","bankId":"b11","title":"Spaghetti with meat sauce","contents":"Beef sauce, garlic bread wrapped separately.","kind":"Cooked meal","servings":4,"tags":["Nut-free","Kid-friendly"],"packedMinutesAgo":100,"eatWithinHours":24,"donor":"Tony"},
+    {"id":"p26","bankId":"b12","title":"Quinoa salad bowls","contents":"Quinoa, chickpeas, cucumber, lemon dressing.","kind":"Cooked meal","servings":3,"tags":["Vegan","Gluten-free","Halal"],"packedMinutesAgo":50,"eatWithinHours":24,"donor":"Hannah"},
+    {"id":"p27","bankId":"b12","title":"Muffins","contents":"Blueberry, a dozen. Contain egg and milk.","kind":"Bakery","servings":12,"tags":["Vegetarian","Nut-free","Kid-friendly"],"packedMinutesAgo":220,"eatWithinHours":48,"donor":"Olivia"},
+    {"id":"p28","bankId":"b13","title":"Turkey and cheese sandwiches","contents":"Whole wheat, individually wrapped.","kind":"Snacks","servings":8,"tags":["Nut-free"],"packedMinutesAgo":25,"eatWithinHours":12,"donor":"Ben"},
+    {"id":"p29","bankId":"b13","title":"Biryani with raita","contents":"Chicken biryani. Raita in a separate cup.","kind":"Cooked meal","servings":4,"tags":["Halal","Gluten-free","Nut-free"],"packedMinutesAgo":75,"eatWithinHours":12,"donor":"Farah"},
+    {"id":"p30","bankId":"b13","title":"Oatmeal cups and milk","contents":"6 instant oatmeal cups, 6 shelf-stable milk boxes.","kind":"Pantry","servings":6,"tags":["Vegetarian","Soft food","Kid-friendly"],"packedMinutesAgo":500,"eatWithinHours":2000,"donor":"Rachel"},
+    {"id":"p31","bankId":"b14","title":"Adobo chicken and rice","contents":"Soy and vinegar braised chicken.","kind":"Cooked meal","servings":3,"tags":["Dairy-free","Nut-free"],"packedMinutesAgo":130,"eatWithinHours":24,"donor":"Joel"},
+    {"id":"p32","bankId":"b15","title":"Minestrone","contents":"Beans, pasta, vegetables. Parmesan on the side.","kind":"Cooked meal","servings":4,"tags":["Vegetarian","Nut-free","Soft food"],"packedMinutesAgo":90,"eatWithinHours":24,"donor":"Giulia"},
+    {"id":"p33","bankId":"b15","title":"Tomatoes and zucchini","contents":"Garden surplus, about 3 lb.","kind":"Produce","servings":5,"tags":["Vegan","Gluten-free"],"packedMinutesAgo":360,"eatWithinHours":120,"donor":"Pete"},
+    {"id":"p34","bankId":"b16","title":"Focaccia","contents":"Rosemary and olive oil, a full tray cut in squares.","kind":"Bakery","servings":10,"tags":["Vegan","Nut-free"],"packedMinutesAgo":160,"eatWithinHours":48,"donor":"Luca"},
+    {"id":"p35","bankId":"b18","title":"Kimchi fried rice","contents":"With egg on top. Kimchi contains fish sauce.","kind":"Cooked meal","servings":2,"tags":["Dairy-free","Nut-free"],"packedMinutesAgo":40,"eatWithinHours":12,"donor":"Jun"},
+    {"id":"p36","bankId":"b18","title":"Hummus and pita packs","contents":"4 sealed hummus tubs, 2 bags pita.","kind":"Snacks","servings":8,"tags":["Vegan","Halal"],"packedMinutesAgo":140,"eatWithinHours":72,"donor":"Leila"}
+  ]
+}
+</script>
+
+<script>
+(() => {
+const SEED = JSON.parse(document.getElementById('seed').textContent);
+const LOAD = Date.now();
+const H = 3600000;
+const BANKS = SEED.foodBanks;
+const bankById = Object.fromEntries(BANKS.map(b => [b.id, b]));
+const DIETS = ["Vegetarian","Vegan","Halal","Gluten-free","Dairy-free","Nut-free","Kid-friendly","Soft food"];
+const KINDS = ["Cooked meal","Produce","Bakery","Pantry","Snacks","Baby & kids"];
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const ls = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
+};
+
+const seedPackets = SEED.packets.map(p => {
+  const packedAt = LOAD - p.packedMinutesAgo * 60000;
+  return {...p, packedAt, eatBy: packedAt + p.eatWithinHours * H, source:'seed'};
+});
+
+const state = {
+  mode: 'find', q: '', diets: new Set(), kinds: new Set(),
+  openNow: false, hasFood: true,
+  me: { ...SEED.neighborhoods[0], label: SEED.neighborhoods[0].name },
+  selected: null, armed: null,
+  drops: [], claims: {}, store: 'local'
+};
+const myIds = new Set(ls.get('kindbox.mine', []));
+let db = null;
+
+/* ---------- time & distance ---------- */
+function laMinutes(){
+  const parts = new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date());
+  const h = +parts.find(p=>p.type==='hour').value, m = +parts.find(p=>p.type==='minute').value;
+  return h*60+m;
+}
+const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
+function isOpen(b){ const n = laMinutes(); return n >= toMin(b.open) && n < toMin(b.close); }
+function fmtHM(s){ const [h,m] = s.split(':').map(Number); if (h===24) return 'midnight'; const ap = h<12?'AM':'PM'; const hh = h%12||12; return m? `${hh}:${String(m).padStart(2,'0')} ${ap}` : `${hh} ${ap}`; }
+function hoursText(b){ return b.open==='00:00' && b.close==='24:00' ? 'Open 24 hours' : `${fmtHM(b.open)} – ${fmtHM(b.close)}`; }
+function miles(a, b){
+  const R = 3958.8, r = x => x*Math.PI/180;
+  const dLat = r(b.lat-a.lat), dLng = r(b.lng-a.lng);
+  const h = Math.sin(dLat/2)**2 + Math.cos(r(a.lat))*Math.cos(r(b.lat))*Math.sin(dLng/2)**2;
+  return 2*R*Math.asin(Math.sqrt(h));
+}
+function distText(mi){ const walk = Math.round(mi*20); return `${mi<0.1?'<0.1':mi.toFixed(1)} mi · ${walk<1?1:walk} min walk`; }
+function ago(ts){ const m = Math.round((Date.now()-ts)/60000); if (m<1) return 'just now'; if (m<60) return `${m} min ago`; const h = Math.round(m/60); return h<48 ? `${h} h ago` : `${Math.round(h/24)} days ago`; }
+function clock(ts){ return new Date(ts).toLocaleString('en-US',{timeZone:'America/Los_Angeles',weekday:'short',hour:'numeric',minute:'2-digit'}); }
+function eatText(p){
+  const left = p.eatBy - Date.now();
+  if (left > 14*24*H) return 'Shelf-stable';
+  if (left > 48*H) return `Eat by ${new Date(p.eatBy).toLocaleDateString('en-US',{timeZone:'America/Los_Angeles',month:'short',day:'numeric'})}`;
+  return `Eat by ${clock(p.eatBy)}`;
+}
+
+/* ---------- data ---------- */
+function allPackets(){ return [...state.drops, ...seedPackets]; }
+function live(p){ return !state.claims[p.id] && p.eatBy > Date.now(); }
+function matchesFilters(p){
+  for (const d of state.diets) if (!p.tags.includes(d)) return false;
+  if (state.kinds.size && !state.kinds.has(p.kind)) return false;
+  return true;
+}
+function textHit(s, q){ return s.toLowerCase().includes(q); }
+function computeBanks(){
+  const q = state.q.trim().toLowerCase();
+  const byBank = {};
+  for (const p of allPackets()) (byBank[p.bankId] ||= []).push(p);
+  const out = [];
+  for (const b of BANKS){
+    const bankHit = !q || textHit(`${b.name} ${b.hood} ${b.address}`, q);
+    const all = (byBank[b.id]||[]);
+    const avail = all.filter(p => live(p) && matchesFilters(p) && (bankHit || textHit(`${p.title} ${p.contents} ${p.kind} ${p.tags.join(' ')}`, q)));
+    if (!bankHit && !avail.length) continue;
+    const open = isOpen(b);
+    if (state.openNow && !open) continue;
+    if (state.hasFood && !avail.length) continue;
+    out.push({ b, avail: avail.sort((x,y)=>y.packedAt-x.packedAt), all, open, mi: miles(state.me, b) });
+  }
+  return out.sort((x,y)=>x.mi-y.mi);
+}
+
+/* ---------- FIND: controls ---------- */
+const nearSel = $('#nearSel');
+nearSel.innerHTML = SEED.neighborhoods.map((n,i)=>`<option value="${i}">${esc(n.name)}</option>`).join('') + `<option value="pin" hidden>Pinned spot</option>`;
+nearSel.addEventListener('change', () => {
+  if (nearSel.value === 'pin') return;
+  const n = SEED.neighborhoods[+nearSel.value];
+  state.me = {...n, label:n.name};
+  renderFind(); ls.set('kindbox.near', nearSel.value);
+});
+const savedNear = ls.get('kindbox.near', null);
+if (savedNear !== null && SEED.neighborhoods[+savedNear]) { nearSel.value = savedNear; const n = SEED.neighborhoods[+savedNear]; state.me = {...n,label:n.name}; }
+
+const KCOL = {"Cooked meal":"meal","Produce":"produce","Bakery":"bakery","Pantry":"pantry","Snacks":"snacks","Baby & kids":"baby"};
+$('#dietChips').innerHTML = DIETS.map(d=>`<button class="chip" aria-pressed="false" data-diet="${d}"><span class="kdot desk-only" style="background:var(--leaf)"></span>${d}<span class="n desk-only"></span></button>`).join('');
+$('#kindChips').innerHTML = KINDS.map(k=>`<button class="chip" aria-pressed="false" data-kind="${k}"><span class="kdot" style="background:var(--k-${KCOL[k]})"></span>${k}<span class="n"></span></button>`).join('');
+$('#dietChips').addEventListener('click', e => {
+  const c = e.target.closest('[data-diet]'); if (!c) return;
+  const d = c.dataset.diet; state.diets.has(d) ? state.diets.delete(d) : state.diets.add(d);
+  c.setAttribute('aria-pressed', state.diets.has(d)); renderFind();
+});
+$('#toggleChips').innerHTML = `
+  <button class="chip toggle" data-t="hasFood" aria-pressed="true">Has food now</button>
+  <button class="chip toggle" data-t="openNow" aria-pressed="false">Open now</button>
+  ${KINDS.map(k=>`<button class="chip mob-kind" data-kind="${k}" aria-pressed="false">${k}</button>`).join('')}`;
+function toggleKind(v){ state.kinds.has(v)?state.kinds.delete(v):state.kinds.add(v); document.querySelectorAll(`[data-kind="${CSS.escape(v)}"]`).forEach(x=>x.setAttribute('aria-pressed', state.kinds.has(v))); }
+$('#toggleChips').addEventListener('click', e => {
+  const t = e.target.closest('[data-t]'), k = e.target.closest('[data-kind]');
+  if (t){ state[t.dataset.t] = !state[t.dataset.t]; t.setAttribute('aria-pressed', state[t.dataset.t]); }
+  else if (k){ toggleKind(k.dataset.kind); }
+  else return;
+  renderFind();
+});
+$('#kindChips').addEventListener('click', e => { const k = e.target.closest('[data-kind]'); if (!k) return; toggleKind(k.dataset.kind); renderFind(); });
+$('#resetF').addEventListener('click', () => {
+  state.diets.clear(); state.kinds.clear(); state.openNow = false; state.hasFood = true; state.q = ''; $('#q').value = '';
+  document.querySelectorAll('[data-diet],[data-kind]').forEach(x=>x.setAttribute('aria-pressed','false'));
+  document.querySelector('[data-t="hasFood"]').setAttribute('aria-pressed','true'); document.querySelector('[data-t="openNow"]').setAttribute('aria-pressed','false');
+  renderFind();
+});
+function renderFacets(){
+  const lp = allPackets().filter(live);
+  document.querySelectorAll('#dietChips [data-diet] .n').forEach(n => { n.textContent = lp.filter(p=>p.tags.includes(n.parentNode.dataset.diet)).length; });
+  document.querySelectorAll('#kindChips [data-kind] .n').forEach(n => { n.textContent = lp.filter(p=>p.kind===n.parentNode.dataset.kind).length; });
+}
+let qTimer; $('#q').addEventListener('input', e => { clearTimeout(qTimer); qTimer = setTimeout(()=>{ state.q = e.target.value; state.selected = null; renderFind(); }, 120); });
+
+/* ---------- FIND: list + detail ---------- */
+function packetCard(p){
+  const taken = !!state.claims[p.id];
+  const span = p.eatBy - p.packedAt, left = Math.max(0, p.eatBy - Date.now());
+  const pct = Math.max(4, Math.min(100, left/span*100));
+  const shelf = left > 14*24*H;
+  const armed = state.armed === p.id;
+  const isNew = p.source !== 'seed';
+  return `<article class="tag${taken?' taken':''}">
+    <div class="row1"><h4>${esc(p.title)}</h4><span class="kind">${esc(p.kind)}</span></div>
+    ${p.contents?`<p>${esc(p.contents)}</p>`:''}
+    ${p.tags.length?`<div class="diet">${p.tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+    <div class="fresh"><span class="mono">${p.servings} serving${p.servings>1?'s':''}</span><span>${shelf?'Shelf-stable':`<span class="bar" style="display:block" title="Time left"><i class="${pct<30?'late':''}" style="width:${pct}%"></i></span>`}</span></div>
+    <div class="foot">
+      <span>Packed ${ago(p.packedAt)} · ${eatText(p)}${p.donor?` · From ${esc(p.donor)}`:''} ${isNew?'<span class="new">New</span>':''}</span>
+      ${taken ? `<span class="pill closed">Taken</span>` :
+        `<button class="btn small ${armed?'give':''}" data-claim="${p.id}">${armed?'Tap again to confirm':'I’m taking this'}</button>`}
+    </div>
+  </article>`;
+}
+
+const mqDesk = matchMedia('(min-width:1024px)');
+const isDesk = () => mqDesk.matches;
+function rowFor(id, rows){
+  const b = bankById[id];
+  return rows.find(r=>r.b.id===id) || { b, open:isOpen(b), mi:miles(state.me,b), avail: allPackets().filter(p=>p.bankId===id && live(p)) };
+}
+function detailHTML(row, desk){
+  const b = row.b;
+  const taken = allPackets().filter(p=>p.bankId===b.id && state.claims[p.id] && p.eatBy>Date.now());
+  const kinds = [...new Set(row.avail.map(p=>p.kind))];
+  return `${desk?`<button class="x" id="closeDrawer" aria-label="Close details">×</button>`:''}
+    ${desk?`<div style="height:12px"></div><div class="hero-art" style="background:${artBg(kinds[0]||'Pantry')}">${kindArt(kinds[0]||'Pantry', 96)}</div>`:''}
+    <div class="detail">
+      ${desk?'':`<button class="back" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 18 9 12l6-6"/></svg>All drop points</button>`}
+      <div><div class="sect">${esc(b.hood)}</div><h2>${esc(b.name)}</h2></div>
+      <dl class="facts">
+        <div><dt>Where</dt><dd><span class="addr">${esc(b.address)}</span>, San Francisco</dd></div>
+        <div><dt>Hours</dt><dd>${hoursText(b)} <span class="pill ${row.open?'open':'closed'}">${row.open?'Open now':'Closed now'}</span></dd></div>
+        <div><dt>Distance</dt><dd>${distText(row.mi)} from ${esc(state.me.label)}</dd></div>
+        <div><dt>Storage</dt><dd>${b.fridge?'Fridge and shelf':'Shelf only'}</dd></div>
+        <div><dt>Access</dt><dd>${esc(b.access)}</dd></div>
+        <div><dt>Note</dt><dd>${esc(b.note)}</dd></div>
+      </dl>
+      <div class="actions">
+        <a class="btn primary" href="https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}&travelmode=walking" target="_blank" rel="noopener">Walking directions</a>
+        <button class="btn" data-act="copy">Copy address</button>
+        <button class="btn" data-act="drop">Drop food here</button>
+      </div>
+      <div class="sect">${row.avail.length} box${row.avail.length===1?'':'es'} available${state.diets.size||state.kinds.size||state.q?' matching your filters':''}</div>
+      ${row.avail.length ? row.avail.map(packetCard).join('') : `<div class="empty"><b>Nothing here right now</b>Boxes go fast. Check a nearby point or come back later.</div>`}
+      ${taken.length?`<div class="sect">Recently taken</div>${taken.map(packetCard).join('')}`:''}
+    </div>`;
+}
+function renderList(rows){
+  const list = $('#list');
+  if (state.selected && !isDesk()){
+    list.innerHTML = detailHTML(rowFor(state.selected, rows), false);
+    return;
+  }
+  if (!rows.length){
+    list.innerHTML = `<div class="empty"><b>No drop points match</b>Try removing a filter, or turn off “Has food now”.</div>`;
+    return;
+  }
+  list.innerHTML = rows.map(r => `<button class="bank${r.b.id===state.selected?' hl':''}" data-bank="${r.b.id}">
+      <h3>${esc(r.b.name)}</h3>
+      <div class="count${r.avail.length?'':' zero'}"><b class="mono">${r.avail.length}</b><span>box${r.avail.length===1?'':'es'}</span></div>
+      <div class="meta">${esc(r.b.hood)} · ${distText(r.mi)} · <span class="pill ${r.open?'open':'closed'}">${r.open?'Open':'Closed'}</span></div>
+      ${r.avail.length?`<div class="items">${r.avail.slice(0,3).map(p=>esc(p.title)).join(' · ')}</div>`:''}
+    </button>`).join('');
+}
+let drawerFor = null;
+function renderDrawer(rows){
+  const d = $('#drawer');
+  const show = isDesk() && !!state.selected;
+  d.hidden = !show;
+  if (!show){ drawerFor = null; return; }
+  const keep = drawerFor === state.selected ? d.scrollTop : 0;
+  d.innerHTML = detailHTML(rowFor(state.selected, rows), true);
+  d.scrollTop = keep; drawerFor = state.selected;
+}
+
+/* kind illustrations (no photos needed) */
+function artBg(kind){ const c = `var(--k-${KCOL[kind]||'meal'})`; return `radial-gradient(120% 90% at 30% 20%, color-mix(in srgb, ${c} 55%, #fff), ${c})`; }
+function kindArt(kind, h){
+  const W2 = 'rgb(255 255 255/.92)', D = 'rgb(23 37 30/.18)';
+  const art = {
+    "Cooked meal": `<path d="M18 46h84a42 30 0 0 1-84 0z" fill="${W2}"/><path d="M14 46h92" stroke="${W2}" stroke-width="4" stroke-linecap="round"/><path d="M46 36c0-7 6-7 6-15M60 36c0-7 6-7 6-15M74 36c0-7 6-7 6-15" stroke="${W2}" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M34 58h52" stroke="${D}" stroke-width="3" stroke-linecap="round"/>`,
+    "Produce": `<circle cx="48" cy="52" r="20" fill="${W2}"/><path d="M48 32c2-8 8-12 14-12-1 7-6 12-14 12z" fill="${W2}"/><path d="M74 30l18 40-8 4-18-40z" fill="${W2}"/><path d="M70 28l-4-8M74 27l2-9M78 29l6-6" stroke="${W2}" stroke-width="3" stroke-linecap="round"/>`,
+    "Bakery": `<path d="M24 62V48c0-14 16-22 36-22s36 8 36 22v14z" fill="${W2}"/><path d="M42 38l-6 12M60 34l-4 14M78 38l-4 12" stroke="${D}" stroke-width="3.5" stroke-linecap="round"/>`,
+    "Pantry": `<rect x="30" y="26" width="30" height="42" rx="4" fill="${W2}"/><ellipse cx="45" cy="26" rx="15" ry="4" fill="${W2}"/><rect x="30" y="38" width="30" height="14" fill="${D}"/><rect x="66" y="36" width="26" height="32" rx="4" fill="${W2}"/><rect x="66" y="44" width="26" height="10" fill="${D}"/>`,
+    "Snacks": `<path d="M26 64 60 22l34 42z" fill="${W2}"/><path d="M33 56h54" stroke="${D}" stroke-width="4"/><path d="M38 50h44" stroke="${D}" stroke-width="2"/>`,
+    "Baby & kids": `<rect x="46" y="34" width="28" height="36" rx="8" fill="${W2}"/><rect x="50" y="24" width="20" height="10" rx="3" fill="${W2}"/><path d="M56 24c0-6 8-6 8 0" fill="${W2}"/><path d="M50 46h8M50 54h8M50 62h8" stroke="${D}" stroke-width="2.5" stroke-linecap="round"/>`
+  }[kind] || '';
+  return `<svg width="${h*1.5}" height="${h}" viewBox="0 0 120 80" aria-hidden="true">${art}</svg>`;
+}
+
+function renderRail(rows){
+  const lp = allPackets().filter(live);
+  const servings = lp.reduce((a,p)=>a+p.servings,0);
+  const openN = BANKS.filter(isOpen).length;
+  $('#rBoxes').textContent = lp.length; $('#rServ').textContent = servings;
+  $('#rMeter').style.width = (openN/BANKS.length*100)+'%';
+  $('#rOpen').textContent = `${openN} of ${BANKS.length} drop points open now · sample data`;
+  const byHood = {};
+  for (const r of rows){ (byHood[r.b.hood] ||= {n:0, id:r.b.id, mi:r.mi}); byHood[r.b.hood].n += r.avail.length; }
+  const top = Object.entries(byHood).sort((a,b)=>b[1].n-a[1].n || a[1].mi-b[1].mi).slice(0,6);
+  const max = Math.max(1, ...top.map(t=>t[1].n));
+  $('#rRank').innerHTML = top.length ? top.map(([h,v],i)=>`<button data-bank="${v.id}"><span class="i">${String(i+1).padStart(2,'0')}</span><span>${esc(h)}</span><b class="mono">${v.n}</b><span class="bar2"><i style="width:${v.n/max*100}%"></i></span></button>`).join('') : `<div class="fine">No matches for these filters.</div>`;
+}
+function renderDock(rows){
+  const items = rows.flatMap(r => r.avail.map(p => ({p, r}))).sort((a,b)=> a.r.mi-b.r.mi || a.p.eatBy-b.p.eatBy).slice(0,16);
+  $('#dockCnt').textContent = items.length;
+  $('#strip').innerHTML = items.length ? items.map(({p,r}) => `<button class="bcard" data-bank="${r.b.id}">
+      <span class="art" style="background:${artBg(p.kind)}">${kindArt(p.kind, 60)}<span class="k">${esc(p.kind)}</span><span class="t">${r.mi.toFixed(1)} mi</span></span>
+      <b>${esc(p.title)}</b>
+      <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/></svg>${esc(r.b.name)}</span>
+      <span>${p.servings} serving${p.servings>1?'s':''} · ${eatText(p)}</span>
+    </button>`).join('') : `<div class="fine" style="padding:20px 4px">No boxes match. Try clearing a filter.</div>`;
+}
+$('#strip').addEventListener('click', e => { const b = e.target.closest('[data-bank]'); if (b) select(b.dataset.bank, true); });
+$('#rRank').addEventListener('click', e => { const b = e.target.closest('[data-bank]'); if (b) select(b.dataset.bank, true); });
+$('#dPrev').onclick = () => $('#strip').scrollBy({left:-380, behavior:'smooth'});
+$('#dNext').onclick = () => $('#strip').scrollBy({left:380, behavior:'smooth'});
+$('#nearestOpen').onclick = () => {
+  const r = computeBanks().filter(x => x.open && x.avail.length)[0] || lastRows.find(x=>x.avail.length);
+  if (r) select(r.b.id, true); else toast('No open drop point has food right now.');
+};
+
+function renderSummary(rows){
+  const boxes = rows.reduce((s,r)=>s+r.avail.length,0);
+  const servings = rows.reduce((s,r)=>s+r.avail.reduce((a,p)=>a+p.servings,0),0);
+  const nearest = rows.find(r=>r.avail.length);
+  $('#summary').innerHTML = `<span><strong>${boxes}</strong> boxes · <strong>${servings}</strong> servings at <strong>${rows.length}</strong> places</span>
+    ${nearest?`<span>Nearest: <strong>${nearest.mi.toFixed(1)} mi</strong></span>`:''}`;
+}
+
+async function onDetailClick(e){
+  const bank = e.target.closest('[data-bank]');
+  if (bank){ select(bank.dataset.bank, true); return; }
+  if (e.target.closest('#backBtn') || e.target.closest('#closeDrawer')){ state.selected = null; state.armed = null; renderFind(); return; }
+  const act = e.target.closest('[data-act]');
+  if (act && act.dataset.act === 'copy'){
+    const b = bankById[state.selected]; const text = `${b.address}, San Francisco, CA`;
+    try { await navigator.clipboard.writeText(text); toast('Address copied'); }
+    catch { const r = document.createRange(); r.selectNodeContents(e.currentTarget.querySelector('.addr')); const s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); toast('Address selected. Copy it.'); }
+    return;
+  }
+  if (act && act.dataset.act === 'drop'){ setMode('give'); $('#gBank').value = state.selected; updatePreview(); return; }
+  const c = e.target.closest('[data-claim]');
+  if (c){
+    const id = c.dataset.claim;
+    if (state.armed !== id){ state.armed = id; renderFind(); return; }
+    state.armed = null; await claim(id);
+  }
+}
+$('#list').addEventListener('click', onDetailClick);
+$('#drawer').addEventListener('click', onDetailClick);
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && state.selected && isDesk()){ state.selected = null; renderFind(); } });
+
+function select(id, center){
+  state.selected = id; state.armed = null; renderFind();
+  if (center){ const b = bankById[id]; const [x,y] = proj(b.lng,b.lat); if (vb.w > baseW*0.75) zoomTo(x,y,baseW*(isDesk()?0.62:0.45)); else zoomTo(x,y,vb.w); }
+  if (state.mode==='find' && matchMedia('(max-width:860px)').matches) $('.panel').scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'});
+}
+
+/* ---------- MAP ---------- */
+const svg = $('#map');
+const MINLNG=-122.525, MAXLNG=-122.350, MINLAT=37.703, MAXLAT=37.816, KX=Math.cos(37.76*Math.PI/180), S=4000;
+const W = (MAXLNG-MINLNG)*KX*S, HH = (MAXLAT-MINLAT)*S;
+const proj = (lng,lat) => [(lng-MINLNG)*KX*S, (MAXLAT-lat)*S];
+const unproj = (x,y) => ({lng: x/(KX*S)+MINLNG, lat: MAXLAT - y/S});
+const vb = {x:0,y:0,w:W,h:HH};
+const OUTLINE = [[-122.5137,37.7810],[-122.5055,37.7878],[-122.4920,37.7880],[-122.4850,37.7895],[-122.4790,37.8108],[-122.4700,37.8075],[-122.4560,37.8058],[-122.4470,37.8068],[-122.4370,37.8075],[-122.4300,37.8072],[-122.4255,37.8090],[-122.4200,37.8082],[-122.4140,37.8095],[-122.4060,37.8090],[-122.4000,37.8060],[-122.3955,37.7995],[-122.3925,37.7950],[-122.3880,37.7890],[-122.3878,37.7810],[-122.3870,37.7700],[-122.3845,37.7600],[-122.3810,37.7550],[-122.3850,37.7470],[-122.3770,37.7380],[-122.3680,37.7330],[-122.3570,37.7290],[-122.3620,37.7210],[-122.3800,37.7140],[-122.3870,37.7083],[-122.4300,37.7081],[-122.4700,37.7081],[-122.5020,37.7081],[-122.5040,37.7200],[-122.5065,37.7350],[-122.5100,37.7550],[-122.5115,37.7700]];
+const PARKS = [
+  [[-122.5110,37.7660],[-122.4545,37.7665],[-122.4545,37.7720],[-122.4775,37.7738],[-122.5105,37.7712]],
+  [[-122.4780,37.8075],[-122.4470,37.8030],[-122.4470,37.7950],[-122.4580,37.7870],[-122.4840,37.7860],[-122.4850,37.7895]],
+  [[-122.4950,37.7350],[-122.4870,37.7350],[-122.4870,37.7230],[-122.4990,37.7230]],
+  [[-122.4400,37.7340],[-122.4510,37.7470],[-122.4560,37.7420],[-122.4480,37.7320]]
+];
+const STREETS = [
+  [[-122.3937,37.7955],[-122.4350,37.7625]],             // Market St
+  [[-122.4198,37.7746],[-122.4185,37.7520],[-122.4220,37.7350],[-122.4330,37.7230],[-122.4460,37.7085]], // Mission St
+  [[-122.4040,37.7900],[-122.3900,37.7350],[-122.3880,37.7120]],  // 3rd St
+  [[-122.4060,37.8085],[-122.4140,37.7970],[-122.4200,37.7880],[-122.4235,37.7730],[-122.4195,37.7500]], // Van Ness-ish
+  [[-122.5080,37.7400],[-122.4700,37.7400],[-122.4580,37.7400]],  // Taraval-ish
+  [[-122.4950,37.7810],[-122.4500,37.7830],[-122.4250,37.7860]],  // Geary
+  [[-122.5050,37.7250],[-122.4600,37.7240],[-122.4380,37.7230]]   // Ocean/Sloat
+];
+const HOODS = [["Richmond",-122.485,37.779],["Sunset",-122.488,37.754],["Mission",-122.416,37.757],["SoMa",-122.400,37.776],["Bayview",-122.388,37.734],["Excelsior",-122.430,37.722],["Marina",-122.436,37.802],["Presidio",-122.466,37.798],["Tenderloin",-122.414,37.786],["Twin Peaks",-122.447,37.752]];
+const path = pts => 'M' + pts.map(([lng,lat]) => proj(lng,lat).map(n=>n.toFixed(1)).join(',')).join('L');
+
+svg.innerHTML = `
+  <defs><pattern id="dotpat" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.1"/></pattern></defs>
+  <path class="land" d="${path(OUTLINE)}Z"/>
+  <path class="landtex" d="${path(OUTLINE)}Z"/>
+  ${PARKS.map(p=>`<path class="park" d="${path(p)}Z"/>`).join('')}
+  <g id="streets">${STREETS.map(s=>`<path class="street" d="${path(s)}"/>`).join('')}</g>
+  <g id="hoods"></g>
+  <g id="pins"></g>
+  <g id="me" class="me"></g>`;
+
+function applyVB(){
+  svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  svg.style.touchAction = vb.w < baseW*0.98 ? 'none' : 'pan-y';
+  const at = document.querySelector('.atlas-top'); if (at) at.classList.toggle('compact', vb.w < baseW*0.9);
+  renderMap();
+}
+function insets(r){
+  if (!isDesk()) return {l:8,r:8,t:8,b:8};
+  const narrow = r.width <= 1240;
+  const rr = state.selected ? 432 : (narrow?316:356);
+  return {l: narrow?332:372, r: rr, t:150, b:250};
+}
+function fitAspect(){
+  const r = svg.getBoundingClientRect(); if (!r.width) return;
+  const ins = insets(r);
+  const aw = Math.max(200, r.width-ins.l-ins.r), ah = Math.max(200, r.height-ins.t-ins.b);
+  const sc = Math.min(aw/W, ah/HH);
+  vb.w = r.width/sc; vb.h = r.height/sc;
+  vb.x = -ins.l/sc - (aw/sc - W)/2; vb.y = -ins.t/sc - (ah/sc - HH)/2;
+  baseW = vb.w;
+}
+let baseW = W;
+function zoomTo(cx, cy, w){
+  const r = svg.getBoundingClientRect(); const ar = r.width/r.height || W/HH;
+  w = Math.max(baseW*0.12, Math.min(baseW, w));
+  const ins = insets(r), k = w / (r.width||1);
+  vb.w = w; vb.h = w/ar;
+  vb.x = cx - w/2 - (ins.l-ins.r)/2*k; vb.y = cy - vb.h/2 - (ins.t-ins.b)/2*k; applyVB();
+}
+function viewCenter(){ const r = svg.getBoundingClientRect(); const ins = insets(r), k = vb.w/(r.width||1); return [vb.x+vb.w/2+(ins.l-ins.r)/2*k, vb.y+vb.h/2+(ins.t-ins.b)/2*k]; }
+$('#zin').onclick = () => { const [x,y]=viewCenter(); zoomTo(x, y, vb.w/1.6); };
+$('#zout').onclick = () => { const [x,y]=viewCenter(); if (vb.w*1.6 >= baseW){ fitAspect(); applyVB(); } else zoomTo(x, y, vb.w*1.6); };
+$('#zreset').onclick = () => { fitAspect(); applyVB(); };
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const r = svg.getBoundingClientRect();
+  const px = vb.x + (e.clientX-r.left)/r.width*vb.w, py = vb.y + (e.clientY-r.top)/r.height*vb.h;
+  const f = e.deltaY > 0 ? 1.15 : 1/1.15;
+  const nw = Math.max(baseW*0.12, Math.min(baseW, vb.w*f)); const k = nw/vb.w;
+  vb.x = px - (px-vb.x)*k; vb.y = py - (py-vb.y)*k; vb.w = nw; vb.h = vb.h*k; applyVB();
+}, {passive:false});
+
+let drag = null;
+svg.addEventListener('pointerdown', e => {
+  drag = {x:e.clientX, y:e.clientY, vx:vb.x, vy:vb.y, moved:false, target:e.target, id:e.pointerId};
+});
+svg.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const dx = e.clientX-drag.x, dy = e.clientY-drag.y;
+  if (!drag.moved && Math.hypot(dx,dy) > 6 && vb.w < baseW*0.98){ drag.moved = true; try{ svg.setPointerCapture(drag.id); }catch{} }
+  if (drag.moved){ const r = svg.getBoundingClientRect(); vb.x = drag.vx - dx/r.width*vb.w; vb.y = drag.vy - dy/r.height*vb.h; svg.setAttribute('viewBox', `${vb.x} ${vb.y} ${vb.w} ${vb.h}`); }
+});
+svg.addEventListener('pointerup', e => {
+  if (!drag) return; const d = drag; drag = null;
+  if (d.moved){ renderMap(); return; }
+  if (Math.hypot(e.clientX-d.x, e.clientY-d.y) > 6) return;
+  const pin = d.target.closest && d.target.closest('.pin');
+  if (pin){ select(pin.dataset.id, false); return; }
+  const r = svg.getBoundingClientRect();
+  const x = vb.x + (e.clientX-r.left)/r.width*vb.w, y = vb.y + (e.clientY-r.top)/r.height*vb.h;
+  const ll = unproj(x,y);
+  if (ll.lat<MINLAT||ll.lat>MAXLAT||ll.lng<MINLNG||ll.lng>MAXLNG) return;
+  state.me = {...ll, label:'your pinned spot'}; nearSel.value = 'pin'; renderFind(); toast('Location set. Sorted by distance from your pin.');
+});
+svg.addEventListener('pointercancel', () => { drag = null; });
+svg.addEventListener('keydown', e => {
+  const pin = e.target.closest('.pin'); if (pin && (e.key==='Enter'||e.key===' ')){ e.preventDefault(); select(pin.dataset.id, false); }
+});
+
+let lastRows = [];
+function renderMap(){
+  const k = vb.w / baseW; // scale factor so marks keep screen size
+  const rows = lastRows; const vis = new Set(rows.map(r=>r.b.id));
+  $('#hoods').innerHTML = HOODS.map(([n,lng,lat]) => { const [x,y]=proj(lng,lat); return `<text class="hood" x="${x}" y="${y}" font-size="${10*k}" text-anchor="middle">${n}</text>`; }).join('');
+  $('#streets').querySelectorAll('path').forEach(p=>p.setAttribute('stroke-width', 2.2*k));
+  const rowById = Object.fromEntries(rows.map(r=>[r.b.id,r]));
+  const order = [...BANKS].sort((a,b)=> (a.id===state.selected) - (b.id===state.selected));
+  $('#pins').innerHTML = order.map(b => {
+    const r = rowById[b.id]; const [x,y] = proj(b.lng,b.lat);
+    const n = r ? r.avail.length : 0; const open = isOpen(b);
+    const sel = b.id === state.selected;
+    const rad = (sel?15:11 + Math.min(n,8)*0.6) * k;
+    const cls = ['pin', !vis.has(b.id)&&'dim', n===0&&'zero', !open&&'closed', sel&&'sel'].filter(Boolean).join(' ');
+    return `<g class="${cls}" data-id="${b.id}" tabindex="${vis.has(b.id)?0:-1}" role="button" aria-label="${esc(b.name)}, ${n} boxes, ${open?'open':'closed'}">
+      <circle class="dot" cx="${x}" cy="${y}" r="${rad}" stroke-width="${2.5*k}"/>
+      <text x="${x}" y="${y}" font-size="${(sel?13:11)*k}">${n}</text></g>`;
+  }).join('');
+  const [mx,my] = proj(state.me.lng, state.me.lat);
+  $('#me').innerHTML = `<circle class="halo" cx="${mx}" cy="${my}" r="${16*k}"/><circle class="core" cx="${mx}" cy="${my}" r="${6*k}" stroke-width="${2.5*k}"/>`;
+}
+
+function renderFind(){
+  lastRows = computeBanks();
+  renderSummary(lastRows); renderList(lastRows); renderMap(); renderFacets();
+  if (isDesk()){ renderDrawer(lastRows); renderRail(lastRows); renderDock(lastRows); } else $('#drawer').hidden = true;
+}
+
+/* ---------- claims & drops (shared store with local fallback) ---------- */
+async function claim(id){
+  const at = Date.now();
+  state.claims[id] = at; renderFind();
+  if (db){
+    try { await db.collection('claims').doc(id).set({at}); toast('Marked as taken. Enjoy your meal.'); return; }
+    catch(err){ /* fall through to local */ }
+  }
+  const local = ls.get('kindbox.claims', {}); local[id] = at; ls.set('kindbox.claims', local);
+  toast('Marked as taken on this device.');
+}
+
+function setStoreStatus(){
+  const el = $('#storeStatus');
+  el.className = 'status' + (state.store==='shared'?' live':'');
+  el.innerHTML = `<i></i>${state.store==='shared' ? 'Listings are shared live with everyone' : 'Demo mode: listings stay on this device'}`;
+}
+
+function mergeLocal(){
+  const localDrops = ls.get('kindbox.drops', []);
+  const localClaims = ls.get('kindbox.claims', {});
+  return { localDrops, localClaims };
+}
+function applyLocal(){
+  const { localDrops, localClaims } = mergeLocal();
+  state.drops = localDrops; state.claims = {...localClaims};
+}
+applyLocal();
+
+async function connect(){
+  try {
+    if (!window.claude?.use) throw 0;
+    db = await window.claude.use('db');
+  } catch { db = null; }
+  if (!db){ state.store = 'local'; setStoreStatus(); return; }
+  state.store = 'shared'; setStoreStatus();
+  const { localDrops, localClaims } = mergeLocal();
+  db.collection('drops').onSnapshot(snap => {
+    const remote = snap.docs.map(d => { const x = d.data()||{}; return {
+      id:d.id, bankId:String(x.bankId||''), title:String(x.title||'Food box').slice(0,60), contents:String(x.contents||'').slice(0,200),
+      kind: KINDS.includes(x.kind)?x.kind:'Cooked meal', servings: Math.max(1, Math.min(50, +x.servings||1)),
+      tags: Array.isArray(x.tags)?x.tags.filter(t=>DIETS.includes(t)):[], packedAt:+x.packedAt||Date.now(), eatBy:+x.eatBy||Date.now(),
+      donor:String(x.donor||'').slice(0,24), code:String(x.code||'').slice(0,8), source:'drop' }; }).filter(x => bankById[x.bankId]);
+    const ids = new Set(remote.map(r=>r.id));
+    state.drops = [...remote, ...localDrops.filter(d=>!ids.has(d.id))];
+    renderFind(); renderMine();
+  }, () => { state.store='local'; setStoreStatus(); });
+  db.collection('claims').onSnapshot(snap => {
+    const c = {...localClaims}; snap.docs.forEach(d => { c[d.id] = d.data().at || 1; });
+    state.claims = c; renderFind();
+  }, () => {});
+}
+
+/* ---------- GIVE ---------- */
+const gBank = $('#gBank');
+gBank.innerHTML = [...BANKS].sort((a,b)=>a.hood.localeCompare(b.hood)).map(b=>`<option value="${b.id}">${esc(b.hood)} — ${esc(b.name)}</option>`).join('');
+$('#gKind').innerHTML = KINDS.map(k=>`<option>${k}</option>`).join('');
+$('#gTags').innerHTML = DIETS.map(d=>`<button type="button" class="chip" aria-pressed="false" data-tag="${d}">${d}</button>`).join('');
+const gTags = new Set(); let servings = 2;
+$('#gTags').addEventListener('click', e => { const c = e.target.closest('[data-tag]'); if(!c) return; const t=c.dataset.tag; gTags.has(t)?gTags.delete(t):gTags.add(t); c.setAttribute('aria-pressed', gTags.has(t)); updatePreview(); });
+$('#sMinus').onclick = () => { servings = Math.max(1, servings-1); $('#gServ').textContent = servings; updatePreview(); };
+$('#sPlus').onclick = () => { servings = Math.min(50, servings+1); $('#gServ').textContent = servings; updatePreview(); };
+['#gBank','#gTitle','#gContents','#gKind','#gPacked','#gEat','#gName'].forEach(s => $(s).addEventListener('input', updatePreview));
+
+let pendingCode = makeCode();
+function makeCode(){ return 'KB-' + String(Math.floor(1000 + Math.random()*9000)); }
+function formDraft(){
+  const packedAt = Date.now() - (+$('#gPacked').value)*60000;
+  return {
+    bankId: gBank.value, title: $('#gTitle').value.trim(), contents: $('#gContents').value.trim(),
+    kind: $('#gKind').value, servings, tags: DIETS.filter(d=>gTags.has(d)),
+    packedAt, eatBy: packedAt + (+$('#gEat').value)*H, donor: $('#gName').value.trim()
+  };
+}
+function updatePreview(){
+  const d = formDraft(); const b = bankById[d.bankId];
+  $('#gBankHint').textContent = b ? `${b.address} · ${hoursText(b)} · ${b.fridge?'Has a fridge':'Shelf only — no cooked food that needs cold storage'}` : '';
+  $('#labelPreview').innerHTML = `
+    <div class="hd"><b>KINDBOX</b><span>${pendingCode}</span></div>
+    <div class="ttl">${esc(d.title) || '<span class="muted">What\'s inside</span>'}</div>
+    <dl>
+      <dt>Packed</dt><dd>${clock(d.packedAt)}</dd>
+      <dt>Eat by</dt><dd>${clock(d.eatBy)}</dd>
+      <dt>Serves</dt><dd>${d.servings}</dd>
+      <dt>Type</dt><dd>${esc(d.kind)}</dd>
+      <dt>For</dt><dd>${d.tags.length?esc(d.tags.join(', ')):'—'}</dd>
+      ${d.contents?`<dt>Note</dt><dd>${esc(d.contents)}</dd>`:''}
+    </dl>`;
+}
+
+$('#giveForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const d = formDraft(); const err = $('#gErr');
+  if (!d.title){ err.textContent = 'Add a short name for what’s in the box.'; $('#gTitle').focus(); return; }
+  if (!$('#gPledge').checked){ err.textContent = 'Please confirm the food is sealed and safe to share.'; $('#gPledge').focus(); return; }
+  if (!bankById[d.bankId].fridge && +$('#gEat').value <= 24 && d.kind === 'Cooked meal'){
+    err.textContent = 'This point has no fridge. Pick a point with a fridge for cooked food.'; gBank.focus(); return;
+  }
+  err.textContent = '';
+  const id = 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+  const drop = {...d, code: pendingCode, createdAt: Date.now(), source:'drop'};
+  let shared = false;
+  if (db){ try { await db.collection('drops').doc(id).set(drop); shared = true; } catch {} }
+  if (!shared){ const arr = ls.get('kindbox.drops', []); arr.unshift({...drop, id}); ls.set('kindbox.drops', arr); state.drops = [{...drop,id}, ...state.drops.filter(x=>x.id!==id)]; }
+  myIds.add(id); ls.set('kindbox.mine', [...myIds].slice(-20));
+  showDone({...drop, id}, shared);
+  renderFind(); renderMine();
+});
+
+function showDone(drop, shared){
+  const b = bankById[drop.bankId];
+  $('#giveFormWrap').hidden = true; const box = $('#doneBox'); box.hidden = false;
+  box.innerHTML = `<div class="done">
+    <div class="sect">Listed${shared?'':' on this device'}</div>
+    <h2>Thank you${drop.donor?', '+esc(drop.donor):''}.</h2>
+    <p class="lede" style="margin:0">Write this code on your box so people can match it to the listing at <b>${esc(b.name)}</b>.</p>
+    <div class="code">${drop.code}</div>
+    <p class="muted" style="margin:0">${esc(drop.title)} · ${drop.servings} serving${drop.servings>1?'s':''} · ${eatText(drop)}</p>
+    <div class="actions">
+      <button class="btn primary" id="seeIt">See it on the map</button>
+      <button class="btn" id="another">List another box</button>
+    </div></div>`;
+  $('#seeIt').onclick = () => { setMode('find'); state.q=''; $('#q').value=''; select(drop.bankId, true); };
+  $('#another').onclick = resetGive;
+  box.querySelector('h2').setAttribute('tabindex','-1'); box.querySelector('h2').focus();
+}
+function resetGive(){
+  ['#gTitle','#gContents','#gName'].forEach(s => $(s).value = '');
+  $('#gPledge').checked = false; gTags.clear(); servings = 2; $('#gServ').textContent = 2;
+  document.querySelectorAll('#gTags .chip').forEach(c => c.setAttribute('aria-pressed','false'));
+  pendingCode = makeCode();
+  $('#doneBox').hidden = true; $('#giveFormWrap').hidden = false; updatePreview(); $('#gTitle').focus();
+}
+
+function renderMine(){
+  const mine = state.drops.filter(d => myIds.has(d.id));
+  $('#myDropsCard').hidden = !mine.length;
+  $('#myDrops').innerHTML = mine.slice(0,6).map(d => `<div><span><b class="mono">${esc(d.code)}</b> ${esc(d.title)}</span><span class="muted">${state.claims[d.id]?'Picked up':(d.eatBy<Date.now()?'Expired':esc(bankById[d.bankId]?.hood||''))}</span></div>`).join('');
+}
+
+/* ---------- mode ---------- */
+function setMode(m){
+  state.mode = m;
+  document.querySelectorAll('.switch button').forEach(b => b.setAttribute('aria-pressed', b.dataset.mode===m));
+  $('#findView').hidden = m!=='find'; $('#giveView').hidden = m!=='give';
+  document.body.classList.toggle('on-find', m==='find'); hideLanding();
+  if (m==='find'){ requestAnimationFrame(()=>{ const keep = vb.w < baseW*0.98; if(!keep){ fitAspect(); } applyVB(); }); }
+  else updatePreview();
+  try { history.replaceState(null,'', m==='give' ? '#give' : '#find'); } catch {}
+}
+document.addEventListener('click', e => {
+  const m = e.target.closest('[data-mode]'); if (m){ setMode(m.dataset.mode); return; }
+  const g = e.target.closest('[data-go]'); if (!g) return;
+  if (g.dataset.go === 'home') showLanding(); else setMode(g.dataset.go);
+});
+
+/* ---------- landing (web only) ---------- */
+function pip(x, y, poly){ let c = false; for (let i=0,j=poly.length-1;i<poly.length;j=i++){ const [xi,yi]=poly[i],[xj,yj]=poly[j]; if (((yi>y)!==(yj>y)) && (x < (xj-xi)*(y-yi)/(yj-yi)+xi)) c=!c; } return c; }
+let landingBuilt = false;
+function buildLanding(){
+  if (landingBuilt) return; landingBuilt = true;
+  const P = OUTLINE.map(([a,b])=>proj(a,b)), PK = PARKS.map(pk=>pk.map(([a,b])=>proj(a,b)));
+  const step = 7.5; let dots = '';
+  for (let y = step/2; y < HH; y += step) for (let x = step/2; x < W; x += step){
+    if (!pip(x,y,P)) continue;
+    const park = PK.some(pk=>pip(x,y,pk));
+    dots += `<circle class="${park?'lpark':'ldot'}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${park?2.3:1.9}"/>`;
+  }
+  const pins = BANKS.map((b,i) => { const [x,y] = proj(b.lng,b.lat); return `<circle class="lring" cx="${x}" cy="${y}" r="7" stroke-width="1.5" style="animation-delay:${(i%6)*-.45}s"/><circle class="lpin" cx="${x}" cy="${y}" r="4.2"/>`; }).join('');
+  const cx = W/2, cy = HH/2;
+  $('#lMap').setAttribute('viewBox', `-60 -40 ${W+120} ${HH+80}`);
+  $('#lMap').innerHTML = `<defs><radialGradient id="lglow"><stop offset="0" stop-color="var(--leaf)" stop-opacity=".14"/><stop offset="1" stop-color="var(--leaf)" stop-opacity="0"/></radialGradient></defs>
+    <ellipse cx="${cx}" cy="${cy}" rx="${W*0.62}" ry="${HH*0.62}" fill="url(#lglow)"/>
+    <g class="orbit-g"><ellipse class="orbit" cx="${cx}" cy="${cy}" rx="${W*0.66}" ry="${HH*0.36}" transform="rotate(-14 ${cx} ${cy})"/><circle cx="${cx+W*0.62}" cy="${cy-30}" r="4" fill="var(--squash)" opacity=".7"/></g>
+    <ellipse class="orbit" cx="${cx}" cy="${cy}" rx="${W*0.56}" ry="${HH*0.58}" transform="rotate(20 ${cx} ${cy})"/>
+    ${dots}${pins}`;
+  const lp = allPackets().filter(live);
+  $('#lsBoxes').textContent = lp.length;
+  $('#lsServ').textContent = lp.reduce((a,p)=>a+p.servings,0);
+  $('#lsPoints').textContent = BANKS.length;
+  $('#lsOpen').textContent = `${BANKS.filter(isOpen).length} open right now.`;
+}
+function showLanding(){ if (!isDesk()) return; buildLanding(); $('#landing').hidden = false; try { history.replaceState(null,'',location.pathname+location.search); } catch {} }
+function hideLanding(){ $('#landing').hidden = true; }
+mqDesk.addEventListener('change', () => { fitAspect(); applyVB(); renderFind(); });
+
+let toastT; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true, 2600); }
+
+let lastRW = 0;
+new ResizeObserver(() => { const w = svg.getBoundingClientRect().width; if (state.mode==='find' && (vb.w >= baseW*0.98 || Math.abs(w-lastRW) > 40)){ lastRW = w; fitAspect(); applyVB(); } }).observe(svg);
+setInterval(() => { if (state.mode==='find' && !state.armed) renderFind(); }, 60000);
+
+setStoreStatus(); updatePreview(); renderMine();
+document.body.classList.add('on-find');
+fitAspect(); applyVB(); renderFind();
+if (location.hash === '#give') setMode('give');
+else if (location.hash !== '#find') showLanding();
+connect();
+})();
+</script>
+</body></html>
