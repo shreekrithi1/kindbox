@@ -5556,5 +5556,374 @@
    "eatWithinHours": 12,
    "donor": "Aroha"
   }
+ ],
+ "programs": [
+  {
+   "id": "g01",
+   "title": "Kitchen skills to culinary jobs",
+   "org": "Mission Table Collective",
+   "orgType": "NGO",
+   "category": "Job training",
+   "dayOffset": 2,
+   "start": "09:00",
+   "end": "13:00",
+   "recurring": "Mon & Wed for 8 weeks",
+   "place": "Community kitchen",
+   "address": "24th St & Harrison St",
+   "hood": "Mission",
+   "cost": "Free, with weekly stipend",
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "audience": [
+    "Adults"
+   ],
+   "spots": 12,
+   "contact": "(415) 555-0142 · jobs@missiontable.example",
+   "desc": "Hands-on training in food safety, prep and line cooking. Graduates get a ServSafe certificate and interviews with partner restaurants."
+  },
+  {
+   "id": "g02",
+   "title": "Resume and interview workshop",
+   "org": "SF Neighborhood Council (demo)",
+   "orgType": "City council",
+   "category": "Job training",
+   "dayOffset": 1,
+   "start": "14:00",
+   "end": "16:00",
+   "recurring": "",
+   "place": "Main library, room B",
+   "address": "Larkin St & Grove St",
+   "hood": "Civic Center",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Cantonese"
+   ],
+   "audience": [
+    "Adults",
+    "Seniors"
+   ],
+   "spots": 25,
+   "contact": "Walk in or call (415) 555-0110",
+   "desc": "Volunteers help you write a resume, practice interviews and set up a job-search email. Bring an ID if you have one."
+  },
+  {
+   "id": "g03",
+   "title": "Community dinner, all welcome",
+   "org": "Tenderloin Supper Club",
+   "orgType": "Community group",
+   "category": "Community meal",
+   "dayOffset": 0,
+   "start": "17:30",
+   "end": "19:30",
+   "recurring": "Every Friday",
+   "place": "Church hall",
+   "address": "Ellis St & Jones St",
+   "hood": "Tenderloin",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Spanish",
+    "Vietnamese"
+   ],
+   "audience": [
+    "Families",
+    "Adults",
+    "Seniors"
+   ],
+   "spots": 150,
+   "contact": "No sign-up needed",
+   "desc": "A hot sit-down dinner cooked by neighbors. Vegetarian and halal options every week."
+  },
+  {
+   "id": "g04",
+   "title": "Food drive: pack 500 Kindboxes",
+   "org": "Kindbox Volunteers",
+   "orgType": "Community group",
+   "category": "Volunteer event",
+   "dayOffset": 3,
+   "start": "10:00",
+   "end": "14:00",
+   "recurring": "",
+   "place": "Shared warehouse",
+   "address": "Howard St & 9th St",
+   "hood": "SoMa",
+   "cost": "Free",
+   "languages": [
+    "English"
+   ],
+   "audience": [
+    "Adults",
+    "Youth",
+    "Families"
+   ],
+   "spots": 40,
+   "contact": "volunteer@kindbox.example",
+   "desc": "Sort donated groceries and pack boxes for fridges across the city. Gloves and snacks provided. Ages 12+ with an adult."
+  },
+  {
+   "id": "g05",
+   "title": "CalFresh and benefits sign-up help",
+   "org": "Bayview Family Resource Hub",
+   "orgType": "NGO",
+   "category": "Housing & benefits",
+   "dayOffset": 4,
+   "start": "10:00",
+   "end": "15:00",
+   "recurring": "Tuesdays",
+   "place": "Resource center",
+   "address": "3rd St & Oakdale Ave",
+   "hood": "Bayview",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Spanish",
+    "Samoan"
+   ],
+   "audience": [
+    "Families",
+    "Adults",
+    "Seniors"
+   ],
+   "spots": 30,
+   "contact": "(415) 555-0177",
+   "desc": "One-on-one help applying for CalFresh food benefits, WIC and Medi-Cal. Bring ID and proof of income if you have it."
+  },
+  {
+   "id": "g06",
+   "title": "Warehouse and forklift certification",
+   "org": "Bay Skills Works",
+   "orgType": "NGO",
+   "category": "Job training",
+   "dayOffset": 7,
+   "start": "08:30",
+   "end": "15:30",
+   "recurring": "3 weeks, weekdays",
+   "place": "Training yard",
+   "address": "Evans Ave & Toland St",
+   "hood": "Bayview",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "audience": [
+    "Adults"
+   ],
+   "spots": 10,
+   "contact": "apply@bayskills.example",
+   "desc": "OSHA-aligned forklift certification and warehouse safety. Job placement support with local employers after you finish."
+  },
+  {
+   "id": "g07",
+   "title": "Digital skills for job seekers",
+   "org": "Excelsior Library Friends",
+   "orgType": "Community group",
+   "category": "Job training",
+   "dayOffset": 5,
+   "start": "11:00",
+   "end": "13:00",
+   "recurring": "Thursdays",
+   "place": "Branch library",
+   "address": "Mission St & Cotter St",
+   "hood": "Excelsior",
+   "cost": "Free, laptops provided",
+   "languages": [
+    "English",
+    "Tagalog",
+    "Spanish"
+   ],
+   "audience": [
+    "Adults",
+    "Seniors"
+   ],
+   "spots": 16,
+   "contact": "(415) 555-0163",
+   "desc": "Email, online job applications, video calls and basic spreadsheets. Go at your own pace with a tutor."
+  },
+  {
+   "id": "g08",
+   "title": "Rental assistance clinic",
+   "org": "SF Neighborhood Council (demo)",
+   "orgType": "City council",
+   "category": "Housing & benefits",
+   "dayOffset": 6,
+   "start": "13:00",
+   "end": "17:00",
+   "recurring": "",
+   "place": "Community room",
+   "address": "Geneva Ave & Mission St",
+   "hood": "Excelsior",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Spanish",
+    "Cantonese"
+   ],
+   "audience": [
+    "Families",
+    "Adults"
+   ],
+   "spots": 40,
+   "contact": "Walk in",
+   "desc": "Behind on rent? Meet caseworkers who can check eligibility for emergency rental help and tenant counseling."
+  },
+  {
+   "id": "g09",
+   "title": "Free health screening and flu shots",
+   "org": "Sunset Neighbors Health Day",
+   "orgType": "NGO",
+   "category": "Health & wellbeing",
+   "dayOffset": 8,
+   "start": "09:00",
+   "end": "13:00",
+   "recurring": "",
+   "place": "Recreation center",
+   "address": "Judah St & 41st Ave",
+   "hood": "Outer Sunset",
+   "cost": "Free",
+   "languages": [
+    "English",
+    "Cantonese",
+    "Russian"
+   ],
+   "audience": [
+    "Adults",
+    "Seniors",
+    "Families"
+   ],
+   "spots": 120,
+   "contact": "No appointment needed",
+   "desc": "Blood pressure, glucose and vision checks, plus flu shots. Nurses can connect you to a free clinic."
+  },
+  {
+   "id": "g10",
+   "title": "Hunger Action Day: restock every fridge",
+   "org": "SF Neighborhood Council (demo)",
+   "orgType": "City council",
+   "category": "Food drive",
+   "dayOffset": 10,
+   "start": "09:00",
+   "end": "16:00",
+   "recurring": "",
+   "place": "City-wide, start at Civic Center",
+   "address": "Civic Center Plaza",
+   "hood": "Civic Center",
+   "cost": "Free",
+   "languages": [
+    "English"
+   ],
+   "audience": [
+    "Adults",
+    "Youth",
+    "Families"
+   ],
+   "spots": 300,
+   "contact": "hungerday@sfcouncil.example",
+   "desc": "A city-wide day to restock community fridges and shelves. Teams get a route, a cart and a list of what each fridge needs."
+  },
+  {
+   "id": "g11",
+   "title": "Youth barista training",
+   "org": "Fillmore Youth Works",
+   "orgType": "NGO",
+   "category": "Job training",
+   "dayOffset": 9,
+   "start": "15:30",
+   "end": "18:00",
+   "recurring": "Mon to Thu for 4 weeks",
+   "place": "Training cafe",
+   "address": "Fillmore St & Turk St",
+   "hood": "Western Addition",
+   "cost": "Free, paid internship after",
+   "languages": [
+    "English"
+   ],
+   "audience": [
+    "Youth"
+   ],
+   "spots": 8,
+   "contact": "(415) 555-0189",
+   "desc": "For ages 16 to 24. Learn espresso, customer service and cash handling, then a paid 6-week internship at a partner cafe."
+  },
+  {
+   "id": "g12",
+   "title": "Senior lunch and social",
+   "org": "Chinatown Elders Circle",
+   "orgType": "Community group",
+   "category": "Community meal",
+   "dayOffset": 1,
+   "start": "11:30",
+   "end": "13:30",
+   "recurring": "Weekdays",
+   "place": "Elders center",
+   "address": "Stockton St & Clay St",
+   "hood": "Chinatown",
+   "cost": "Free, donations welcome",
+   "languages": [
+    "Cantonese",
+    "Mandarin",
+    "English"
+   ],
+   "audience": [
+    "Seniors"
+   ],
+   "spots": 60,
+   "contact": "(415) 555-0124",
+   "desc": "A soft-food friendly lunch, tai chi and mahjong. Help with Medicare forms on Wednesdays."
+  },
+  {
+   "id": "g13",
+   "title": "Veterans career fair",
+   "org": "Presidio Veterans Network",
+   "orgType": "NGO",
+   "category": "Job training",
+   "dayOffset": 12,
+   "start": "10:00",
+   "end": "15:00",
+   "recurring": "",
+   "place": "Parade ground hall",
+   "address": "Presidio, Montgomery St",
+   "hood": "Presidio",
+   "cost": "Free",
+   "languages": [
+    "English"
+   ],
+   "audience": [
+    "Veterans",
+    "Adults"
+   ],
+   "spots": 200,
+   "contact": "vets@presidionet.example",
+   "desc": "Meet 30+ employers hiring veterans. Free headshots, resume review and VA benefits help on site."
+  },
+  {
+   "id": "g14",
+   "title": "Cooking well on a small budget",
+   "org": "Bernal Heights Kitchen",
+   "orgType": "Community group",
+   "category": "Health & wellbeing",
+   "dayOffset": 3,
+   "start": "18:00",
+   "end": "19:30",
+   "recurring": "Tuesdays",
+   "place": "Neighborhood center",
+   "address": "Cortland Ave & Andover St",
+   "hood": "Bernal Heights",
+   "cost": "Free, take home groceries",
+   "languages": [
+    "English",
+    "Spanish"
+   ],
+   "audience": [
+    "Families",
+    "Adults"
+   ],
+   "spots": 18,
+   "contact": "(415) 555-0156",
+   "desc": "Cook three cheap, healthy meals from pantry staples. Every family takes home a bag of groceries."
+  }
  ]
 }
