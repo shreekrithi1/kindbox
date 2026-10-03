@@ -26,6 +26,45 @@ const seedPackets = SEED.packets.map(p => {
   const packedAt = LOAD - p.packedMinutesAgo * 60000;
   return {...p, packedAt, eatBy: packedAt + p.eatWithinHours * H, source:'seed'};
 });
+
+/* ---------- i18n: English + 22 scheduled languages of India ---------- */
+const LANGS = [
+  ['en','English','English'],['hi','हिन्दी','Hindi'],['bn','বাংলা','Bengali'],['te','తెలుగు','Telugu'],['mr','मराठी','Marathi'],
+  ['ta','தமிழ்','Tamil'],['ur','اردو','Urdu'],['gu','ગુજરાતી','Gujarati'],['kn','ಕನ್ನಡ','Kannada'],['or','ଓଡ଼ିଆ','Odia'],
+  ['ml','മലയാളം','Malayalam'],['pa','ਪੰਜਾਬੀ','Punjabi'],['as','অসমীয়া','Assamese'],['mai','मैथिली','Maithili'],['sat','ᱥᱟᱱᱛᱟᱲᱤ','Santali'],
+  ['ks','کٲشُر','Kashmiri'],['ne','नेपाली','Nepali'],['sd','سنڌي','Sindhi'],['kok','कोंकणी','Konkani'],['doi','डोगरी','Dogri'],
+  ['mni','ꯃꯩꯇꯩꯂꯣꯟ','Manipuri'],['brx','बड़ो','Bodo'],['sa','संस्कृतम्','Sanskrit']
+];
+const RTL = new Set(['ur','ks','sd']);
+const I18N_ALL = embedded('i18n') || {};
+const dictCache = {...I18N_ALL};
+let LANG = 'en', DICT = {}, EN = dictCache.en || {};
+async function loadDict(code){
+  if (dictCache[code]) return dictCache[code];
+  try { dictCache[code] = await fetch(`i18n/${code}.json`).then(r => r.json()); } catch { dictCache[code] = {}; }
+  return dictCache[code];
+}
+function t(k, v){ let s = DICT[k] ?? EN[k] ?? k; if (v) s = s.replace(/\{(\w+)\}/g, (m, x) => v[x] ?? m); return s; }
+const tN = (n, v) => (n === 1 && LANG === 'en') ? t('u.box1') : t('u.boxes', {n, ...(v||{})});
+const LOC = () => { const l = `${LANG === 'en' ? 'en' : LANG}-IN-u-nu-latn`; try { return Intl.DateTimeFormat.supportedLocalesOf([l]).length ? l : 'en-IN'; } catch { return 'en-US'; } };
+const kindLabel = k => t('kind.' + k), dietLabel = d => t('diet.' + d);
+function applyStatic(){
+  document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (k in EN || k in DICT) el.textContent = t(k); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  const cur = LANGS.find(l => l[0] === LANG);
+  document.querySelectorAll('.lang-cur').forEach(el => el.textContent = cur ? cur[1] : 'English');
+}
+async function setLang(code, persist = true){
+  if (!LANGS.some(l => l[0] === code)) code = 'en';
+  EN = await loadDict('en'); DICT = code === 'en' ? EN : await loadDict(code);
+  LANG = code;
+  document.documentElement.lang = code; document.documentElement.dir = RTL.has(code) ? 'rtl' : 'ltr';
+  if (persist) ls.set('eternalpot.lang', code);
+  applyStatic();
+  if (typeof relabel === 'function') relabel();
+}
+
 const SFI = Math.max(0, CITIES.findIndex(c => c.name === 'San Francisco'));
 const cityMe = i => ({ lat: CITIES[i].lat, lng: CITIES[i].lng, label: CITIES[i].name, cc: CITIES[i].cc });
 const state = {
@@ -49,8 +88,8 @@ function localMinutes(tz){
 }
 const toMin = s => { const [h,m] = s.split(':').map(Number); return h*60+m; };
 function isOpen(b){ const n = localMinutes(b.tz || 'America/Los_Angeles'); return n >= toMin(b.open) && n < toMin(b.close); }
-function fmtHM(s){ const [h,m] = s.split(':').map(Number); if (h===24) return 'midnight'; const ap = h<12?'AM':'PM'; const hh = h%12||12; return m? `${hh}:${String(m).padStart(2,'0')} ${ap}` : `${hh} ${ap}`; }
-function hoursText(b){ return b.open==='00:00' && b.close==='24:00' ? 'Open 24 hours' : `${fmtHM(b.open)} – ${fmtHM(b.close)} local time`; }
+function fmtHM(s){ const [h,m] = s.split(':').map(Number); const d = new Date(Date.UTC(2026,0,1,h%24,m)); return d.toLocaleTimeString(LOC(),{hour:'numeric',minute:m?'2-digit':undefined,timeZone:'UTC'}); }
+function hoursText(b){ return b.open==='00:00' && b.close==='24:00' ? t('st.24') : `${fmtHM(b.open)} – ${fmtHM(b.close)}`; }
 function miles(a, b){
   const R = 3958.8, r = x => x*Math.PI/180;
   const dLat = r(b.lat-a.lat), dLng = r(b.lng-a.lng);
@@ -62,14 +101,14 @@ function distShort(mi){
   const u = unit(), v = u === 'mi' ? mi : mi*1.609;
   return `${v<0.1?'<0.1':v<10?v.toFixed(1):Math.round(v).toLocaleString('en-US')} ${u}`;
 }
-function distText(mi){ const walk = Math.round(mi*20); return mi < 3 ? `${distShort(mi)} · ${walk<1?1:walk} min walk` : `${distShort(mi)} away`; }
-function ago(ts){ const m = Math.round((Date.now()-ts)/60000); if (m<1) return 'just now'; if (m<60) return `${m} min ago`; const h = Math.round(m/60); return h<48 ? `${h} h ago` : `${Math.round(h/24)} days ago`; }
-function clock(ts, tz){ return new Date(ts).toLocaleString('en-US',{timeZone:tz||'America/Los_Angeles',weekday:'short',hour:'numeric',minute:'2-digit'}); }
+function distText(mi){ const walk = Math.max(1, Math.round(mi*20)); return mi < 3 ? `${distShort(mi)} · ${t('u.walk',{n:walk})}` : distShort(mi); }
+function ago(ts){ const m = Math.round((Date.now()-ts)/60000); if (m<1) return t('ago.now'); if (m<60) return t('ago.min',{n:m}); const h = Math.round(m/60); return h<48 ? t('ago.h',{n:h}) : t('ago.d',{n:Math.round(h/24)}); }
+function clock(ts, tz){ return new Date(ts).toLocaleString(LOC(),{timeZone:tz||'America/Los_Angeles',weekday:'short',hour:'numeric',minute:'2-digit'}); }
 function eatText(p){
   const left = p.eatBy - Date.now(); const tz = bankById[p.bankId]?.tz;
-  if (left > 14*24*H) return 'Shelf-stable';
-  if (left > 48*H) return `Eat by ${new Date(p.eatBy).toLocaleDateString('en-US',{timeZone:tz,month:'short',day:'numeric'})}`;
-  return `Eat by ${clock(p.eatBy, tz)}`;
+  if (left > 14*24*H) return t('time.shelfStable');
+  if (left > 48*H) return t('time.eatBy',{t:new Date(p.eatBy).toLocaleDateString(LOC(),{timeZone:tz,month:'short',day:'numeric'})});
+  return t('time.eatBy',{t:clock(p.eatBy, tz)});
 }
 const fmtN = n => n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/,'') + 'k' : String(n);
 
@@ -113,17 +152,20 @@ nearSel.addEventListener('change', () => {
   renderFind(); flyTo([state.me.lng, state.me.lat], CITY_K);
 });
 
-$('#dietChips').innerHTML = DIETS.map(d=>`<button class="chip" aria-pressed="false" data-diet="${d}"><span class="kdot desk-only" style="background:var(--leaf)"></span>${d}<span class="n desk-only"></span></button>`).join('');
-$('#kindChips').innerHTML = KINDS.map(k=>`<button class="chip" aria-pressed="false" data-kind="${k}"><span class="kdot" style="background:var(--k-${KCOL[k]})"></span>${k}<span class="n"></span></button>`).join('');
+function buildDeskChips(){
+$('#dietChips').innerHTML = DIETS.map(d=>`<button class="chip" aria-pressed="${state.diets.has(d)}" data-diet="${d}"><span class="kdot desk-only" style="background:var(--leaf)"></span>${dietLabel(d)}<span class="n desk-only"></span></button>`).join('');
+$('#kindChips').innerHTML = KINDS.map(k=>`<button class="chip" aria-pressed="${state.kinds.has(k)}" data-kind="${k}"><span class="kdot" style="background:var(--k-${KCOL[k]})"></span>${kindLabel(k)}<span class="n"></span></button>`).join('');
+$('#toggleChips').innerHTML = `
+  <button class="chip toggle" data-t="hasFood" aria-pressed="${state.hasFood}">${t('f.hasFood')}</button>
+  <button class="chip toggle" data-t="openNow" aria-pressed="${state.openNow}">${t('f.openNow')}</button>
+  ${KINDS.map(k=>`<button class="chip mob-kind" data-kind="${k}" aria-pressed="${state.kinds.has(k)}">${kindLabel(k)}</button>`).join('')}`;
+}
+buildDeskChips();
 $('#dietChips').addEventListener('click', e => {
   const c = e.target.closest('[data-diet]'); if (!c) return;
   const d = c.dataset.diet; state.diets.has(d) ? state.diets.delete(d) : state.diets.add(d);
   c.setAttribute('aria-pressed', state.diets.has(d)); renderFind();
 });
-$('#toggleChips').innerHTML = `
-  <button class="chip toggle" data-t="hasFood" aria-pressed="true">Has food now</button>
-  <button class="chip toggle" data-t="openNow" aria-pressed="false">Open now</button>
-  ${KINDS.map(k=>`<button class="chip mob-kind" data-kind="${k}" aria-pressed="false">${k}</button>`).join('')}`;
 function toggleKind(v){ state.kinds.has(v)?state.kinds.delete(v):state.kinds.add(v); document.querySelectorAll(`[data-kind="${CSS.escape(v)}"]`).forEach(x=>x.setAttribute('aria-pressed', state.kinds.has(v))); }
 $('#toggleChips').addEventListener('click', e => {
   const t = e.target.closest('[data-t]'), k = e.target.closest('[data-kind]');
@@ -187,7 +229,7 @@ function detailHTML(row, desk){
       ${desk?'':`<button class="back" id="backBtn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M15 18 9 12l6-6"/></svg>All drop points</button>`}
       <div><div class="sect">${esc(b.hood)} · ${esc(b.city)}</div><h2>${esc(b.name)}</h2></div>
       <dl class="facts">
-        <div><dt>Where</dt><dd><span class="addr">${esc(b.address)}, ${esc(b.city)}</span>, ${esc(b.country)}</dd></div>
+        <div><dt>${t('prog.where')}</dt><dd><span class="addr">${esc(b.address)}, ${esc(b.city)}</span>, ${esc(b.country)}</dd></div>
         <div><dt>Hours</dt><dd>${hoursText(b)} <span class="pill ${row.open?'open':'closed'}">${row.open?'Open now':'Closed now'}</span></dd></div>
         <div><dt>Distance</dt><dd>${distText(row.mi)} from ${esc(state.me.label)}</dd></div>
         <div><dt>Storage</dt><dd>${b.fridge?'Fridge and shelf':'Shelf only'}</dd></div>
@@ -230,8 +272,8 @@ function renderSummary(rows){
   const boxes = rows.reduce((s,r)=>s+r.avail.length,0);
   const servings = rows.reduce((s,r)=>s+r.avail.reduce((a,p)=>a+p.servings,0),0);
   const nearest = rows.find(r=>r.avail.length);
-  $('#summary').innerHTML = `<span><strong>${boxes}</strong> boxes · <strong>${servings}</strong> servings at <strong>${rows.length}</strong> places</span>
-    ${nearest?`<span>Nearest: <strong>${distShort(nearest.mi)}</strong></span>`:''}`;
+  $('#summary').innerHTML = `<span>${esc(t('side.summary',{b:boxes,s:servings,p:rows.length}))}</span>
+    ${nearest?`<span>${esc(t('side.nearest',{d:distShort(nearest.mi)}))}</span>`:''}`;
 }
 
 /* kind illustrations (no photos needed) */
@@ -257,7 +299,7 @@ function renderRail(rows){
   $('#rBoxes').textContent = fmtN(lp.length); $('#rServ').textContent = fmtN(servings);
   $('#rCountries').textContent = countries; $('#rCities').textContent = CITIES.length;
   $('#rMeter').style.width = (openN/BANKS.length*100)+'%';
-  $('#rOpen').textContent = `${openN} of ${BANKS.length} drop points open right now (local time) · sample data`;
+  $('#rOpen').textContent = t('rail.open',{n:openN,total:BANKS.length});
   const by = {};
   for (const r of rows){ const k = r.b.country; (by[k] ||= {n:0, b:r.b, mi:r.mi}); by[k].n += r.avail.length; if (r.mi < by[k].mi){ by[k].mi = r.mi; } }
   const top = Object.entries(by).sort((a,b)=>b[1].n-a[1].n || a[1].mi-b[1].mi).slice(0,7);
@@ -268,10 +310,10 @@ function renderDock(rows){
   const items = rows.flatMap(r => r.avail.map(p => ({p, r}))).sort((a,b)=> a.r.mi-b.r.mi || a.p.eatBy-b.p.eatBy).slice(0,16);
   $('#dockCnt').textContent = items.length;
   $('#strip').innerHTML = items.length ? items.map(({p,r}) => `<button class="bcard" data-bank="${r.b.id}">
-      <span class="art" style="background:${artBg(p.kind)}">${kindArt(p.kind, 60)}<span class="k">${esc(p.kind)}</span><span class="t">${distShort(r.mi)}</span></span>
+      <span class="art" style="background:${artBg(p.kind)}">${kindArt(p.kind, 60)}<span class="k">${esc(kindLabel(p.kind))}</span><span class="t">${distShort(r.mi)}</span></span>
       <b>${esc(p.title)}</b>
       <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/></svg>${esc(r.b.name)}, ${esc(r.b.city)}</span>
-      <span>${p.servings} serving${p.servings>1?'s':''} · ${eatText(p)}</span>
+      <span>${servTxt(p.servings)} · ${eatText(p)}</span>
     </button>`).join('') : `<div class="fine" style="padding:20px 4px">No boxes match. Try clearing a filter.</div>`;
 }
 $('#strip').addEventListener('click', e => { const b = e.target.closest('[data-bank]'); if (b) select(b.dataset.bank, true); });
@@ -280,7 +322,7 @@ $('#dPrev').onclick = () => $('#strip').scrollBy({left:-380, behavior:'smooth'})
 $('#dNext').onclick = () => $('#strip').scrollBy({left:380, behavior:'smooth'});
 $('#nearestOpen').onclick = () => {
   const r = lastRows.find(x => x.open && x.avail.length) || lastRows.find(x=>x.avail.length);
-  if (r) select(r.b.id, true); else toast('No open drop point has food right now.');
+  if (r) select(r.b.id, true); else toast(t('toast.noOpen'));
 };
 
 async function onDetailClick(e){
@@ -290,7 +332,7 @@ async function onDetailClick(e){
   const act = e.target.closest('[data-act]');
   if (act && act.dataset.act === 'copy'){
     const b = bankById[state.selected]; const text = `${b.address}, ${b.city}, ${b.country}`;
-    try { await navigator.clipboard.writeText(text); toast('Address copied'); }
+    try { await navigator.clipboard.writeText(text); toast(t('toast.copied')); }
     catch { const r = document.createRange(); r.selectNodeContents(e.currentTarget.querySelector('.addr')); const s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); toast('Address selected. Copy it.'); }
     return;
   }
@@ -578,11 +620,11 @@ async function claim(id){
   const at = Date.now();
   state.claims[id] = at; renderFind();
   if (db){
-    try { await db.collection('claims').doc(id).set({at}); toast('Marked as taken. Enjoy your meal.'); return; }
+    try { await db.collection('claims').doc(id).set({at}); toast(t('toast.taken')); return; }
     catch(err){ /* fall through to local */ }
   }
   const local = ls.get('kindbox.claims', {}); local[id] = at; ls.set('kindbox.claims', local);
-  toast('Marked as taken on this device.');
+  toast(t('toast.taken'));
 }
 function setStoreStatus(){
   const el = $('#storeStatus');
@@ -631,7 +673,7 @@ $('#sMinus').onclick = () => { servings = Math.max(1, servings-1); $('#gServ').t
 $('#sPlus').onclick = () => { servings = Math.min(50, servings+1); $('#gServ').textContent = servings; updatePreview(); };
 ['#gBank','#gTitle','#gContents','#gKind','#gPacked','#gEat','#gName'].forEach(s => $(s).addEventListener('input', updatePreview));
 let pendingCode = makeCode();
-function makeCode(){ return 'KB-' + String(Math.floor(1000 + Math.random()*9000)); }
+function makeCode(){ return 'EP-' + String(Math.floor(1000 + Math.random()*9000)); }
 function formDraft(){
   const packedAt = Date.now() - (+$('#gPacked').value)*60000;
   return { bankId: gBank.value, title: $('#gTitle').value.trim(), contents: $('#gContents').value.trim(),
@@ -642,7 +684,7 @@ function updatePreview(){
   const d = formDraft(); const b = bankById[d.bankId]; const tz = b?.tz;
   $('#gBankHint').textContent = b ? `${b.address}, ${b.city} · ${hoursText(b)} · ${b.fridge?'Has a fridge':'Shelf only — no cooked food that needs cold storage'}` : '';
   $('#labelPreview').innerHTML = `
-    <div class="hd"><b>KINDBOX</b><span>${pendingCode}</span></div>
+    <div class="hd"><b>ETERNAL POT</b><span>${pendingCode}</span></div>
     <div class="ttl">${esc(d.title) || '<span class="muted">What\'s inside</span>'}</div>
     <dl>
       <dt>Packed</dt><dd>${clock(d.packedAt, tz)}</dd>
@@ -656,10 +698,10 @@ function updatePreview(){
 $('#giveForm').addEventListener('submit', async e => {
   e.preventDefault();
   const d = formDraft(); const err = $('#gErr');
-  if (!d.title){ err.textContent = 'Add a short name for what’s in the box.'; $('#gTitle').focus(); return; }
-  if (!$('#gPledge').checked){ err.textContent = 'Please confirm the food is sealed and safe to share.'; $('#gPledge').focus(); return; }
+  if (!d.title){ err.textContent = t('give.errTitle'); $('#gTitle').focus(); return; }
+  if (!$('#gPledge').checked){ err.textContent = t('give.errPledge'); $('#gPledge').focus(); return; }
   if (!bankById[d.bankId].fridge && +$('#gEat').value <= 24 && d.kind === 'Cooked meal'){
-    err.textContent = 'This point has no fridge. Pick a point with a fridge for cooked food.'; gBank.focus(); return;
+    err.textContent = t('give.errFridge'); gBank.focus(); return;
   }
   err.textContent = '';
   const before = computeRewards();
@@ -672,21 +714,21 @@ $('#giveForm').addEventListener('submit', async e => {
   const after = computeRewards();
   showDone({...drop, id}, shared, after.pts - before.pts, after);
   renderFind(); renderMine();
-  if (after.certs.length > before.certs.length) setTimeout(() => { toast('You earned a certificate of kindness!'); openCert(after.certs[after.certs.length-1]); }, 600);
+  if (after.certs.length > before.certs.length) setTimeout(() => { toast(t('rew.newCert')); openCert(after.certs[after.certs.length-1]); }, 600);
 });
 function showDone(drop, shared, gained = 0, R = null){
   const b = bankById[drop.bankId];
   $('#giveFormWrap').hidden = true; const box = $('#doneBox'); box.hidden = false;
   box.innerHTML = `<div class="done">
-    <div class="sect">Listed${shared?'':' on this device'}</div>
-    <h2>Thank you${drop.donor?', '+esc(drop.donor):''}.</h2>
-    <p class="lede" style="margin:0">Write this code on your box so people can match it to the listing at <b>${esc(b.name)}</b>, ${esc(b.city)}.</p>
+    <div class="sect">${t('give.listed')}</div>
+    <h2>${t('give.thanks')}${drop.donor?', '+esc(drop.donor):''}</h2>
+    <p class="lede" style="margin:0">${esc(t('give.codeHint',{place:b.name+', '+b.city}))}</p>
     <div class="code">${drop.code}</div>
-    <p class="muted" style="margin:0">${esc(drop.title)} · ${drop.servings} serving${drop.servings>1?'s':''} · ${eatText(drop)}</p>
-    ${R ? `<div class="earned"><b>+${gained} points</b><span>${R.inRow === 0 && R.certs.length ? 'Certificate earned! ' : ''}Streak: ${R.inRow || (R.certs.length ? 5 : 0)} of 5 toward your next certificate.</span><button class="btn small" data-mode="rewards">See rewards</button></div>` : ''}
+    <p class="muted" style="margin:0">${esc(drop.title)} · ${servTxt(drop.servings)} · ${eatText(drop)}</p>
+    ${R ? `<div class="earned"><b>${t('give.points',{n:gained})}</b><span>${t('give.streak',{n:R.inRow || (R.certs.length ? 5 : 0)})}</span><button class="btn small" data-mode="rewards">${t('promo.rew.go')}</button></div>` : ''}
     <div class="actions">
-      <button class="btn primary" id="seeIt">See it on the map</button>
-      <button class="btn" id="another">List another box</button>
+      <button class="btn primary" id="seeIt">${t('give.seeMap')}</button>
+      <button class="btn" id="another">${t('give.another')}</button>
     </div></div>`;
   $('#seeIt').onclick = () => { setMode('find'); state.q=''; $('#q').value=''; select(drop.bankId, true); };
   $('#another').onclick = resetGive;
@@ -721,10 +763,13 @@ function allPrograms(){
   return [...pstate.remote, ...pstate.posted.filter(p=>!ids.has(p.id)), ...seedPrograms].filter(p => p.date >= TODAY).sort((a,b) => (a.date+a.start).localeCompare(b.date+b.start));
 }
 function dParts(iso){ const [y,m,d] = iso.split('-').map(Number); const t = new Date(Date.UTC(y,m-1,d));
-  return { day: d, mon: t.toLocaleDateString('en-US',{month:'short',timeZone:'UTC'}), wk: t.toLocaleDateString('en-US',{weekday:'short',timeZone:'UTC'}), long: t.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'}) }; }
-function relDay(iso){ if (iso === TODAY) return 'Today'; if (iso === addDays(TODAY,1)) return 'Tomorrow'; return dParts(iso).long; }
-$('#pCats').innerHTML = `<button class="chip toggle" data-pcat="" aria-pressed="true">All programs</button>` + PCATS.map(c=>`<button class="chip" data-pcat="${c}" aria-pressed="false"><span class="kdot" style="background:${PCOL[c]}"></span>${c}</button>`).join('') + `<button class="chip" data-psaved aria-pressed="false">Saved</button>`;
-$('#pAud').innerHTML = PAUD.map(a=>`<button class="chip" data-paud="${a}" aria-pressed="false">${a}</button>`).join('');
+  return { day: d, mon: t.toLocaleDateString(LOC(),{month:'short',timeZone:'UTC'}), wk: t.toLocaleDateString(LOC(),{weekday:'short',timeZone:'UTC'}), long: t.toLocaleDateString(LOC(),{weekday:'long',month:'long',day:'numeric',timeZone:'UTC'}) }; }
+function relDay(iso){ if (iso === TODAY) return t('prog.today'); if (iso === addDays(TODAY,1)) return t('prog.tomorrow'); return dParts(iso).long; }
+function buildProgChips(){
+  $('#pCats').innerHTML = `<button class="chip toggle" data-pcat="" aria-pressed="${!pstate.cat}">${t('prog.all')}</button>` + PCATS.map(c=>`<button class="chip" data-pcat="${c}" aria-pressed="${pstate.cat===c}"><span class="kdot" style="background:${PCOL[c]}"></span>${t('pcat.'+c)}</button>`).join('') + `<button class="chip" data-psaved aria-pressed="${pstate.savedOnly}">${t('prog.saved')}</button>`;
+  $('#pAud').innerHTML = PAUD.map(a=>`<button class="chip" data-paud="${a}" aria-pressed="${pstate.aud.has(a)}">${t('aud.'+a)}</button>`).join('');
+}
+buildProgChips();
 $('#pCats').addEventListener('click', e => {
   const sv = e.target.closest('[data-psaved]');
   if (sv){ pstate.savedOnly = !pstate.savedOnly; sv.setAttribute('aria-pressed', pstate.savedOnly); renderPrograms(); return; }
@@ -740,21 +785,21 @@ function progCard(p){
   return `<article class="pcard" style="--c:${c}">
     <div class="pdate" aria-label="${esc(d.long)}"><small>${d.wk}</small><b>${d.day}</b><span>${d.mon}</span></div>
     <div class="pbody">
-      <div class="ptop"><span class="pcat">${esc(p.category)}</span><span class="potype">${esc(p.orgType)}</span>${p.source!=='seed'?'<span class="pnew">New</span>':''}</div>
+      <div class="ptop"><span class="pcat">${t('pcat.'+p.category)}</span><span class="potype">${esc(p.orgType)}</span>${p.source!=='seed'?'<span class="pnew">New</span>':''}</div>
       <h3>${esc(p.title)}</h3>
       <div class="porg">by ${esc(p.org)}</div>
       <dl class="pfacts">
-        <dt>When</dt><dd>${relDay(p.date)}, ${fmtHM(p.start)} – ${fmtHM(p.end)}${p.recurring?` · ${esc(p.recurring)}`:''}</dd>
-        <dt>Where</dt><dd>${esc(p.place)}${p.address?`, ${esc(p.address)}`:''} · ${esc(p.hood)}</dd>
-        <dt>Cost</dt><dd>${esc(p.cost||'Free')}</dd>
-        ${p.languages?.length?`<dt>Languages</dt><dd>${esc(p.languages.join(', '))}</dd>`:''}
-        ${p.audience?.length?`<dt>For</dt><dd>${esc(p.audience.join(', '))}</dd>`:''}
+        <dt>${t('prog.when')}</dt><dd>${relDay(p.date)}, ${fmtHM(p.start)} – ${fmtHM(p.end)}${p.recurring?` · ${esc(p.recurring)}`:''}</dd>
+        <dt>${t('prog.where')}</dt><dd>${esc(p.place)}${p.address?`, ${esc(p.address)}`:''} · ${esc(p.hood)}</dd>
+        <dt>${t('prog.cost')}</dt><dd>${esc(p.cost||'Free')}</dd>
+        ${p.languages?.length?`<dt>${t('prog.langs')}</dt><dd>${esc(p.languages.join(', '))}</dd>`:''}
+        ${p.audience?.length?`<dt>${t('prog.for')}</dt><dd>${esc(p.audience.map(a=>t('aud.'+a)).join(', '))}</dd>`:''}
       </dl>
       ${p.desc?`<p>${esc(p.desc)}</p>`:''}
       <div class="pfoot">
-        <span class="spots">${p.spots} spot${p.spots===1?'':'s'}</span>
-        <button class="btn small${saved?' saved':''}" data-psave="${p.id}" aria-pressed="${saved}">${saved?'Saved':'Save'}</button>
-        <button class="btn small primary" data-phow="${p.id}" aria-expanded="${open}">How to join</button>
+        <span class="spots">${t('prog.spots',{n:p.spots})}</span>
+        <button class="btn small${saved?' saved':''}" data-psave="${p.id}" aria-pressed="${saved}">${saved?t('prog.saved'):t('prog.save')}</button>
+        <button class="btn small primary" data-phow="${p.id}" aria-expanded="${open}">${t('prog.how')}</button>
       </div>
       ${open?`<div class="phow"><span>${esc(p.contact)}</span><button class="btn small" data-pcopy="${p.id}">Copy</button></div>`:''}
     </div>
@@ -768,7 +813,7 @@ function renderPrograms(){
     && (!q || `${p.title} ${p.org} ${p.hood} ${p.place} ${p.category} ${p.desc} ${(p.languages||[]).join(' ')}`.toLowerCase().includes(q)));
   const week = list.filter(p => p.date <= addDays(TODAY, 6)).length;
   const orgs = new Set(list.map(p=>p.org)).size;
-  $('#pSum').innerHTML = `<b>${list.length}</b> programs from <b>${orgs}</b> organizations · <b>${week}</b> this week · San Francisco area`;
+  $('#pSum').innerHTML = esc(t('prog.sum',{n:list.length,o:orgs,w:week}));
   $('#pGrid').innerHTML = list.length ? list.map(progCard).join('') : `<div class="empty p-empty"><b>No programs match</b>Try another category or clear your search.</div>`;
 }
 $('#pGrid').addEventListener('click', async e => {
@@ -830,15 +875,16 @@ const IC = {
   drop:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h18v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M3 8l3-5h12l3 5M12 12v6M9 15h6"/></svg>',
   arrow:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>'
 };
-function openText(b){ if (b.open==='00:00' && b.close==='24:00') return 'Open 24 hours'; return isOpen(b) ? `Open until ${fmtHM(b.close)}` : `Opens ${fmtHM(b.open)}`; }
-function walkBit(mi){ return mi < 3 ? ` · ${Math.max(1, Math.round(mi*20))} min walk` : ''; }
+function openText(b){ if (b.open==='00:00' && b.close==='24:00') return t('st.24'); return isOpen(b) ? t('st.until',{t:fmtHM(b.close)}) : t('st.opens',{t:fmtHM(b.open)}); }
+function walkBit(mi){ return mi < 3 ? ` · ${t('u.walk',{n:Math.max(1, Math.round(mi*20))})}` : ''; }
+const servTxt = n => t('u.servings', {n});
 function storeCard(r, big){
   const k = r.avail[0]?.kind || 'Pantry';
   return `<button class="m-store${big?' big':''}" data-sel="${r.b.id}">
-    <span class="m-art" style="background:${artBg(k)}">${kindArt(k, big?92:70)}<span class="badge ${r.open?'ok':'no'}">${r.open?'Open now':'Closed'}</span><span class="cnt">${r.avail.length} box${r.avail.length===1?'':'es'}</span></span>
+    <span class="m-art" style="background:${artBg(k)}">${kindArt(k, big?92:70)}<span class="badge ${r.open?'ok':'no'}">${r.open?t('st.open'):t('st.closed')}</span><span class="cnt">${tN(r.avail.length)}</span></span>
     <span class="t">${esc(r.b.name)}</span>
     <span class="s">${esc(r.b.hood)} · ${distShort(r.mi)}${walkBit(r.mi)}</span>
-    <span class="s"><span class="${r.open?'ok':'no'}">${openText(r.b)}</span>${r.b.fridge?' · Fridge':' · Shelf'}</span>
+    <span class="s"><span class="${r.open?'ok':'no'}">${openText(r.b)}</span> · ${r.b.fridge?t('st.fridge'):t('st.shelf')}</span>
   </button>`;
 }
 function syncFilterUI(){
@@ -849,50 +895,53 @@ function syncFilterUI(){
   document.querySelectorAll('[data-md]').forEach(x => x.setAttribute('aria-pressed', state.diets.has(x.dataset.md)));
   document.querySelectorAll('[data-mk]').forEach(x => x.setAttribute('aria-pressed', state.kinds.has(x.dataset.mk)));
 }
-$('#mCats').innerHTML = KINDS.map(k => `<button class="m-cat" data-mk="${k}" aria-pressed="false"><span class="ci" style="background:${artBg(k)}">${kindArt(k, 30)}</span>${MKIND[k]}</button>`).join('');
-$('#mChips').innerHTML = `<button class="m-chip" data-mt="openNow" aria-pressed="false">Open now</button><button class="m-chip" data-mt="hasFood" aria-pressed="true">Has food</button>` + DIETS.map(d => `<button class="m-chip" data-md="${d}" aria-pressed="false">${d}</button>`).join('');
+const PROMOS = [
+  {id:'hungry', k:'promo.hungry', bg:'linear-gradient(135deg,var(--leaf),color-mix(in srgb,var(--leaf) 55%,#0b2a1a))', art:'Cooked meal'},
+  {id:'give', k:'promo.give', bg:'linear-gradient(135deg,var(--squash),color-mix(in srgb,var(--squash) 60%,#5a1d00))', art:'Bakery'},
+  {id:'rewards', k:'promo.rew', bg:'linear-gradient(135deg,var(--k-baby),color-mix(in srgb,var(--k-baby) 55%,#0b1f33))', art:'Produce'},
+  {id:'programs', k:'promo.prog', bg:'linear-gradient(135deg,var(--k-bakery),color-mix(in srgb,var(--k-bakery) 55%,#3b2600))', art:'Pantry'}
+];
+function buildMobileChrome(){
+  $('#mCats').innerHTML = KINDS.map(k => `<button class="m-cat" data-mk="${k}" aria-pressed="${state.kinds.has(k)}"><span class="ci" style="background:${artBg(k)}">${kindArt(k, 30)}</span><span>${kindLabel(k)}</span></button>`).join('');
+  $('#mChips').innerHTML = `<button class="m-chip" data-mt="openNow" aria-pressed="${state.openNow}">${t('f.openNow')}</button><button class="m-chip" data-mt="hasFood" aria-pressed="${state.hasFood}">${t('f.hasFood')}</button>` + DIETS.map(d => `<button class="m-chip" data-md="${d}" aria-pressed="${state.diets.has(d)}">${dietLabel(d)}</button>`).join('');
+  $('#mPromos').innerHTML = PROMOS.map(p => `<button class="m-promo" data-promo="${p.id}" style="background:${p.bg}"><b>${t(p.k+'.t')}</b><span>${t(p.k+'.s')}</span><i class="go">${t(p.k+'.go')} ${IC.arrow}</i><svg class="art" width="150" height="100" viewBox="0 0 120 80" aria-hidden="true">${kindArt(p.art, 80).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg></button>`).join('');
+}
+buildMobileChrome();
 $('#mCats').addEventListener('click', e => { const c = e.target.closest('[data-mk]'); if (!c) return; toggleKind(c.dataset.mk); syncFilterUI(); renderFind(); });
 $('#mChips').addEventListener('click', e => {
-  const t = e.target.closest('[data-mt]'), d = e.target.closest('[data-md]');
-  if (t) state[t.dataset.mt] = !state[t.dataset.mt];
+  const tg = e.target.closest('[data-mt]'), d = e.target.closest('[data-md]');
+  if (tg) state[tg.dataset.mt] = !state[tg.dataset.mt];
   else if (d){ const v = d.dataset.md; state.diets.has(v) ? state.diets.delete(v) : state.diets.add(v); }
   else return;
   syncFilterUI(); renderFind();
 });
 let mqT; $('#mq').addEventListener('input', e => { clearTimeout(mqT); mqT = setTimeout(() => { state.q = e.target.value; $('#q').value = e.target.value; renderFind(); }, 140); });
-const PROMOS = [
-  {id:'hungry', bg:'linear-gradient(135deg,var(--leaf),color-mix(in srgb,var(--leaf) 55%,#0b2a1a))', t:'Hungry right now?', s:'Take me to the nearest open fridge with food.', go:'Show me', art:'Cooked meal'},
-  {id:'give', bg:'linear-gradient(135deg,var(--squash),color-mix(in srgb,var(--squash) 60%,#5a1d00))', t:'Cooked too much?', s:'Pack it, drop it, list it in a minute.', go:'Give a box', art:'Bakery'},
-  {id:'rewards', bg:'linear-gradient(135deg,var(--k-baby),color-mix(in srgb,var(--k-baby) 55%,#0b1f33))', t:'Earn a certificate', s:'Give 5 times in a row and get a certificate of kindness.', go:'See rewards', art:'Produce'},
-  {id:'programs', bg:'linear-gradient(135deg,var(--k-bakery),color-mix(in srgb,var(--k-bakery) 55%,#3b2600))', t:'Back-to-work programs', s:'Job training and benefits help in San Francisco this week.', go:'Explore', art:'Pantry'}
-];
-$('#mPromos').innerHTML = PROMOS.map(p => `<button class="m-promo" data-promo="${p.id}" style="background:${p.bg}"><b>${p.t}</b><span>${p.s}</span><i class="go">${p.go} ${IC.arrow}</i><svg class="art" width="150" height="100" viewBox="0 0 120 80" aria-hidden="true">${kindArt(p.art, 80).replace(/^<svg[^>]*>|<\/svg>$/g,'')}</svg></button>`).join('');
 $('#mPromos').addEventListener('click', e => {
   const p = e.target.closest('[data-promo]'); if (!p) return;
   const id = p.dataset.promo;
-  if (id === 'hungry'){ const r = lastRows.find(x => x.open && x.avail.length) || lastRows.find(x => x.avail.length); if (r) select(r.b.id, false); else toast('No open drop point has food right now.'); }
+  if (id === 'hungry'){ const r = lastRows.find(x => x.open && x.avail.length) || lastRows.find(x => x.avail.length); if (r) select(r.b.id, false); else toast(t('toast.noOpen')); }
   else setMode(id === 'give' ? 'give' : id);
 });
 
 function renderMobile(){
   if (isDesk()) return;
-  $('#mLocName').textContent = state.me.label === 'your pinned spot' ? 'Pinned spot' : state.me.label;
+  $('#mLocName').textContent = state.me.label === 'your pinned spot' ? t('m.pinned') : state.me.label;
   const rows = lastRows;
   const open = rows.filter(r => r.open && r.avail.length).slice(0, 10);
-  $('#mOpen').innerHTML = open.length ? open.map(r => storeCard(r)).join('') : `<div class="m-empty">Nothing open with food nearby right now. Check the list below for opening times.</div>`;
+  $('#mOpen').innerHTML = open.length ? open.map(r => storeCard(r)).join('') : `<div class="m-empty">${t('empty.open')}</div>`;
   const near = rows.slice(0, 40);
   const fresh = near.flatMap(r => r.avail.map(p => ({p, r}))).filter(x => x.r.mi < 25 || near.indexOf(x.r) < 8).sort((a,b) => b.p.packedAt - a.p.packedAt).slice(0, 12);
   $('#mFresh').innerHTML = fresh.length ? fresh.map(({p, r}) => `<button class="m-store m-box" data-sel="${r.b.id}">
-      <span class="m-art" style="background:${artBg(p.kind)}">${kindArt(p.kind, 54)}<span class="cnt">${p.servings} serving${p.servings>1?'s':''}</span></span>
-      <span class="t">${esc(p.title)}</span><span class="s">${esc(r.b.name)}</span><span class="s">Packed ${ago(p.packedAt)} · ${distShort(r.mi)}</span></button>`).join('') : `<div class="m-empty">No boxes match your filters.</div>`;
+      <span class="m-art" style="background:${artBg(p.kind)}">${kindArt(p.kind, 54)}<span class="cnt">${servTxt(p.servings)}</span></span>
+      <span class="t">${esc(p.title)}</span><span class="s">${esc(r.b.name)}</span><span class="s">${t('time.packed',{t:ago(p.packedAt)})} · ${distShort(r.mi)}</span></button>`).join('') : `<div class="m-empty">${t('empty.boxes')}</div>`;
   const progs = (typeof allPrograms === 'function') ? allPrograms().filter(p => p.date <= addDays(TODAY, 6)).slice(0, 8) : [];
   $('#mProgSec').hidden = !progs.length;
-  $('#mProg').innerHTML = progs.map(p => { const d = dParts(p.date); return `<button class="m-pcard" data-mode="programs" style="--c:${PCOL[p.category]}"><span class="m-pdate"><small>${d.wk}</small><b>${d.day}</b></span><span class="m-pbody"><i>${esc(p.category)}</i><b>${esc(p.title)}</b><span>${fmtHM(p.start)} · ${esc(p.hood)}</span></span></button>`; }).join('');
+  $('#mProg').innerHTML = progs.map(p => { const d = dParts(p.date); return `<button class="m-pcard" data-mode="programs" style="--c:${PCOL[p.category]}"><span class="m-pdate"><small>${d.wk}</small><b>${d.day}</b></span><span class="m-pbody"><i>${t('pcat.'+p.category)}</i><b>${esc(p.title)}</b><span>${fmtHM(p.start)} · ${esc(p.hood)}</span></span></button>`; }).join('');
   const list = rows.slice(0, 30);
-  $('#mCount').textContent = rows.length > 30 ? `30 nearest of ${rows.length}` : `${rows.length} places`;
-  $('#mList').innerHTML = list.length ? list.map(r => storeCard(r, true)).join('') : `<div class="m-empty">No drop points match. Try removing a filter.</div>`;
+  $('#mCount').textContent = rows.length > 30 ? t('u.nearestOf',{n:30,total:rows.length}) : t('u.places',{n:rows.length});
+  $('#mList').innerHTML = list.length ? list.map(r => storeCard(r, true)).join('') : `<div class="m-empty">${t('empty.filters')}</div>`;
   const mc = rows.filter(r => r.avail.length).slice(0, 12);
-  $('#mMapCards').innerHTML = mc.map(r => { const k = r.avail[0]?.kind || 'Pantry'; return `<button class="m-mapcard${r.b.id===state.selected?' sel':''}" data-sel="${r.b.id}" data-fly="1"><span class="m-art" style="background:${artBg(k)}">${kindArt(k, 34)}</span><span><b>${esc(r.b.name)}</b><span class="s">${r.avail.length} box${r.avail.length===1?'':'es'} · ${distShort(r.mi)}</span><span class="s ${r.open?'ok':'no'}">${openText(r.b)}</span></span></button>`; }).join('');
+  $('#mMapCards').innerHTML = mc.map(r => { const k = r.avail[0]?.kind || 'Pantry'; return `<button class="m-mapcard${r.b.id===state.selected?' sel':''}" data-sel="${r.b.id}" data-fly="1"><span class="m-art" style="background:${artBg(k)}">${kindArt(k, 34)}</span><span><b>${esc(r.b.name)}</b><span class="s">${tN(r.avail.length)} · ${distShort(r.mi)}</span><span class="s ${r.open?'ok':'no'}">${openText(r.b)}</span></span></button>`; }).join('');
   $('#mPts').textContent = computeRewards().pts;
   if (sheetFor && !$('#mSheet').hidden) renderSheet();
 }
@@ -909,23 +958,23 @@ function sheetHTML(row){
   const taken = allPackets().filter(p => p.bankId===b.id && state.claims[p.id] && p.eatBy > Date.now());
   const item = (p, isTaken) => `<div class="ms-item${isTaken?' taken':''}">
       <div><h4>${esc(p.title)}</h4>${p.contents?`<p>${esc(p.contents)}</p>`:''}
-        ${p.tags.length?`<div class="diet">${p.tags.slice(0,4).map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
-        <div class="meta">${p.servings} serving${p.servings>1?'s':''} · ${eatText(p)} · Packed ${ago(p.packedAt)}${p.donor?` · From ${esc(p.donor)}`:''}</div></div>
-      <div class="ms-thumb" style="background:${artBg(p.kind)}">${kindArt(p.kind, 50)}${isTaken?`<span class="ms-take done">Taken</span>`:`<button class="ms-take${state.armed===p.id?' armed':''}" data-claim="${p.id}">${state.armed===p.id?'Confirm':'+ Take'}</button>`}</div>
+        ${p.tags.length?`<div class="diet">${p.tags.slice(0,4).map(x=>`<span>${esc(dietLabel(x))}</span>`).join('')}</div>`:''}
+        <div class="meta">${servTxt(p.servings)} · ${eatText(p)} · ${t('time.packed',{t:ago(p.packedAt)})}${p.donor?` · ${t('time.from',{name:esc(p.donor)})}`:''}</div></div>
+      <div class="ms-thumb" style="background:${artBg(p.kind)}">${kindArt(p.kind, 50)}${isTaken?`<span class="ms-take done">${t('sheet.takenBtn')}</span>`:`<button class="ms-take${state.armed===p.id?' armed':''}" data-claim="${p.id}">${state.armed===p.id?t('sheet.confirm'):t('sheet.take')}</button>`}</div>
     </div>`;
   return `<div class="ms-hero" style="background:${artBg(k)}"><span class="ms-grab"></span>${kindArt(k, 120)}<button class="ms-x" data-close aria-label="Close">×</button></div>
     <div class="ms-body">
       <div><div class="sect">${esc(b.hood)} · ${esc(b.city)}</div><h2>${esc(b.name)}</h2>
-        <div class="ms-meta"><span class="${row.open?'ok':'no'}">${row.open?'Open now':'Closed now'}</span><span>·</span><span>${hoursText(b)}</span><span>·</span><span>${distText(row.mi)}</span></div></div>
+        <div class="ms-meta"><span class="${row.open?'ok':'no'}">${row.open?t('st.open'):t('st.closedNow')}</span><span>·</span><span>${hoursText(b)}</span><span>·</span><span>${distText(row.mi)}</span></div></div>
       <div class="ms-acts">
-        <a href="https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}&travelmode=walking" target="_blank" rel="noopener">${IC.dir}Directions</a>
-        <button data-act="copy">${IC.copy}Copy address</button>
-        <button data-act="drop">${IC.drop}Drop food here</button>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${b.lat},${b.lng}&travelmode=walking" target="_blank" rel="noopener">${IC.dir}${t('sheet.dir')}</a>
+        <button data-act="copy">${IC.copy}${t('sheet.copy')}</button>
+        <button data-act="drop">${IC.drop}${t('sheet.drop')}</button>
       </div>
-      <div class="ms-info"><div><b>Address</b><span class="addr">${esc(b.address)}, ${esc(b.city)}</span></div><div><b>Storage</b><span>${b.fridge?'Fridge and shelf':'Shelf only'}</span></div><div><b>Access</b><span>${esc(b.access)}</span></div><div><b>Note</b><span>${esc(b.note)}</span></div></div>
-      <h3 class="ms-h">${row.avail.length} box${row.avail.length===1?'':'es'} available</h3>
-      ${row.avail.length ? row.avail.map(p => item(p, false)).join('') : `<div class="m-empty">Nothing here right now. Boxes go fast, so check a nearby point.</div>`}
-      ${taken.length ? `<h3 class="ms-h">Recently taken</h3>${taken.map(p => item(p, true)).join('')}` : ''}
+      <div class="ms-info"><div><b>${t('sheet.address')}</b><span class="addr">${esc(b.address)}, ${esc(b.city)}</span></div><div><b>${t('sheet.storage')}</b><span>${b.fridge?t('sheet.fridgeShelf'):t('sheet.shelfOnly')}</span></div><div><b>${t('sheet.access')}</b><span>${esc(b.access)}</span></div><div><b>${t('sheet.note')}</b><span>${esc(b.note)}</span></div></div>
+      <h3 class="ms-h">${t('sheet.avail',{n:row.avail.length})}</h3>
+      ${row.avail.length ? row.avail.map(p => item(p, false)).join('') : `<div class="m-empty">${t('sheet.empty')}</div>`}
+      ${taken.length ? `<h3 class="ms-h">${t('sheet.taken')}</h3>${taken.map(p => item(p, true)).join('')}` : ''}
     </div>`;
 }
 function renderSheet(){ if (!sheetFor) return; const box = $('#mSheetIn'), st = box.scrollTop; box.innerHTML = sheetHTML(rowFor(sheetFor, lastRows)); box.scrollTop = st; }
@@ -936,8 +985,8 @@ $('#mSheet').addEventListener('click', async e => {
   const act = e.target.closest('[data-act]');
   if (act?.dataset.act === 'copy'){
     const b = bankById[sheetFor]; const text = `${b.address}, ${b.city}, ${b.country}`;
-    try { await navigator.clipboard.writeText(text); toast('Address copied'); }
-    catch { const r = document.createRange(); r.selectNodeContents(e.currentTarget.querySelector('.addr')); const s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); toast('Address selected. Copy it.'); }
+    try { await navigator.clipboard.writeText(text); toast(t('toast.copied')); }
+    catch { const r = document.createRange(); r.selectNodeContents(e.currentTarget.querySelector('.addr')); const s2 = getSelection(); s2.removeAllRanges(); s2.addRange(r); }
     return;
   }
   if (act?.dataset.act === 'drop'){ const id = sheetFor; closeSheet(); setMode('give'); $('#gBank').value = id; updatePreview(); return; }
@@ -969,7 +1018,7 @@ const DAYMS = 864e5;
 const LEVELS = [[0,'Seedling'],[100,'Sprout'],[250,'Helper'],[500,'Good Neighbor'],[1000,'Community Hero'],[2000,'City Champion']];
 let demoHist = ls.get('kindbox.demoHistory', []);
 const dayKey = ts => new Intl.DateTimeFormat('en-CA',{timeZone:SF_TZ,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ts));
-const fmtDate = ts => new Date(ts).toLocaleDateString('en-US',{timeZone:SF_TZ,month:'long',day:'numeric',year:'numeric'});
+const fmtDate = ts => new Date(ts).toLocaleDateString(LOC(),{timeZone:SF_TZ,month:'long',day:'numeric',year:'numeric'});
 function myGiving(){
   const mine = state.drops.filter(d => myIds.has(d.id)).map(d => ({id:d.id, createdAt:d.createdAt || d.packedAt, servings:d.servings, title:d.title, bankId:d.bankId, demo:false}));
   return [...mine, ...demoHist].sort((a,b) => a.createdAt - b.createdAt);
@@ -992,13 +1041,13 @@ function computeRewards(){
   return { list, pts, certs, servings, boxes: list.length, doubleDays, streak: cur, inRow: cur % 5, nextDue: alive ? last + 7*DAYMS : null, level: LEVELS[li], next: LEVELS[li+1] || null };
 }
 const BADGES = R => [
-  {n:'First box', d:'List your first box', ok:R.boxes>=1, p:`${Math.min(R.boxes,1)}/1`},
-  {n:'Regular giver', d:'Give 2 or more boxes', ok:R.boxes>=2, p:`${Math.min(R.boxes,2)}/2`},
-  {n:'Double day', d:'Give 2 or more boxes in one day', ok:R.doubleDays>=1, p:R.doubleDays>=1?'Done':'0/1'},
-  {n:'Five in a row', d:'Earn your first certificate', ok:R.certs.length>=1, p:`${Math.min(R.certs.length,1)}/1`},
-  {n:'Feeds a family', d:'Share 20 servings', ok:R.servings>=20, p:`${Math.min(R.servings,20)}/20`},
-  {n:'Neighborhood hero', d:'Give 10 boxes', ok:R.boxes>=10, p:`${Math.min(R.boxes,10)}/10`},
-  {n:'City champion', d:'Give 25 boxes', ok:R.boxes>=25, p:`${Math.min(R.boxes,25)}/25`}
+  {n:'badge.first', d:'badge.firstD', ok:R.boxes>=1, p:`${Math.min(R.boxes,1)}/1`},
+  {n:'badge.regular', d:'badge.regularD', ok:R.boxes>=2, p:`${Math.min(R.boxes,2)}/2`},
+  {n:'badge.double', d:'badge.doubleD', ok:R.doubleDays>=1, p:R.doubleDays>=1?'Done':'0/1'},
+  {n:'badge.five', d:'badge.fiveD', ok:R.certs.length>=1, p:`${Math.min(R.certs.length,1)}/1`},
+  {n:'badge.family', d:'badge.familyD', ok:R.servings>=20, p:`${Math.min(R.servings,20)}/20`},
+  {n:'badge.hero', d:'badge.heroD', ok:R.boxes>=10, p:`${Math.min(R.boxes,10)}/10`},
+  {n:'badge.champ', d:'badge.champD', ok:R.boxes>=25, p:`${Math.min(R.boxes,25)}/25`}
 ];
 const MEDAL = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg>';
 $('#rName').value = ls.get('kindbox.certName', '');
@@ -1006,25 +1055,25 @@ $('#rName').addEventListener('input', e => ls.set('kindbox.certName', e.target.v
 function certName(){ return $('#rName').value.trim() || [...myGiving()].reverse().map(d => state.drops.find(x=>x.id===d.id)?.donor).find(Boolean) || 'A Kind Neighbor'; }
 function renderRewards(){
   const R = computeRewards();
-  $('#rPts').textContent = R.pts.toLocaleString('en-US'); $('#rLevel').textContent = R.level[1]; $('#rMedal').innerHTML = MEDAL;
+  $('#rPts').textContent = R.pts.toLocaleString('en-US'); $('#rLevel').textContent = t('lvl.'+R.level[1]); $('#rMedal').innerHTML = MEDAL;
   const span = R.next ? (R.pts - R.level[0]) / (R.next[0] - R.level[0]) : 1;
   $('#rBar').style.width = Math.max(3, Math.min(100, span*100)) + '%';
-  $('#rNext').textContent = R.next ? `${R.next[0] - R.pts} points to ${R.next[1]}` : 'Top level reached. Thank you!';
+  $('#rNext').textContent = R.next ? t('rew.next',{n:R.next[0] - R.pts, level:t('lvl.'+R.next[1])}) : t('rew.top');
   $('#rBoxesN').textContent = R.boxes; $('#rServN').textContent = R.servings; $('#rCertN').textContent = R.certs.length;
-  $('#rStreakTxt').textContent = `${R.inRow} of 5`;
+  $('#rStreakTxt').textContent = t('rew.ofFive',{n:R.inRow});
   $('#rDots').innerHTML = Array.from({length:5}, (_, i) => `<span class="r-dot${i < R.inRow ? ' on' : ''}${i===4?' last':''}">${i===4 ? MEDAL : i+1}</span>`).join('');
   $('#rStreakHelp').textContent = R.nextDue
-    ? `Your streak is ${R.streak} box${R.streak===1?'':'es'} long. Give again by ${fmtDate(R.nextDue)} to keep it going. ${5 - R.inRow} more for your next certificate.`
-    : 'Start a streak: give a box today, then again within 7 days each time. Every 5 in a row earns a certificate.';
-  $('#rDemo').textContent = demoHist.length ? 'Clear sample history' : 'Load sample history';
-  $('#rBadges').innerHTML = BADGES(R).map(b => `<div class="r-badge${b.ok?' ok':''}"><span class="r-bi">${MEDAL}</span><b>${b.n}</b><span>${b.d}</span><small>${b.ok?'Earned':b.p}</small></div>`).join('');
-  $('#rCerts').innerHTML = R.certs.length ? R.certs.slice().reverse().map(c => `<div class="r-cert"><div class="r-cert-mini"><i>Certificate of Kindness</i><b>${esc(certName())}</b><small>No. ${certNo(c)}</small></div><div class="r-cert-meta"><b>Five in a row #${c.no}</b><span>${fmtDate(c.from)} to ${fmtDate(c.to)} · ${c.servings} servings</span></div><button class="btn small primary" data-cert="${c.no}">View and download</button></div>`).join('')
-    : `<div class="r-card r-empty"><b>No certificates yet</b><span>Give 5 boxes in a row, each within 7 days of the last, to earn your first one. Want to see one? Load the sample history above.</span></div>`;
-  $('#rHist').innerHTML = R.list.length ? R.list.slice().reverse().map(d => { const b = bankById[d.bankId]; return `<div class="r-row"><span><b>${esc(d.title)}</b><small>${b?esc(b.name)+', '+esc(b.city):''}${d.demo?' · sample':''}</small></span><span class="r-fine">${fmtDate(d.createdAt)} · ${d.servings} servings</span></div>`; }).join('')
-    : `<div class="r-fine">Nothing yet. Boxes you list on this device appear here.</div>`;
+    ? t('rew.streakHelp',{n:R.streak, t:fmtDate(R.nextDue), k:5 - R.inRow})
+    : t('rew.start');
+  $('#rDemo').textContent = demoHist.length ? t('rew.clear') : t('rew.sample');
+  $('#rBadges').innerHTML = BADGES(R).map(b => `<div class="r-badge${b.ok?' ok':''}"><span class="r-bi">${MEDAL}</span><b>${t(b.n)}</b><span>${t(b.d)}</span><small>${b.ok?t('rew.earned'):b.p}</small></div>`).join('');
+  $('#rCerts').innerHTML = R.certs.length ? R.certs.slice().reverse().map(c => `<div class="r-cert"><div class="r-cert-mini"><i>${t('rew.certTitle')}</i><b>${esc(certName())}</b><small>No. ${certNo(c)}</small></div><div class="r-cert-meta"><b>${t('rew.fiveRow',{n:c.no})}</b><span>${fmtDate(c.from)} – ${fmtDate(c.to)} · ${servTxt(c.servings)}</span></div><button class="btn small primary" data-cert="${c.no}">${t('rew.view')}</button></div>`).join('')
+    : `<div class="r-card r-empty"><b>${t('rew.noCerts')}</b><span>${t('rew.noCertsS')}</span></div>`;
+  $('#rHist').innerHTML = R.list.length ? R.list.slice().reverse().map(d => { const b = bankById[d.bankId]; return `<div class="r-row"><span><b>${esc(d.title)}</b><small>${b?esc(b.name)+', '+esc(b.city):''}${d.demo?' · sample':''}</small></span><span class="r-fine">${fmtDate(d.createdAt)} · ${servTxt(d.servings)}</span></div>`; }).join('')
+    : `<div class="r-fine">${t('rew.histEmpty')}</div>`;
   if ($('#mPts')) $('#mPts').textContent = R.pts;
 }
-function certNo(c){ let h = 0; const s = certName() + c.issuedAt; for (const ch of s) h = (h*31 + ch.charCodeAt(0)) >>> 0; return `KB-${String(c.no).padStart(3,'0')}-${h.toString(36).toUpperCase().slice(0,5)}`; }
+function certNo(c){ let h = 0; const s = certName() + c.issuedAt; for (const ch of s) h = (h*31 + ch.charCodeAt(0)) >>> 0; return `EP-${String(c.no).padStart(3,'0')}-${h.toString(36).toUpperCase().slice(0,5)}`; }
 $('#rDemo').onclick = () => {
   if (demoHist.length){ demoHist = []; ls.set('kindbox.demoHistory', []); renderRewards(); toast('Sample history cleared'); return; }
   const sf = BANKS.filter(b => b.city === 'San Francisco');
@@ -1047,7 +1096,7 @@ async function drawCert(c){
   g.strokeStyle = squash; g.lineWidth = 2; g.strokeRect(66,66,W-132,Hc-132);
   for (const [x,y] of [[66,66],[W-66,66],[66,Hc-66],[W-66,Hc-66]]){ g.beginPath(); g.arc(x,y,10,0,Math.PI*2); g.fillStyle = squash; g.fill(); }
   g.textAlign = 'center'; g.textBaseline = 'alphabetic';
-  g.fillStyle = leaf; g.font = `800 34px ${disp}`; g.fillText('K I N D B O X', W/2, 160);
+  g.fillStyle = leaf; g.font = `800 34px ${disp}`; g.fillText('E T E R N A L   P O T', W/2, 160);
   g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('DEMO CERTIFICATE  ·  SAN FRANCISCO BAY AREA PILOT', W/2, 196);
   g.fillStyle = ink; g.font = `400 96px ${serif}`; g.fillText('Certificate of Kindness', W/2, 318);
   g.fillStyle = muted; g.font = `400 32px ${sans}`; g.fillText('This certificate is presented to', W/2, 392);
@@ -1067,12 +1116,12 @@ async function drawCert(c){
   g.fillStyle = '#fff'; g.font = `800 46px ${disp}`; g.fillText('5', sx, sy - 2); g.font = `800 17px ${disp}`; g.fillText('IN A ROW', sx, sy + 28);
   // signature + number
   g.textAlign = 'left'; g.strokeStyle = 'rgba(23,37,30,0.4)'; g.beginPath(); g.moveTo(160, 900); g.lineTo(560, 900); g.stroke();
-  g.fillStyle = leaf; g.font = `italic 400 44px ${serif}`; g.fillText('Kindbox Community', 170, 885);
-  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('KINDBOX COMMUNITY TEAM (DEMO ISSUER)', 160, 934);
+  g.fillStyle = leaf; g.font = `italic 400 44px ${serif}`; g.fillText('Eternal Pot Community', 170, 885);
+  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('ETERNAL POT COMMUNITY TEAM (DEMO ISSUER)', 160, 934);
   g.textAlign = 'right'; g.fillStyle = ink; g.font = `500 26px ${mono}`; g.fillText(`No. ${certNo(c)}`, W-160, 880);
   g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText(`ISSUED ${fmtDate(c.issuedAt).toUpperCase()}`, W-160, 916);
   g.textAlign = 'center'; g.fillStyle = muted; g.font = `400 19px ${sans}`;
-  g.fillText('Demo certificate for illustration only. Kindbox is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
+  g.fillText('Demo certificate for illustration only. Eternal Pot is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
 }
 async function openCert(c){ if (!c) return; certShown = c; $('#certTitle').textContent = `Certificate no. ${certNo(c)}`; $('#certModal').hidden = false; document.body.style.overflow = 'hidden'; await drawCert(c); }
 const closeCert = () => { $('#certModal').hidden = true; document.body.style.overflow = ''; };
@@ -1080,7 +1129,7 @@ $('#certClose').onclick = closeCert;
 $('#certModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeCert(); });
 $('#certDl').onclick = async () => {
   const blob = await new Promise(r => $('#certCanvas').toBlob(r, 'image/png'));
-  const filename = `kindbox-certificate-${certShown?.no || 1}.png`;
+  const filename = `eternal-pot-certificate-${certShown?.no || 1}.png`;
   try {
     const dl = window.claude?.use ? await window.claude.use('downloads') : null;
     if (dl){ await dl.save({filename, data: blob}); toast('Certificate saved'); return; }
@@ -1192,7 +1241,33 @@ function hideLanding(){ $('#landing').hidden = true; cancelAnimationFrame(lRaf);
 
 let toastT; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true, 2600); }
 
+
+/* ---------- language picker ---------- */
+function relabel(){
+  buildDeskChips(); buildMobileChrome(); buildProgChips(); syncFilterUI();
+  renderFind(); renderMobile();
+  if (state.mode === 'programs') renderPrograms();
+  if (state.mode === 'rewards') renderRewards();
+  if (state.mode === 'give') updatePreview();
+  renderMine();
+}
+function renderLangGrid(){
+  $('#langGrid').innerHTML = LANGS.map(([c, n, e]) => `<button class="lang-opt${c===LANG?' on':''}" data-lang="${c}" lang="${c}" dir="${RTL.has(c)?'rtl':'ltr'}"><b>${n}</b><small>${e}</small></button>`).join('');
+}
+function openLang(){ renderLangGrid(); $('#langModal').hidden = false; document.body.style.overflow = 'hidden'; }
+function closeLang(){ $('#langModal').hidden = true; document.body.style.overflow = ''; ls.set('eternalpot.langAsked', true); }
+document.addEventListener('click', e => { if (e.target.closest('[data-lang-open]')) openLang(); });
+$('#langClose').onclick = closeLang;
+$('#langModal').addEventListener('click', async e => {
+  if (e.target === e.currentTarget){ closeLang(); return; }
+  const b = e.target.closest('[data-lang]'); if (!b) return;
+  await setLang(b.dataset.lang); closeLang();
+});
+
 /* ---------- boot ---------- */
+const savedLang = ls.get('eternalpot.lang', null);
+const navLang = (navigator.languages || [navigator.language || 'en']).map(x => x.split('-')[0]).find(x => LANGS.some(l => l[0] === x));
+await setLang(savedLang || 'en', false);
 readTokens();
 const themeChanged = () => { readTokens(); draw(); };
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', themeChanged);
@@ -1208,5 +1283,6 @@ const startHash = location.hash.slice(1);
 if (['give','programs','rewards','find','home'].includes(startHash)) setMode(startHash);
 else if (isDesk()){ setMode('find'); showLanding(); }
 else setMode('home');
+if (!savedLang && !ls.get('eternalpot.langAsked', false)) setTimeout(openLang, 400);
 connect();
 })();

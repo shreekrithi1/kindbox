@@ -1,4 +1,4 @@
-# Kindbox
+# Eternal Pot
 
 > **Demo only.** Inspired by the Akshaya Patra Foundation's mission that no one should go hungry. Not affiliated with or endorsed by Akshaya Patra. Piloting in the San Francisco Bay Area; all listings are sample data.
 
@@ -8,7 +8,9 @@ A living map of shared meals. People who need food find free, sealed food boxes 
 
 **Programs:** NGOs, city councils and community groups post job trainings (back-to-work programs), community meals, food drives, benefits and housing help, and health events. People filter by category and audience (adults, youth, families, seniors, veterans), save programs, and see how to join.
 
-**Give food:** a short form to list a box at any drop point. It generates a label code (e.g. `KB-4821`) to write on the box.
+**Languages:** English plus all 22 scheduled languages of India (Assamese, Bengali, Bodo, Dogri, Gujarati, Hindi, Kannada, Kashmiri, Konkani, Maithili, Malayalam, Manipuri in Meetei Mayek, Marathi, Nepali, Odia, Punjabi, Sanskrit, Santali in Ol Chiki, Sindhi, Tamil, Telugu, Urdu). Pick one on first launch or from the globe button. Urdu, Kashmiri and Sindhi switch the layout to right-to-left. Noto fonts cover every script. Strings live in `i18n/<code>.json`; translations are machine drafts and need review by native speakers.
+
+**Give food:** a short form to list a box at any drop point. It generates a label code (e.g. `EP-4821`) to write on the box.
 
 **Rewards:** donors earn 10 points per box, 2 per serving, and a 15-point bonus for giving 2 or more boxes in one day. Levels go from Seedling to City Champion, with badges along the way. Every 5 boxes in a row (each within 7 days of the last) issues a downloadable certificate of kindness (PNG). "Load sample history" on the Rewards tab shows a certificate right away.
 

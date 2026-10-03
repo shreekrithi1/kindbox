@@ -3,54 +3,56 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Kindbox</title>
+<title>Eternal Pot</title>
 <meta name="description" content="Demo: a living map of shared meals, inspired by Akshaya Patra. Piloting in the San Francisco Bay Area.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;700&family=Noto+Sans+Bengali:wght@400;700&family=Noto+Sans+Gurmukhi:wght@400;700&family=Noto+Sans+Gujarati:wght@400;700&family=Noto+Sans+Oriya:wght@400;700&family=Noto+Sans+Tamil:wght@400;700&family=Noto+Sans+Telugu:wght@400;700&family=Noto+Sans+Kannada:wght@400;700&family=Noto+Sans+Malayalam:wght@400;700&family=Noto+Sans+Ol+Chiki:wght@400;700&family=Noto+Sans+Meetei+Mayek:wght@400;700&family=Noto+Naskh+Arabic:wght@400;700&family=Noto+Nastaliq+Urdu:wght@400;700&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<section class="landing" id="landing" hidden aria-label="Welcome to Kindbox">
+<section class="landing" id="landing" hidden aria-label="Welcome to Eternal Pot">
   <div class="l-top">
-    <div class="l-brand"><span class="tile"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--leaf)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="#FBD9B8"/></svg></span>Kindbox</div>
-    <div class="l-pill"><span class="demo-pill">Demo only</span>Inspired by Akshaya Patra</div>
-    <button class="l-link" data-go="find">Open the map <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+    <div class="l-brand"><span class="tile"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><path d="M12 9.5c0-2 2-2.2 2-4.5M17 9.5c0-2 2-2.2 2-4.5M22 9.5c0-2 2-2.2 2-4.5" stroke="#FBD9B8" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="4" y="12" width="26" height="4" rx="2" fill="#fff"/><path d="M7 16.5h20c0 7.5-4.5 13-10 13S7 24 7 16.5z" fill="#fff"/><path d="M11 21h12" stroke="#FBD9B8" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg></span>Eternal Pot</div>
+    <div class="l-pill"><span class="demo-pill">Demo only</span><span data-i18n="land.pill">Inspired by Akshaya Patra</span></div>
+    <button class="lang-btn l-lang" data-lang-open aria-label="Language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lang-cur">English</span></button><button class="l-link" data-go="find"><span data-i18n="land.open">Open the map</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
   </div>
   <div class="l-stage" id="lStage">
     <canvas id="lMap" aria-hidden="true"></canvas>
-    <div class="stat glass" style="left:2%;top:10%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 10l9 5 9-5"/></svg><b id="lsBoxes">0</b><span>boxes ready right now</span><small>Sealed, labeled, free.</small></div>
-    <div class="stat glass" style="right:2%;top:30%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b id="lsPoints">0</b><span>drop points worldwide</span><small id="lsCountries">Fridges and shelves.</small></div>
-    <div class="stat glass" style="left:7%;bottom:4%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11h16a8 6 0 0 1-16 0zM9 7c0-1.5 1-1.5 1-3M14 7c0-1.5 1-1.5 1-3"/></svg><b id="lsServ">0</b><span>servings shared</span><small>Cooked at home, by neighbors.</small></div>
+    <div class="stat glass" style="left:2%;top:10%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M3 10l9 5 9-5"/></svg><b id="lsBoxes">0</b><span><span data-i18n="land.stat1">boxes ready right now</span></span><small><span data-i18n="land.stat1s">Sealed, labeled, free.</span></small></div>
+    <div class="stat glass" style="right:2%;top:30%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b id="lsPoints">0</b><span><span data-i18n="land.stat2">drop points worldwide</span></span><small id="lsCountries">Fridges and shelves.</small></div>
+    <div class="stat glass" style="left:7%;bottom:4%"><svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 11h16a8 6 0 0 1-16 0zM9 7c0-1.5 1-1.5 1-3M14 7c0-1.5 1-1.5 1-3"/></svg><b id="lsServ">0</b><span><span data-i18n="land.stat3">servings shared</span></span><small><span data-i18n="land.stat3s">Cooked at home, by neighbors.</span></small></div>
   </div>
   <div class="l-copy">
-    <div class="l-demo"><span><i></i>Now piloting in the San Francisco Bay Area</span></div>
-    <div class="eyebrow">Your next meal is closer than you think</div>
-    <h1>A world that <em>shares its table.</em></h1>
-    <p>From San Francisco to Mumbai, neighbors leave sealed, labeled meals at community fridges and shelves. Anyone who needs food can find one nearby, free, with no questions asked.</p>
+    <div class="l-demo"><span><i></i><span data-i18n="land.pilot">Now piloting in the San Francisco Bay Area</span></span></div>
+    <div class="eyebrow"><span data-i18n="land.eyebrow">Your next meal is closer than you think</span></div>
+    <h1><span data-i18n-html="land.h_html">A world that <em>shares its table.</em></span></h1>
+    <p><span data-i18n="land.p">From San Francisco to Mumbai, neighbors leave sealed, labeled meals at community fridges and shelves. Anyone who needs food can find one nearby, free, with no questions asked.</span></p>
     <div class="l-ctas">
-      <button class="cta" data-go="find">Find food near me <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
-      <button class="cta alt" data-go="give">I have food to give</button>
+      <button class="cta" data-go="find"><span data-i18n="land.find">Find food near me</span> <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button>
+      <button class="cta alt" data-go="give"><span data-i18n="land.give">I have food to give</span></button>
     </div>
-    <div class="l-note">No account needed. Free for everyone.</div>
-    <div class="l-orgs"><span><b>NGOs and city councils:</b> post job trainings, community meals and hunger events.</span><button data-mode="programs">See programs <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
-    <p class="l-fine">Kindbox is a demo concept inspired by the Akshaya Patra Foundation's mission that no one should go hungry. It is not affiliated with or endorsed by Akshaya Patra. All drop points, boxes and programs shown are sample data. Other cities on the map show how Kindbox could grow.</p>
+    <div class="l-note"><span data-i18n="land.note">No account needed. Free for everyone.</span></div>
+    <div class="l-orgs"><span data-i18n="land.orgs">NGOs and city councils: post job trainings, community meals and hunger events.</span><button data-mode="programs"><span data-i18n="land.seeProg">See programs</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 12h16m-6-6 6 6-6 6"/></svg></button></div>
+    <p class="l-fine">Eternal Pot is a demo concept inspired by the Akshaya Patra Foundation's mission that no one should go hungry. It is not affiliated with or endorsed by Akshaya Patra. All drop points, boxes and programs shown are sample data. Other cities on the map show how Eternal Pot could grow.</p>
   </div>
 </section>
 
-<div class="demo-bar" id="demoBar"><b>Demo only</b> · Inspired by Akshaya Patra · Piloting in the San Francisco Bay Area · Sample data</div>
+<div class="demo-bar" id="demoBar" data-i18n="demo.bar">Demo only · Inspired by Akshaya Patra · Piloting in the San Francisco Bay Area · Sample data</div>
 <header class="top">
   <div class="wrap">
     <div class="brand">
-      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="var(--squash)"/><path d="M3 14 17 20 31 14" stroke="var(--surface)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="var(--leaf)"/></svg>
-      <div><b>Kindbox</b><small>Shared food, sealed with care</small></div>
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M12 9.5c0-2 2-2.2 2-4.5M17 9.5c0-2 2-2.2 2-4.5M22 9.5c0-2 2-2.2 2-4.5" stroke="var(--leaf)" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="4" y="12" width="26" height="4" rx="2" fill="var(--squash)"/><path d="M7 16.5h20c0 7.5-4.5 13-10 13S7 24 7 16.5z" fill="var(--squash)"/><path d="M11 21h12" stroke="var(--leaf)" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg>
+      <div><b>Eternal Pot</b><small>Shared food, sealed with care</small></div>
     </div>
     <nav class="switch" aria-label="Mode">
-      <button data-mode="find" aria-pressed="true">Find food</button>
-      <button data-mode="give" aria-pressed="false">Give food</button>
-      <button data-mode="programs" aria-pressed="false">Programs</button>
-      <button data-mode="rewards" aria-pressed="false">Rewards</button>
+      <button data-mode="find" aria-pressed="true"><span data-i18n="nav.find">Find food</span></button>
+      <button data-mode="give" aria-pressed="false"><span data-i18n="nav.give">Give food</span></button>
+      <button data-mode="programs" aria-pressed="false"><span data-i18n="nav.programs">Programs</span></button>
+      <button data-mode="rewards" aria-pressed="false"><span data-i18n="nav.rewards">Rewards</span></button>
     </nav>
+    <button class="lang-btn h-lang" data-lang-open aria-label="Language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lang-cur">English</span></button>
   </div>
 </header>
 
@@ -59,45 +61,46 @@
   <!-- MOBILE HOME (phones and tablets) -->
   <section id="mHome" class="m-home mob-only" aria-label="Home">
     <div class="m-top">
-      <button class="m-loc" id="mLoc" aria-haspopup="dialog"><small>Food near</small><b><span id="mLocName">San Francisco</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></b></button>
-      <button class="m-pts" data-mode="rewards" aria-label="Your rewards"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg><span id="mPts">0</span> pts</button>
+      <button class="m-loc" id="mLoc" aria-haspopup="dialog"><small><span data-i18n="m.near">Food near</span></small><b><span id="mLocName">San Francisco</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></b></button>
+      <div class="m-top-r"><button class="lang-btn m-lang" data-lang-open aria-label="Language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lang-cur">English</span></button>
+      <button class="m-pts" data-mode="rewards" aria-label="Your rewards"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg><span id="mPts">0</span> <span data-i18n="m.pts">pts</span></button></div>
     </div>
-    <label class="m-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="mq" type="search" placeholder="Search rice, soup, Mission, Mumbai…" aria-label="Search food or places" autocomplete="off"></label>
+    <label class="m-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="mq" data-i18n-ph="m.search" type="search" placeholder="Search rice, soup, Mission, Mumbai…" aria-label="Search food or places" autocomplete="off"></label>
     <div class="m-cats" id="mCats" aria-label="Type of food"></div>
     <div class="m-chips" id="mChips" aria-label="Filters"></div>
     <div class="m-promos" id="mPromos"></div>
-    <div class="m-sec"><div class="m-sec-h"><h2>Open now near you</h2><button data-mode="find">Map</button></div><div class="m-rail" id="mOpen"></div></div>
-    <div class="m-sec"><div class="m-sec-h"><h2>Fresh boxes</h2><span class="m-sub">packed most recently</span></div><div class="m-rail" id="mFresh"></div></div>
-    <div class="m-sec" id="mProgSec"><div class="m-sec-h"><h2>Programs this week</h2><button data-mode="programs">See all</button></div><div class="m-rail" id="mProg"></div></div>
-    <div class="m-sec"><div class="m-sec-h"><h2>All drop points</h2><span class="m-sub" id="mCount"></span></div><div class="m-list" id="mList"></div></div>
-    <p class="m-fine">Demo only. Kindbox is a concept inspired by the Akshaya Patra Foundation's mission that no one should go hungry. Not affiliated with or endorsed by Akshaya Patra. Piloting in the San Francisco Bay Area; all listings are sample data.</p>
+    <div class="m-sec"><div class="m-sec-h"><h2><span data-i18n="sec.open">Open now near you</span></h2><button data-mode="find"><span data-i18n="nav.map">Map</span></button></div><div class="m-rail" id="mOpen"></div></div>
+    <div class="m-sec"><div class="m-sec-h"><h2><span data-i18n="sec.fresh">Fresh boxes</span></h2><span class="m-sub"><span data-i18n="sec.freshSub">packed most recently</span></span></div><div class="m-rail" id="mFresh"></div></div>
+    <div class="m-sec" id="mProgSec"><div class="m-sec-h"><h2><span data-i18n="sec.prog">Programs this week</span></h2><button data-mode="programs"><span data-i18n="btn.seeAll">See all</span></button></div><div class="m-rail" id="mProg"></div></div>
+    <div class="m-sec"><div class="m-sec-h"><h2><span data-i18n="sec.all">All drop points</span></h2><span class="m-sub" id="mCount"></span></div><div class="m-list" id="mList"></div></div>
+    <p class="m-fine">Demo only. Eternal Pot is a concept inspired by the Akshaya Patra Foundation's mission that no one should go hungry. Not affiliated with or endorsed by Akshaya Patra. Piloting in the San Francisco Bay Area; all listings are sample data.</p>
   </section>
   <!-- FIND -->
   <section id="findView" class="wrap find" aria-label="Find food near you">
     <div class="panel">
       <div class="side-brand desk-only">
-        <button class="row" data-go="home" aria-label="Kindbox home">
-          <span class="tile"><svg width="24" height="24" viewBox="0 0 34 34" aria-hidden="true"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--leaf)" stroke-width="2" fill="none"/><path d="M17 11c-3-6-9-6-9-2s6 2 9 2c3 0 9 2 9-2s-6-4-9 2z" fill="#FBD9B8"/></svg></span>
-          <span><b>Kindbox</b><small>Shared meals · SF pilot</small></span>
+        <button class="row" data-go="home" aria-label="Eternal Pot home">
+          <span class="tile"><svg width="24" height="24" viewBox="0 0 34 34" aria-hidden="true"><path d="M12 9.5c0-2 2-2.2 2-4.5M17 9.5c0-2 2-2.2 2-4.5M22 9.5c0-2 2-2.2 2-4.5" stroke="#FBD9B8" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="4" y="12" width="26" height="4" rx="2" fill="#fff"/><path d="M7 16.5h20c0 7.5-4.5 13-10 13S7 24 7 16.5z" fill="#fff"/><path d="M11 21h12" stroke="#FBD9B8" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg></span>
+          <span><b>Eternal Pot</b><small>Shared meals · SF pilot</small></span>
         </button>
-        <span class="demo-pill">Demo · Inspired by Akshaya Patra</span>
-        <h1>Find a warm meal, <em>close by.</em></h1>
-        <p>Home-cooked boxes and groceries left by neighbors at fridges and shelves in cities around the world.</p>
+        <span class="demo-pill"><span data-i18n="demo.pill">Demo · Inspired by Akshaya Patra</span></span>
+        <h1><span data-i18n-html="side.h_html">Find a warm meal, <em>close by.</em></span></h1>
+        <p><span data-i18n="side.p">Home-cooked boxes and groceries left by neighbors at fridges and shelves in cities around the world.</span></p>
       </div>
       <div class="controls">
         <div class="search">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
-          <input id="q" type="search" placeholder="Search rice, soup, Mumbai, London…" aria-label="Search food or neighborhood" autocomplete="off">
+          <input id="q" data-i18n-ph="m.search" type="search" placeholder="Search rice, soup, Mumbai, London…" aria-label="Search food or neighborhood" autocomplete="off">
         </div>
         <div class="near">
-          <span class="muted">I'm near</span>
+          <span class="muted"><span data-i18n="side.near">I'm near</span></span>
           <select id="nearSel" aria-label="Your location"></select>
-          <span class="muted">or tap the map</span>
+          <span class="muted"><span data-i18n="side.tap">or tap the map</span></span>
         </div>
-        <div class="refine desk-only"><span class="eyebrow" style="color:var(--muted);letter-spacing:.14em">Refine your search</span><button id="resetF">Reset</button></div>
-        <div class="facet-h desk-only">Diet</div>
+        <div class="refine desk-only"><span class="eyebrow" style="color:var(--muted);letter-spacing:.14em"><span data-i18n="side.refine">Refine your search</span></span><button id="resetF"><span data-i18n="side.reset">Reset</span></button></div>
+        <div class="facet-h desk-only"><span data-i18n="side.diet">Diet</span></div>
         <div class="chips" id="dietChips" aria-label="Dietary needs"></div>
-        <div class="facet-h desk-only">Type of food</div>
+        <div class="facet-h desk-only"><span data-i18n="side.type">Type of food</span></div>
         <div class="chips desk-only" id="kindChips" aria-label="Type of food"></div>
         <div class="chips" id="toggleChips"></div>
       </div>
@@ -106,58 +109,59 @@
     </div>
     <div class="mapbox">
       <canvas id="map" tabindex="0" role="img" aria-label="World map of food drop points. Drag to move, scroll or pinch to zoom, tap a circle to open it."></canvas>
-      <div class="viewtog" role="group" aria-label="Map style"><button data-view="flat" aria-pressed="true">World map</button><button data-view="globe" aria-pressed="false">3D globe</button></div>
+      <div class="viewtog" role="group" aria-label="Map style"><button data-view="flat" aria-pressed="true"><span data-i18n="map.world">World map</span></button><button data-view="globe" aria-pressed="false"><span data-i18n="map.globe">3D globe</span></button></div>
       <div class="mapui">
         <button id="zin" aria-label="Zoom in">+</button>
         <button id="zout" aria-label="Zoom out">−</button>
-        <button id="zreset" aria-label="Show the whole world" style="font-size:12px">All</button>
+        <button id="zreset" aria-label="Show the whole world" style="font-size:12px"><span data-i18n="map.all">All</span></button>
       </div>
       <div class="maphint">
-        <span><i class="lg" style="background:var(--squash)"></i>Has food</span>
-        <span><i class="lg hollow"></i>Closed now</span>
+        <span><i class="lg" style="background:var(--squash)"></i><span data-i18n="f.hasFood">Has food</span></span>
+        <span><i class="lg hollow"></i><span data-i18n="st.closedNow">Closed now</span></span>
         <span><i class="lg" style="background:var(--leaf)"></i>You</span>
       </div>
     </div>
     <div class="m-mapcards mob-only" id="mMapCards"></div>
     <div class="atlas-top desk-only">
+      <button class="lang-btn a-lang" data-lang-open aria-label="Language"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg><span class="lang-cur">English</span></button>
       <nav class="switch" aria-label="Mode">
-        <button data-mode="find" aria-pressed="true">Find food</button>
-        <button data-mode="give" aria-pressed="false">Give food</button>
-        <button data-mode="programs" aria-pressed="false">Programs</button>
-        <button data-mode="rewards" aria-pressed="false">Rewards</button>
+        <button data-mode="find" aria-pressed="true"><span data-i18n="nav.find">Find food</span></button>
+        <button data-mode="give" aria-pressed="false"><span data-i18n="nav.give">Give food</span></button>
+        <button data-mode="programs" aria-pressed="false"><span data-i18n="nav.programs">Programs</span></button>
+        <button data-mode="rewards" aria-pressed="false"><span data-i18n="nav.rewards">Rewards</span></button>
       </nav>
-      <div class="eyebrow">Rooted in neighbors. Connected by food.</div>
-      <h2>One world. <em>Many shared tables.</em></h2>
-      <p>Tap a circle to zoom in or open a drop point. Tap anywhere else to set where you are.</p>
+      <div class="eyebrow"><span data-i18n="atlas.eyebrow">Rooted in neighbors. Connected by food.</span></div>
+      <h2><span data-i18n-html="atlas.h_html">One world. <em>Many shared tables.</em></span></h2>
+      <p><span data-i18n="atlas.p">Tap a circle to zoom in or open a drop point. Tap anywhere else to set where you are.</span></p>
     </div>
     <aside class="rail desk-only" aria-label="City overview">
       <div class="glass">
-        <div class="eyebrow" style="color:var(--muted);letter-spacing:.14em">Right now around the world</div>
-        <div class="bign"><div><b id="rBoxes">0</b><span>boxes ready</span></div><div><b id="rServ">0</b><span>servings</span></div><div><b id="rCountries">0</b><span>countries</span></div><div><b id="rCities">0</b><span>cities</span></div></div>
+        <div class="eyebrow" style="color:var(--muted);letter-spacing:.14em"><span data-i18n="rail.now">Right now around the world</span></div>
+        <div class="bign"><div><b id="rBoxes">0</b><span><span data-i18n="rail.boxes">boxes ready</span></span></div><div><b id="rServ">0</b><span><span data-i18n="rew.servings">servings</span></span></div><div><b id="rCountries">0</b><span><span data-i18n="rail.countries">countries</span></span></div><div><b id="rCities">0</b><span><span data-i18n="rail.cities">cities</span></span></div></div>
         <div class="meter"><i id="rMeter" style="width:0"></i></div>
         <div class="fine" id="rOpen"></div>
       </div>
       <div class="glass">
-        <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:15px">Across the world</b><span class="muted" style="font-size:12px">boxes</span></div>
-        <div class="fine" style="margin:2px 0 0">Pick a country to fly there.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:15px"><span data-i18n="rail.across">Across the world</span></b><span class="muted" style="font-size:12px"><span data-i18n="rew.boxes">boxes</span></span></div>
+        <div class="fine" style="margin:2px 0 0"><span data-i18n="rail.pick">Pick a country to fly there.</span></div>
         <div class="rank" id="rRank"></div>
       </div>
       <div class="glass promo">
-        <div class="eyebrow">Cooked too much?</div>
-        <h3>Pack it. Drop it. <em style="color:var(--squash)">Share it.</em></h3>
-        <p>Seal a box, leave it at a fridge, and list it here in under a minute.</p>
-        <button data-mode="give">Give a meal <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
+        <div class="eyebrow"><span data-i18n="promo.give.t">Cooked too much?</span></div>
+        <h3 data-i18n-html="rail.promoH_html">Pack it. Drop it. <em>Share it.</em></h3>
+        <p><span data-i18n="rail.promoP">Seal a box, leave it at a fridge, and list it here in under a minute.</span></p>
+        <button data-mode="give"><span data-i18n="rail.promoGo">Give a meal</span> <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
         <svg class="art" width="130" height="110" viewBox="0 0 120 100" aria-hidden="true"><path d="M14 52h92a46 34 0 0 1-92 0z" fill="var(--squash)" opacity=".22"/><path d="M45 40c0-6 5-6 5-13M60 40c0-6 5-6 5-13M75 40c0-6 5-6 5-13" stroke="var(--squash)" stroke-width="3" fill="none" stroke-linecap="round" opacity=".35"/></svg>
       </div>
       <button class="glass tipcard" id="nearestOpen">
         <span class="ti"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></span>
-        <span><b>Hungry right now?</b><span>Take me to the nearest open point with food</span></span>
+        <span><b><span data-i18n="promo.hungry.t">Hungry right now?</span></b><span><span data-i18n="rail.hungryS">Take me to the nearest open point with food</span></span></span>
       </button>
     </aside>
     <div class="dock glass desk-only" aria-label="Nearest boxes">
       <div class="dock-h">
-        <span class="tile"><svg width="16" height="16" viewBox="0 0 34 34"><rect x="3" y="11" width="28" height="19" rx="3" fill="#fff"/><path d="M3 14 17 20 31 14" stroke="var(--squash)" stroke-width="2.5" fill="none"/></svg></span>
-        <b>Nearest boxes to you</b><span class="cnt" id="dockCnt">0</span>
+        <span class="tile"><svg width="16" height="16" viewBox="0 0 34 34" ><path d="M12 9.5c0-2 2-2.2 2-4.5M17 9.5c0-2 2-2.2 2-4.5M22 9.5c0-2 2-2.2 2-4.5" stroke="#FBD9B8" stroke-width="2" fill="none" stroke-linecap="round"/><rect x="4" y="12" width="26" height="4" rx="2" fill="#fff"/><path d="M7 16.5h20c0 7.5-4.5 13-10 13S7 24 7 16.5z" fill="#fff"/><path d="M11 21h12" stroke="#FBD9B8" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg></span>
+        <b><span data-i18n="dock.h">Nearest boxes to you</span></b><span class="cnt" id="dockCnt">0</span>
         <div class="nav"><button id="dPrev" aria-label="Scroll left">‹</button><button id="dNext" aria-label="Scroll right">›</button></div>
       </div>
       <div class="strip" id="strip"></div>
@@ -170,29 +174,29 @@
     <div class="card" id="giveCard">
       <div id="doneBox" hidden></div>
       <div id="giveFormWrap">
-      <h2>Drop off a meal box</h2>
-      <p class="lede">Cooked too much, or have groceries you won't use? Pack it in a clean, sealed box, drop it at a Kindbox point, and list it here so someone nearby can find it while it's fresh.</p>
+      <h2><span data-i18n="give.h">Drop off a meal box</span></h2>
+      <p class="lede"><span data-i18n="give.lede">Cooked too much, or have groceries you won't use? Pack it in a clean, sealed box, drop it at a Eternal Pot point, and list it here so someone nearby can find it while it's fresh.</span></p>
       <form id="giveForm" novalidate>
         <div class="field">
-          <label for="gBank">Where are you dropping it?</label>
+          <label for="gBank"><span data-i18n="give.where">Where are you dropping it?</span></label>
           <select id="gBank" required></select>
           <span class="hint" id="gBankHint"></span>
         </div>
         <div class="field">
-          <label for="gTitle">What's in the box?</label>
+          <label for="gTitle"><span data-i18n="give.what">What's in the box?</span></label>
           <input id="gTitle" maxlength="60" placeholder="e.g. Vegetable biryani, 3 boxes" required>
         </div>
         <div class="field">
-          <label for="gContents">Ingredients and notes</label>
+          <label for="gContents"><span data-i18n="give.ing">Ingredients and notes</span></label>
           <textarea id="gContents" rows="2" maxlength="200" placeholder="List main ingredients and anything someone with allergies should know."></textarea>
         </div>
         <div class="two">
           <div class="field">
-            <label for="gKind">Type</label>
+            <label for="gKind"><span data-i18n="give.type">Type</span></label>
             <select id="gKind"></select>
           </div>
           <div class="field">
-            <span style="font-weight:700;font-size:14.5px" id="servLbl">Servings</span>
+            <span style="font-weight:700;font-size:14.5px" id="servLbl"><span data-i18n="give.serv">Servings</span></span>
             <div class="stepper" role="group" aria-labelledby="servLbl">
               <button type="button" id="sMinus" aria-label="Fewer servings">−</button>
               <output id="gServ">2</output>
@@ -201,38 +205,38 @@
           </div>
         </div>
         <fieldset class="field">
-          <legend>Suitable for</legend>
+          <legend><span data-i18n="give.for">Suitable for</span></legend>
           <div class="chips pick" id="gTags"></div>
         </fieldset>
         <div class="two">
           <div class="field">
-            <label for="gPacked">Packed</label>
+            <label for="gPacked"><span data-i18n="give.packed">Packed</span></label>
             <select id="gPacked">
-              <option value="0">Just now</option>
-              <option value="30">30 minutes ago</option>
-              <option value="60">1 hour ago</option>
-              <option value="120">2 hours ago</option>
+              <option value="0" data-i18n="give.p0">Just now</option>
+              <option value="30" data-i18n="give.p30">30 minutes ago</option>
+              <option value="60" data-i18n="give.p60">1 hour ago</option>
+              <option value="120" data-i18n="give.p120">2 hours ago</option>
             </select>
           </div>
           <div class="field">
-            <label for="gEat">Good to eat for</label>
+            <label for="gEat"><span data-i18n="give.eat">Good to eat for</span></label>
             <select id="gEat">
-              <option value="4">4 hours (cooked, unrefrigerated)</option>
-              <option value="12">12 hours</option>
-              <option value="24" selected>1 day (refrigerated)</option>
-              <option value="72">3 days</option>
-              <option value="168">1 week (packaged / produce)</option>
+              <option value="4" data-i18n="give.e4">4 hours (cooked, unrefrigerated)</option>
+              <option value="12" data-i18n="give.e12">12 hours</option>
+              <option value="24" selected data-i18n="give.e24">1 day (refrigerated)</option>
+              <option value="72" data-i18n="give.e72">3 days</option>
+              <option value="168" data-i18n="give.e168">1 week (packaged / produce)</option>
             </select>
           </div>
         </div>
         <div class="field">
-          <label for="gName">Your first name (optional)</label>
+          <label for="gName"><span data-i18n="give.name">Your first name (optional)</span></label>
           <input id="gName" maxlength="24" placeholder="Shown as “From Priya”" autocomplete="given-name">
         </div>
-        <label class="pledge"><input type="checkbox" id="gPledge"> <span>The food is in a clean, sealed container, labeled with what's inside, and was cooked or stored safely. No alcohol, no opened or half-eaten food.</span></label>
+        <label class="pledge"><input type="checkbox" id="gPledge"> <span><span data-i18n="give.pledge">The food is in a clean, sealed container, labeled with what's inside, and was cooked or stored safely. No alcohol, no opened or half-eaten food.</span></span></label>
         <div class="err" id="gErr" role="alert"></div>
         <div class="actions">
-          <button class="btn give" type="submit">List my box</button>
+          <button class="btn give" type="submit"><span data-i18n="give.submit">List my box</span></button>
           <span class="status" id="storeStatus"><i></i>Connecting…</span>
         </div>
       </form>
@@ -240,17 +244,17 @@
     </div>
     <aside class="side">
       <div>
-        <div class="sect" style="margin-bottom:8px">Write this on your box</div>
+        <div class="sect" style="margin-bottom:8px"><span data-i18n="give.label">Write this on your box</span></div>
         <div class="boxlabel" id="labelPreview"></div>
       </div>
       <div class="card tips">
-        <h3>Packing guide</h3>
+        <h3><span data-i18n="give.guide">Packing guide</span></h3>
         <ul>
-          <li>Let cooked food cool, then seal it within 2 hours of cooking.</li>
-          <li>One meal per container. Wrap the box so it stays closed.</li>
-          <li>Mark nuts, dairy, eggs, shellfish, and pork clearly.</li>
-          <li>Put cooked food in a fridge point if the box says “Refrigerated”.</li>
-          <li>Drop it off during open hours and list it right away.</li>
+          <li><span data-i18n="give.t1">Let cooked food cool, then seal it within 2 hours of cooking.</span></li>
+          <li><span data-i18n="give.t2">One meal per container. Wrap the box so it stays closed.</span></li>
+          <li data-i18n="give.t3">Mark nuts, dairy, eggs, shellfish and meat clearly.</li>
+          <li data-i18n="give.t4">Put cooked food in a fridge point if the box says it needs a fridge.</li>
+          <li><span data-i18n="give.t5">Drop it off during open hours and list it right away.</span></li>
         </ul>
       </div>
       <div class="card" id="myDropsCard" hidden>
@@ -264,11 +268,11 @@
   <section id="progView" class="wrap progs" hidden aria-label="Programs and events">
     <div class="p-hero">
       <div>
-        <div class="eyebrow">For neighbors, NGOs and city councils</div>
-        <h2>Programs that help people <em>get back on their feet.</em></h2>
-        <p class="lede">Job training, benefits help, community meals and hunger events around San Francisco. Nonprofits, city councils and community groups can post their own.</p>
+        <div class="eyebrow"><span data-i18n="prog.eyebrow">For neighbors, NGOs and city councils</span></div>
+        <h2><span data-i18n-html="prog.h_html">Programs that help people <em>get back on their feet.</em></span></h2>
+        <p class="lede" data-i18n="prog.lede">Job training, benefits help, community meals and hunger events around San Francisco. Nonprofits, city councils and community groups can post their own.</p>
       </div>
-      <div class="actions"><button class="btn give" id="postProgBtn">Post a program</button></div>
+      <div class="actions"><button class="btn give" id="postProgBtn"><span data-i18n="prog.post">Post a program</span></button></div>
     </div>
 
     <div class="card p-post" id="pPost" hidden>
@@ -299,8 +303,8 @@
         </div>
         <fieldset class="field"><legend>Who it's for</legend><div class="chips pick" id="pAudPick"></div></fieldset>
         <div class="two">
-          <div class="field"><label for="pLang">Languages</label><input id="pLang" maxlength="80" placeholder="English, Spanish"></div>
-          <div class="field"><label for="pContact">How to join</label><input id="pContact" maxlength="80" required placeholder="Phone, email, or “walk in”"></div>
+          <div class="field"><label for="pLang"><span data-i18n="prog.langs">Languages</span></label><input id="pLang" maxlength="80" placeholder="English, Spanish"></div>
+          <div class="field"><label for="pContact"><span data-i18n="prog.how">How to join</span></label><input id="pContact" maxlength="80" required placeholder="Phone, email, or “walk in”"></div>
         </div>
         <div class="field"><label for="pDesc">Description</label><textarea id="pDesc" rows="3" maxlength="400" placeholder="What people will do or learn, what to bring, any costs or stipends."></textarea></div>
         <label class="pledge"><input type="checkbox" id="pConfirm"> <span>We are a nonprofit, public agency or community group, the program is free or low-cost, and the details are accurate.</span></label>
@@ -324,41 +328,41 @@
   <section id="rewView" class="wrap rew" hidden aria-label="Your giving rewards">
     <div class="r-head">
       <div>
-        <div class="eyebrow">Your giving</div>
-        <h2>Every box counts. <em>Keep the streak going.</em></h2>
-        <p class="lede">Earn points for every box you share. Give 5 times in a row, each within 7 days of the last, and Kindbox issues you a certificate of kindness.</p>
+        <div class="eyebrow"><span data-i18n="rew.eyebrow">Your giving</span></div>
+        <h2><span data-i18n-html="rew.h_html">Every box counts. <em>Keep the streak going.</em></span></h2>
+        <p class="lede"><span data-i18n="rew.lede">Earn points for every box you share. Give 5 times in a row, each within 7 days of the last, and Eternal Pot issues you a certificate of kindness.</span></p>
       </div>
-      <div class="field r-name"><label for="rName">Name on certificates</label><input id="rName" maxlength="40" placeholder="Your name" autocomplete="name"></div>
+      <div class="field r-name"><label for="rName"><span data-i18n="rew.name">Name on certificates</span></label><input id="rName" maxlength="40" placeholder="Your name" autocomplete="name"></div>
     </div>
     <div class="r-grid">
       <div class="r-card r-points">
-        <div class="r-lvl"><span class="r-medal" id="rMedal"></span><div><small>Level</small><b id="rLevel">Seedling</b></div></div>
-        <div class="r-big"><b id="rPts">0</b><span>points</span></div>
+        <div class="r-lvl"><span class="r-medal" id="rMedal"></span><div><small><span data-i18n="rew.level">Level</span></small><b id="rLevel"><span data-i18n="lvl.Seedling">Seedling</span></b></div></div>
+        <div class="r-big"><b id="rPts">0</b><span><span data-i18n="rew.points">points</span></span></div>
         <div class="r-bar"><i id="rBar"></i></div>
         <div class="r-fine" id="rNext"></div>
-        <div class="r-stats"><div><b id="rBoxesN">0</b><span>boxes</span></div><div><b id="rServN">0</b><span>servings</span></div><div><b id="rCertN">0</b><span>certificates</span></div></div>
+        <div class="r-stats"><div><b id="rBoxesN">0</b><span><span data-i18n="rew.boxes">boxes</span></span></div><div><b id="rServN">0</b><span><span data-i18n="rew.servings">servings</span></span></div><div><b id="rCertN">0</b><span><span data-i18n="rew.certs">certificates</span></span></div></div>
       </div>
       <div class="r-card r-streak">
-        <div class="r-ch"><b>Streak to your next certificate</b><span id="rStreakTxt"></span></div>
+        <div class="r-ch"><b><span data-i18n="rew.streak">Streak to your next certificate</span></b><span id="rStreakTxt"></span></div>
         <div class="r-dots" id="rDots"></div>
         <p class="r-fine" id="rStreakHelp"></p>
-        <div class="actions"><button class="btn give" data-mode="give">Give a box</button><button class="btn" id="rDemo">Load sample history</button></div>
+        <div class="actions"><button class="btn give" data-mode="give"><span data-i18n="promo.give.go">Give a box</span></button><button class="btn" id="rDemo"><span data-i18n="rew.sample">Load sample history</span></button></div>
       </div>
     </div>
     <div class="r-card">
-      <div class="r-ch"><b>How points work</b></div>
+      <div class="r-ch"><b><span data-i18n="rew.howPts">How points work</span></b></div>
       <div class="r-rules">
-        <div><b>+10</b><span>for every box you list</span></div>
-        <div><b>+2</b><span>for every serving in it</span></div>
-        <div><b>+15</b><span>bonus when you give 2 or more boxes in one day</span></div>
-        <div><b>Certificate</b><span>for every 5 boxes in a row, each within 7 days of the last</span></div>
+        <div><b>+10</b><span><span data-i18n="rew.r1">for every box you list</span></span></div>
+        <div><b>+2</b><span><span data-i18n="rew.r2">for every serving in it</span></span></div>
+        <div><b>+15</b><span><span data-i18n="rew.r3">bonus when you give 2 or more boxes in one day</span></span></div>
+        <div><b><span data-i18n="rew.certWord">Certificate</span></b><span><span data-i18n="rew.r4">for every 5 boxes in a row, each within 7 days of the last</span></span></div>
       </div>
     </div>
-    <div class="r-sec-h"><h3>Badges</h3></div>
+    <div class="r-sec-h"><h3><span data-i18n="rew.badges">Badges</span></h3></div>
     <div class="r-badges" id="rBadges"></div>
-    <div class="r-sec-h"><h3>Certificates</h3></div>
+    <div class="r-sec-h"><h3><span data-i18n="rew.certificates">Certificates</span></h3></div>
     <div class="r-certs" id="rCerts"></div>
-    <div class="r-sec-h"><h3>Giving history</h3></div>
+    <div class="r-sec-h"><h3><span data-i18n="rew.history">Giving history</span></h3></div>
     <div class="r-card r-hist" id="rHist"></div>
   </section>
 </main>
@@ -369,26 +373,33 @@
 <!-- mobile: city picker -->
 <div class="m-picker" id="mPicker" hidden role="dialog" aria-modal="true" aria-label="Choose your city">
   <div class="m-picker-in">
-    <div class="m-picker-h"><b>Find food near</b><button class="m-x" id="mPickClose" aria-label="Close">×</button></div>
-    <label class="m-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="mPickQ" type="search" placeholder="Search cities" aria-label="Search cities"></label>
+    <div class="m-picker-h"><b><span data-i18n="m.cityPick">Find food near</span></b><button class="m-x" id="mPickClose" aria-label="Close">×</button></div>
+    <label class="m-search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="mPickQ" data-i18n-ph="m.searchCities" type="search" placeholder="Search cities" aria-label="Search cities"></label>
     <div class="m-picker-list" id="mPickList"></div>
   </div>
 </div>
 <!-- certificate viewer -->
 <div class="cert-modal" id="certModal" hidden role="dialog" aria-modal="true" aria-label="Certificate">
   <div class="cert-in">
-    <div class="cert-h"><b id="certTitle">Certificate</b><button class="m-x" id="certClose" aria-label="Close">×</button></div>
+    <div class="cert-h"><b id="certTitle"><span data-i18n="rew.certWord">Certificate</span></b><button class="m-x" id="certClose" aria-label="Close">×</button></div>
     <canvas id="certCanvas" width="1600" height="1130"></canvas>
-    <div class="actions"><button class="btn give" id="certDl">Download PNG</button><span class="r-fine">Demo certificate for illustration only.</span></div>
+    <div class="actions"><button class="btn give" id="certDl"><span data-i18n="rew.download">Download PNG</span></button><span class="r-fine">Demo certificate for illustration only.</span></div>
+  </div>
+</div>
+<!-- language picker -->
+<div class="lang-modal" id="langModal" hidden role="dialog" aria-modal="true" aria-labelledby="langTitle">
+  <div class="lang-in">
+    <div class="lang-h"><div><b id="langTitle" data-i18n="lang.choose">Choose your language</b><small data-i18n="lang.sub">You can change this anytime from the language button.</small></div><button class="m-x" id="langClose" aria-label="Close">×</button></div>
+    <div class="lang-grid" id="langGrid"></div>
   </div>
 </div>
 <!-- mobile tab bar -->
 <nav class="m-tabs mob-only" aria-label="Sections">
-  <button data-mode="home"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
-  <button data-mode="find"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>Map</span></button>
-  <button data-mode="give" class="m-give"><i><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span>Give</span></button>
-  <button data-mode="programs"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Programs</span></button>
-  <button data-mode="rewards"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg><span>Rewards</span></button>
+  <button data-mode="home"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span><span data-i18n="nav.home">Home</span></span></button>
+  <button data-mode="find"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span><span data-i18n="nav.map">Map</span></span></button>
+  <button data-mode="give" class="m-give"><i><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span><span data-i18n="nav.giveShort">Give</span></span></button>
+  <button data-mode="programs"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span><span data-i18n="nav.programs">Programs</span></span></button>
+  <button data-mode="rewards"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 7 5-3 5 3-1.5-7"/></svg><span><span data-i18n="nav.rewards">Rewards</span></span></button>
 </nav>
 
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
