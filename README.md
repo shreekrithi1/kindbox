@@ -1,5 +1,7 @@
 # Eternal Pot
 
+*Powered by [nMemoIQ.com](https://nmemoiq.com)*
+
 > **Demo only.** Inspired by the Akshaya Patra Foundation's mission that no one should go hungry. Not affiliated with or endorsed by Akshaya Patra. Piloting in the San Francisco Bay Area; all listings are sample data.
 
 A living map of shared meals. People who need food find free, sealed food boxes at community fridges and shelves nearby. Households with extra food pack it, drop it off, and list it.

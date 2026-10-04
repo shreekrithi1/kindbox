@@ -668,3 +668,12 @@ aside.side{display:grid;gap:16px;position:sticky;top:84px}
 .lang-opt[lang="ur"] b{font-family:"Noto Nastaliq Urdu","Noto Naskh Arabic",serif;line-height:1.9}
 @media (max-width:640px){ .lang-modal{place-items:end center;padding:0} .lang-in{border-radius:22px 22px 0 0;max-height:88dvh;padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))} .lang-grid{grid-template-columns:1fr 1fr} }
 @media (max-width:1023px){ header .h-lang{display:none} }
+
+.powered{display:inline-block;font-size:11.5px;font-weight:600;color:var(--muted);text-decoration:none;letter-spacing:.01em;text-transform:none;font-family:var(--f-body)}
+.powered b{color:var(--leaf);font-weight:800;font-size:inherit;display:inline;font-family:inherit}
+.powered:hover b{text-decoration:underline}
+.brand-lock{display:grid;line-height:1.1}
+.brand-lock .powered{font-size:12px;margin-top:2px}
+.m-brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 16px 0;max-width:720px;margin:0 auto}
+.m-brand>b{font-family:var(--f-display);font-weight:800;font-size:15px;color:var(--squash)}
+.powered-line{margin:0;font-weight:700}

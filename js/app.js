@@ -1097,7 +1097,7 @@ async function drawCert(c){
   for (const [x,y] of [[66,66],[W-66,66],[66,Hc-66],[W-66,Hc-66]]){ g.beginPath(); g.arc(x,y,10,0,Math.PI*2); g.fillStyle = squash; g.fill(); }
   g.textAlign = 'center'; g.textBaseline = 'alphabetic';
   g.fillStyle = leaf; g.font = `800 34px ${disp}`; g.fillText('E T E R N A L   P O T', W/2, 160);
-  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('DEMO CERTIFICATE  ·  SAN FRANCISCO BAY AREA PILOT', W/2, 196);
+  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('POWERED BY NMEMOIQ.COM  ·  DEMO CERTIFICATE', W/2, 196);
   g.fillStyle = ink; g.font = `400 96px ${serif}`; g.fillText('Certificate of Kindness', W/2, 318);
   g.fillStyle = muted; g.font = `400 32px ${sans}`; g.fillText('This certificate is presented to', W/2, 392);
   const name = certName();
@@ -1121,7 +1121,7 @@ async function drawCert(c){
   g.textAlign = 'right'; g.fillStyle = ink; g.font = `500 26px ${mono}`; g.fillText(`No. ${certNo(c)}`, W-160, 880);
   g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText(`ISSUED ${fmtDate(c.issuedAt).toUpperCase()}`, W-160, 916);
   g.textAlign = 'center'; g.fillStyle = muted; g.font = `400 19px ${sans}`;
-  g.fillText('Demo certificate for illustration only. Eternal Pot is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
+  g.fillText('Eternal Pot, powered by nMemoIQ.com. Demo certificate for illustration only. Eternal Pot is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
 }
 async function openCert(c){ if (!c) return; certShown = c; $('#certTitle').textContent = `Certificate no. ${certNo(c)}`; $('#certModal').hidden = false; document.body.style.overflow = 'hidden'; await drawCert(c); }
 const closeCert = () => { $('#certModal').hidden = true; document.body.style.overflow = ''; };
