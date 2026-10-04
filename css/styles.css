@@ -679,3 +679,60 @@ aside.side{display:grid;gap:16px;position:sticky;top:84px}
 .m-brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 16px 0;max-width:720px;margin:0 auto}
 .m-brand>b{font-family:var(--f-display);font-weight:800;font-size:15px;color:var(--squash)}
 .powered-line{margin:0;font-weight:700}
+
+/* ======================================================================
+   RESPONSIVE FIXES
+   ====================================================================== */
+img,svg,video,canvas{max-width:100%}
+html,body{overflow-x:clip}
+/* Atlas top bar: language + mode switch sit in one wrapping row, never overlap */
+@media (min-width:1024px){
+  .atlas-top{grid-template-columns:auto;}
+  .atlas-top .lang-btn{position:static;justify-self:center;order:-1}
+  .atlas-top .switch{flex-wrap:wrap;justify-content:center;max-width:100%}
+  .atlas-top .switch button{padding:8px 14px;white-space:nowrap}
+}
+/* Small desktops / large tablets in landscape: drop the right rail so the map breathes */
+@media (min-width:1024px) and (max-width:1279px){
+  .rail{display:none}
+  .atlas-top,.dock{right:16px}
+  .find .mapui,.find:has(#drawer:not([hidden])) .mapui{right:16px;top:auto;bottom:280px}
+  .find .viewtog{left:332px}
+  .drawer{width:min(380px,calc(100% - 348px))}
+  .atlas-top h2{font-size:24px}
+  .atlas-top p{display:none}
+}
+/* Tablet (app layout 641–1023): centre the content and the tab bar */
+@media (min-width:641px) and (max-width:1023px){
+  .m-tabs{left:50%;right:auto;width:min(720px,100%);translate:-50% 0;border-inline:1px solid var(--line);border-radius:18px 18px 0 0}
+  section.give,.progs,.rew{margin-inline:auto}
+  .m-mapcards{max-width:720px;margin-inline:auto}
+}
+/* Phones */
+@media (max-width:480px){
+  .r-ch{flex-wrap:wrap}
+  .r-ch span{white-space:nowrap}
+  .r-card{padding:16px}
+  .r-big b{font-size:42px}
+  .r-stats b{font-size:20px}
+  .r-dots{gap:6px}
+  .r-dot{font-size:15px}
+  .r-rules div{padding:10px}
+  .r-name,.r-name input{width:100%}
+  .r-certs{grid-template-columns:1fr}
+  .r-badges{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+  .pfoot .btn{flex:1}
+  .three{grid-template-columns:1fr}
+  .cert-in{padding:12px}
+  .p-filters input{min-width:0}
+}
+@media (max-width:360px){
+  .m-tabs button{font-size:10px}
+  .r-rules{grid-template-columns:1fr}
+  .r-stats{grid-template-columns:1fr 1fr}
+}
+.r-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:760px){.r-grid{grid-template-columns:minmax(0,1fr)}}
+.r-dots{grid-template-columns:repeat(5,minmax(0,1fr))}
+.r-card{grid-template-columns:minmax(0,1fr)} .r-card .actions .btn{flex:1 1 auto}
+.r-ch b{min-width:0;flex:1 1 12em}

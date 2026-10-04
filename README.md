@@ -1,6 +1,6 @@
 # Eternal Pot
 
-*Powered by [nMemoIQ.com](https://nmemoiq.com)*
+*Powered by [mnemoIQ.com](https://mnemoiq.com)*
 
 > **Demo only.** Inspired by the Akshaya Patra Foundation's mission that no one should go hungry. Not affiliated with or endorsed by Akshaya Patra. Piloting in the San Francisco Bay Area; all listings are sample data.
 

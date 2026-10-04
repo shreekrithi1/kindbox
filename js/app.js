@@ -1121,7 +1121,7 @@ async function drawCert(c){
   g.textAlign = 'right'; g.fillStyle = ink; g.font = `500 26px ${mono}`; g.fillText(`No. ${certNo(c)}`, W-160, 880);
   g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText(`ISSUED ${fmtDate(c.issuedAt).toUpperCase()}`, W-160, 916);
   g.textAlign = 'center'; g.fillStyle = muted; g.font = `400 19px ${sans}`;
-  g.fillText('Eternal Pot, powered by nMemoIQ.com. Demo certificate for illustration only. Eternal Pot is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
+  g.fillText('Eternal Pot, powered by mnemoIQ.com. Demo certificate for illustration only. Eternal Pot is inspired by the Akshaya Patra Foundation and is not affiliated with or endorsed by it.', W/2, Hc - 100);
 }
 async function openCert(c){ if (!c) return; certShown = c; $('#certTitle').textContent = `Certificate no. ${certNo(c)}`; $('#certModal').hidden = false; document.body.style.overflow = 'hidden'; await drawCert(c); }
 const closeCert = () => { $('#certModal').hidden = true; document.body.style.overflow = ''; };
