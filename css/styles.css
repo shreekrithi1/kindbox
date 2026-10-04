@@ -670,8 +670,10 @@ aside.side{display:grid;gap:16px;position:sticky;top:84px}
 @media (max-width:1023px){ header .h-lang{display:none} }
 
 .powered{display:inline-block;font-size:11.5px;font-weight:600;color:var(--muted);text-decoration:none;letter-spacing:.01em;text-transform:none;font-family:var(--f-body)}
-.powered b{color:var(--leaf);font-weight:800;font-size:inherit;display:inline;font-family:inherit}
-.powered:hover b{text-decoration:underline}
+.powered b{display:inline-block;background:#17251E;color:#fff;font-weight:800;font-size:inherit;font-family:inherit;border-radius:999px;padding:2px 9px;margin-inline-start:3px;line-height:1.5}
+.powered:hover b{background:#000}
+:root[data-theme="dark"] .powered b{box-shadow:0 0 0 1px rgb(255 255 255/.25)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .powered b{box-shadow:0 0 0 1px rgb(255 255 255/.25)}}
 .brand-lock{display:grid;line-height:1.1}
 .brand-lock .powered{font-size:12px;margin-top:2px}
 .m-brand{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 16px 0;max-width:720px;margin:0 auto}
