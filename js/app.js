@@ -1097,7 +1097,7 @@ async function drawCert(c){
   for (const [x,y] of [[66,66],[W-66,66],[66,Hc-66],[W-66,Hc-66]]){ g.beginPath(); g.arc(x,y,10,0,Math.PI*2); g.fillStyle = squash; g.fill(); }
   g.textAlign = 'center'; g.textBaseline = 'alphabetic';
   g.fillStyle = leaf; g.font = `800 34px ${disp}`; g.fillText('E T E R N A L   P O T', W/2, 160);
-  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('POWERED BY NMEMOIQ.COM  ·  DEMO CERTIFICATE', W/2, 196);
+  g.fillStyle = muted; g.font = `700 20px ${sans}`; g.fillText('POWERED BY MNEMOIQ.COM  ·  DEMO CERTIFICATE', W/2, 196);
   g.fillStyle = ink; g.font = `400 96px ${serif}`; g.fillText('Certificate of Kindness', W/2, 318);
   g.fillStyle = muted; g.font = `400 32px ${sans}`; g.fillText('This certificate is presented to', W/2, 392);
   const name = certName();
