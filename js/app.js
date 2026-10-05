@@ -1,3 +1,15 @@
+
+function chipAkshaya(root = document.body){
+  const re = /Akshaya Patra/g, hits = [];
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: n =>
+    n.parentElement && !n.parentElement.closest('.ap-chip,script,style,textarea,title') && /Akshaya Patra/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  while (w.nextNode()) hits.push(w.currentNode);
+  for (const n of hits){
+    const frag = document.createDocumentFragment(); let last = 0; const v = n.nodeValue; re.lastIndex = 0; let m;
+    while ((m = re.exec(v))){ frag.append(v.slice(last, m.index)); const b = document.createElement('b'); b.className = 'ap-chip'; b.textContent = m[0]; frag.append(b); last = m.index + m[0].length; }
+    frag.append(v.slice(last)); n.replaceWith(frag);
+  }
+}
 (async () => {
 const $ = s => document.querySelector(s);
 const WA = 'https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/';
@@ -51,6 +63,7 @@ const kindLabel = k => t('kind.' + k), dietLabel = d => t('diet.' + d);
 function applyStatic(){
   document.querySelectorAll('[data-i18n]').forEach(el => { const k = el.dataset.i18n; if (k in EN || k in DICT) el.textContent = t(k); });
   document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  chipAkshaya();
   document.querySelectorAll('[data-i18n-ph]').forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
   const cur = LANGS.find(l => l[0] === LANG);
   document.querySelectorAll('.lang-cur').forEach(el => el.textContent = cur ? cur[1] : 'English');
